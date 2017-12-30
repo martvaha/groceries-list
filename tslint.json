@@ -121,13 +121,13 @@
     "directive-selector": [
       true,
       "attribute",
-      "gs",
+      "gl",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element",
-      "gs",
+      "gl",
       "kebab-case"
     ],
     "no-output-on-prefix": true,
