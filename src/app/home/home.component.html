@@ -1,3 +1,14 @@
-<p>
-  home-component works!
-</p>
+
+<mat-toolbar color="primary">
+  <button mat-icon-button (click)="nav.toggle()">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <h1 class="home__heading">Groceries List</h1>
+  </mat-toolbar>
+
+<mat-sidenav-container class="home__sidenav_container">
+  <mat-sidenav #nav class="home__sidenav" mode="side" opened="true" role="navigation">
+    <gl-sidenav-menu></gl-sidenav-menu>
+  </mat-sidenav>
+  <mat-sidenav-content role="main">Main content</mat-sidenav-content>
+</mat-sidenav-container>

@@ -27,7 +27,7 @@
         "dev": "environments/environment.ts",
         "prod": "environments/environment.prod.ts"
       },
-      "serviceWorker": true,
+      "serviceWorker": false,
       "appShell": {
         "app": "gl-app-shell",
         "route": "app-shell-path"
