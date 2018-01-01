@@ -1,0 +1,8 @@
+<div *ngIf="auth.user | async; let user">
+
+  <p>
+    {{ user.displayName }}
+  </p>
+  <img src="{{user.photoURL}}">
+
+</div>

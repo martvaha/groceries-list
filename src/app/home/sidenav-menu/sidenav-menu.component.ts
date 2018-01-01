@@ -7,7 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class SidenavMenuComponent implements OnInit {
   public navItems = [
-    { label: 'Home', link: '/home'}
+    { label: 'Home', link: '/home'},
+    { label: 'Login', link: '/home/login'}
   ];
 
   constructor() { }

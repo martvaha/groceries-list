@@ -9,14 +9,22 @@ import { SharedModule } from './shared/shared.module';
 import { AppRoutingModule } from './/app-routing.module';
 
 import { environment } from '../environments/environment';
+
+import { AuthService } from './auth/auth.service';
+
 import { HomeComponent } from './home/home.component';
 import { RouterModule } from '@angular/router';
 import { SidenavMenuComponent } from './home/sidenav-menu/sidenav-menu.component';
+import { AuthComponent } from './auth/auth.component';
+import { ListContainerComponent } from './list-container/list-container.component';
+import { AuthGuard } from './auth/auth.guard';
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
     SidenavMenuComponent,
+    AuthComponent,
+    ListContainerComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -27,7 +35,7 @@ import { SidenavMenuComponent } from './home/sidenav-menu/sidenav-menu.component
     SharedModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [AuthService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

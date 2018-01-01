@@ -4,7 +4,7 @@
     "outDir": "../dist-server/",
     "baseUrl": "./",
     "module": "commonjs",
-    "types": []
+    "types": ["node"]
   },
   "exclude": [
     "test.ts",
