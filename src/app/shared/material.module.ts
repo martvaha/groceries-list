@@ -8,6 +8,8 @@ import {
   MatSidenavModule,
   MatIconModule,
   MatListModule,
+  MatDialogModule,
+  MatInputModule
 } from '@angular/material';
 
 const modules = [
@@ -18,12 +20,14 @@ const modules = [
   MatSidenavModule,
   MatIconModule,
   MatListModule,
+  MatDialogModule,
+  MatInputModule
 ];
 
 @NgModule({
   imports: modules,
   exports: modules,
   declarations: [],
-  providers: [],
+  providers: []
 })
-export class MaterialModule { }
+export class MaterialModule {}

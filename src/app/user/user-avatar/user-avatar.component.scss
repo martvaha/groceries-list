@@ -1,0 +1,19 @@
+$avatar-size: 40px;
+
+.user-avatar__container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.user-avatar__name {
+  padding-right: 5px;
+}
+
+.user-avatar__image {
+  flex-shrink: 0;
+  width: $avatar-size;
+  height: $avatar-size;
+  border-radius: 50%;
+  background-size: cover;
+}

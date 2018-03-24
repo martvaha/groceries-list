@@ -3,7 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { HomeComponent } from './home/home.component';
 import { AuthComponent } from './auth/auth.component';
-import { ListContainerComponent } from './list-container/list-container.component';
+import { ListsContainerComponent } from './lists-container/lists-container.component';
 import { AuthGuard } from './auth/auth.guard';
 
 const routes: Routes = [
@@ -12,8 +12,8 @@ const routes: Routes = [
     path: 'home',
     component: HomeComponent,
     children: [
-      { path: '', redirectTo: 'list', pathMatch: 'full' },
-      { path: 'list', component: ListContainerComponent, canActivate: [AuthGuard] },
+      { path: '', redirectTo: 'lists', pathMatch: 'full' },
+      { path: 'lists', component: ListsContainerComponent, canActivate: [AuthGuard] },
       { path: 'login', component: AuthComponent }
     ]
   },

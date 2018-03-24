@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from './auth/auth.service';
 
+
 @Component({
   selector: 'gl-root',
   templateUrl: './app.component.html',
@@ -9,7 +10,7 @@ import { AuthService } from './auth/auth.service';
 export class AppComponent {
   title = 'Groceries List';
 
-  constructor(auth: AuthService) {
+  constructor() {
 
   }
 }

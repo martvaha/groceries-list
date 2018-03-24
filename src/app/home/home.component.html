@@ -3,14 +3,16 @@
     <mat-icon>menu</mat-icon>
   </button>
   <h1 class="home__heading">Groceries List</h1>
+  <span class="spacer"></span>
+  <gl-user-avatar [user]="user | async"></gl-user-avatar>
 </mat-toolbar>
 
-<mat-sidenav-container class="home__sidenav_container">
+<mat-sidenav-container class="home__sidenav-container">
   <mat-sidenav #nav class="home__sidenav" [mode]="mobileQuery.matches ? 'over' : 'side'"
     opened="{{opened}}" role="navigation">
-    <gl-sidenav-menu></gl-sidenav-menu>
+    <gl-sidenav-menu [nav]="nav"></gl-sidenav-menu>
   </mat-sidenav>
-  <mat-sidenav-content role="main">
+  <mat-sidenav-content class="home__sidenav-content" role="main">
     <router-outlet></router-outlet>
   </mat-sidenav-content>
 </mat-sidenav-container>

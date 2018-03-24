@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
+import { MatSidenav } from '@angular/material';
 
 @Component({
   selector: 'gl-sidenav-menu',
@@ -6,14 +7,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./sidenav-menu.component.scss']
 })
 export class SidenavMenuComponent implements OnInit {
-  public navItems = [
-    { label: 'Home', link: '/home'},
-    { label: 'Login', link: '/home/login'}
-  ];
+  @Input() nav: MatSidenav;
+  public navItems = [{ label: 'Home', link: '/home' }, { label: 'Login', link: '/home/login' }];
 
-  constructor() { }
+  constructor() {}
 
   ngOnInit() {
+    console.log(this.nav);
   }
 
+  handleClick() {
+    if (this.nav && this.nav.mode === 'over') {
+       this.nav.close();
+    }
+  };
 }
