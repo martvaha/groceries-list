@@ -5,6 +5,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "shell": "http-server -c-1 dist # for testing AppShell, -c-1 disables cache",
     "build": "ng build --prod",
     "deploy": "yarn build && firebase deploy",
     "test": "ng test",

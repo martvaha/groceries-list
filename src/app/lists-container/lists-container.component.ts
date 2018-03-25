@@ -34,7 +34,7 @@ export class ListsContainerComponent implements OnInit {
                   const id = change.payload.doc.id;
                   return { id, ...data };
                 })
-                .sort((a: any, b: any) => a.name - b.name)
+                .sort((a: any, b: any) => a.name.localeCompare(b.name))
             )
           )
       ),
