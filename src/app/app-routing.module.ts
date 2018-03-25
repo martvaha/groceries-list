@@ -7,6 +7,7 @@ import { ListsContainerComponent } from './lists-container/lists-container.compo
 import { AuthGuard } from './auth/auth.guard';
 import { AppShellComponent } from './app-shell/app-shell.component';
 import { environment } from '../environments/environment.prod';
+import { ListContainerComponent } from './list-container/list-container.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
@@ -16,7 +17,8 @@ const routes: Routes = [
     children: [
       { path: '', redirectTo: 'lists', pathMatch: 'full' },
       { path: 'lists', component: ListsContainerComponent, canActivate: [AuthGuard] },
-      { path: 'login', component: AuthComponent }
+      { path: 'login', component: AuthComponent },
+      { path: 'list/:id', component: ListContainerComponent }
     ]
   }
 ];

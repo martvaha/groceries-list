@@ -1,0 +1,25 @@
+:host {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow-y: auto;
+  padding: 1em;
+}
+
+.list-container__form {
+  display: flex;
+  align-items: center;
+  justify-content: baseline;
+}
+
+.list-container__input {
+  max-width: 400px;
+  padding-right: 1em;
+  flex: 1 1 auto;
+}
+
+.lists-container__item-list {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}

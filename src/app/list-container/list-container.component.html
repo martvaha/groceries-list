@@ -1,0 +1,20 @@
+<form class="list-container__form" novalidate [formGroup]="inputForm" (ngSubmit)="addItem()">
+  <mat-input-container class="list-container__input" floatPlaceholder="never">
+    <input matInput type="text" formControlName="inputControl" required placeholder="Lisa nimekirja"
+      [matAutocomplete]="auto" [errorStateMatcher]='inputValid'>
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="inputDisplay">
+      <mat-option *ngFor="let item of filteredItems | async" [value]="item">
+        {{ item.name }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-input-container>
+  <button mat-raised-button type="submit" color="primary" [disabled]="!inputForm.valid">Lisa</button>
+</form>
+
+
+<mat-list class="lists-container__item-list" [disableRipple]="false">
+  <!-- <h3 mat-subheader>Nimekiri</h3> -->
+  <mat-list-item *ngFor="let item of activeItems | async" (click)="markDone(item)">
+    <mat-checkbox>{{ item.name }}</mat-checkbox>
+  </mat-list-item>
+</mat-list>

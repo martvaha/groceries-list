@@ -20,6 +20,7 @@ import { AuthComponent } from './auth/auth.component';
 import { ListsContainerComponent } from './lists-container/lists-container.component';
 import { AuthGuard } from './auth/auth.guard';
 import { UserAvatarComponent } from './user/user-avatar/user-avatar.component';
+import { ListContainerComponent } from './list-container/list-container.component';
 
 @NgModule({
   declarations: [
@@ -28,7 +29,8 @@ import { UserAvatarComponent } from './user/user-avatar/user-avatar.component';
     SidenavMenuComponent,
     AuthComponent,
     ListsContainerComponent,
-    UserAvatarComponent
+    UserAvatarComponent,
+    ListContainerComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
@@ -40,7 +42,7 @@ import { UserAvatarComponent } from './user/user-avatar/user-avatar.component';
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase, 'groceries-list'),
     AngularFireAuthModule,
-    AngularFirestoreModule
+    AngularFirestoreModule.enablePersistence()
   ],
   providers: [AuthService, AuthGuard, MediaMatcher],
   bootstrap: [AppComponent]
