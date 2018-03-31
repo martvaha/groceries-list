@@ -9,7 +9,8 @@
       "outDir": "dist",
       "assets": [
         "assets",
-        "favicon.ico"
+        "favicon.ico",
+        "manifest.json"
       ],
       "index": "index.html",
       "main": "main.ts",
@@ -27,7 +28,7 @@
         "dev": "environments/environment.ts",
         "prod": "environments/environment.prod.ts"
       },
-      "serviceWorker": false,
+      "serviceWorker": true,
       "appShell": {
         "app": "gl-app-shell",
         "route": "app-shell-path"
@@ -38,7 +39,8 @@
       "outDir": "dist-server/",
       "assets": [
         "assets",
-        "favicon.ico"
+        "favicon.ico",
+        "manifest.json"
       ],
       "index": "index.html",
       "main": "main.server.ts",
