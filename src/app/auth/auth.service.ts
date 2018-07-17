@@ -6,6 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
+import { Router } from '@angular/router';
 
 export interface User {
   uid: string;
@@ -21,15 +22,16 @@ export class AuthService {
   private _user = new BehaviorSubject<User | null>(null);
   public user = this._user.asObservable();
 
-  constructor(private firebase: AngularFireAuth) {
+  constructor(private firebase: AngularFireAuth, private router: Router) {
     this.handleRedirect();
     this.registerAuthStateObserver();
   }
 
-  signInWithFacebook() {
+  async signInWithFacebook(redirect: string) {
     this.firebase.auth.useDeviceLanguage();
     const provider = new firebase.auth.FacebookAuthProvider();
-    this.firebase.auth.signInWithPopup(provider);
+    await this.firebase.auth.signInWithPopup(provider);
+    return this.router.navigate([redirect]);
   }
 
   signOut() {

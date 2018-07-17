@@ -14,7 +14,7 @@ export class AuthComponent implements OnInit {
   }
 
   logIn() {
-    this.auth.signInWithFacebook();
+    this.auth.signInWithFacebook('home');
   }
   logOut() {
     this.auth.signOut();

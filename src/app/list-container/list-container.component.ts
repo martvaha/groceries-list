@@ -2,10 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { switchMap, map, debounceTime, filter, startWith, delay } from 'rxjs/operators';
+import { switchMap, map, debounceTime, filter, startWith, delay, tap } from 'rxjs/operators';
 import { combineLatest } from 'rxjs/observable/combineLatest';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material';
+import { LoadingService } from '../shared/loading-service';
 
 @Component({
   selector: 'gl-list-container',
@@ -26,7 +27,7 @@ export class ListContainerComponent implements OnInit {
     }
   };
 
-  constructor(private route: ActivatedRoute, private db: AngularFirestore) {}
+  constructor(private route: ActivatedRoute, private db: AngularFirestore, private loading: LoadingService) {}
 
   ngOnInit() {
     this.inputControl = new FormControl('', [Validators.required]);
@@ -35,6 +36,7 @@ export class ListContainerComponent implements OnInit {
     this.items = this.listId.pipe(
       switchMap(id => {
         const path = 'lists/' + id + '/items';
+        this.loading.start();
         return this.db
           .collection(path)
           .snapshotChanges()
@@ -47,7 +49,8 @@ export class ListContainerComponent implements OnInit {
               })
             )
           );
-      })
+      }),
+      tap(() => this.loading.end())
     );
     this.activeItems = this.items.pipe(map(items => items.filter(item => item.active)));
 

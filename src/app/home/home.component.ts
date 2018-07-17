@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { AuthService, User } from '../auth/auth.service';
 import { Observable } from 'rxjs/Observable';
+import { LoadingService } from '../shared/loading-service';
 
 @Component({
   selector: 'gl-home',
@@ -15,7 +16,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   private _mobileQueryListener: () => void;
 
-  constructor(private changeDetectorRef: ChangeDetectorRef, private media: MediaMatcher, private auth: AuthService) {}
+  constructor(
+    private changeDetectorRef: ChangeDetectorRef,
+    private media: MediaMatcher,
+    private auth: AuthService,
+    public loading: LoadingService) {}
 
   ngOnInit() {
     this.mobileQuery = this.media.matchMedia('(max-width: 600px)');

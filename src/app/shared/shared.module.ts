@@ -7,10 +7,11 @@ import { InputDialogComponent } from './dialog-service/input-dialog.component';
 import { DialogService } from './dialog-service/dialog.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
+import { LoadingService } from './loading-service';
 
-const modules = [CommonModule , MaterialModule, ReactiveFormsModule];
+const modules = [CommonModule, MaterialModule, ReactiveFormsModule];
 const entryComponents = [ConfirmDialogComponent, InfoDialogComponent, InputDialogComponent];
-const services = [DialogService];
+const services = [DialogService, LoadingService];
 
 @NgModule({
   imports: modules,

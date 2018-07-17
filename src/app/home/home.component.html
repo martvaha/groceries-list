@@ -14,5 +14,8 @@
   </mat-sidenav>
   <mat-sidenav-content class="home__sidenav-content" role="main">
     <router-outlet></router-outlet>
+    <div *ngIf="(loading.isLoading | async)" class="home__sidenav-content__spinner">
+      <mat-spinner></mat-spinner>
+    </div>
   </mat-sidenav-content>
 </mat-sidenav-container>

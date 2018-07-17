@@ -1,0 +1,4 @@
+.env
+.runtimeconfig.json
+.vscode
+yarn-error.log

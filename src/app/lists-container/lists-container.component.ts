@@ -5,6 +5,7 @@ import { switchMap, map, mergeMap, concatMap, filter, tap, take } from 'rxjs/ope
 import { Observable } from 'rxjs/Observable';
 import { forkJoin } from 'rxjs/observable/forkJoin';
 import { DialogService } from '../shared/dialog-service/dialog.service';
+import { LoadingService } from '../shared/loading-service';
 
 export interface UserDocument {
   lists: string[];
@@ -17,11 +18,17 @@ export interface UserDocument {
 })
 export class ListsContainerComponent implements OnInit {
   public lists: Observable<any[]>;
-  constructor(private db: AngularFirestore, private auth: AuthService, private dialogService: DialogService) {}
+  constructor(
+    private db: AngularFirestore,
+    private auth: AuthService,
+    private dialogService: DialogService,
+    private loading: LoadingService
+  ) {}
 
   ngOnInit() {
     this.lists = this.auth.user.pipe(
       filter(user => !!user),
+      tap(() => this.loading.start()),
       switchMap((user: User) =>
         this.db
           .collection('lists', ref => ref.where('acl.' + user.uid, '==', true))
@@ -38,6 +45,7 @@ export class ListsContainerComponent implements OnInit {
             )
           )
       ),
+      tap(() => this.loading.end()),
       tap(console.log)
     );
   }

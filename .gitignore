@@ -8,6 +8,7 @@
 
 # dependencies
 /node_modules
+/functions/node_modules
 
 # IDEs and editors
 /.idea
@@ -46,3 +47,5 @@ Thumbs.db
 # Firebase
 firestore.rules
 firestore.indexes.json
+firebase-debug.log
+.env-app-engine.json
