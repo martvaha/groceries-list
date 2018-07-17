@@ -42,7 +42,10 @@ exports.sendEmail = functions.firestore.document('/invites/{uid}').onCreate(func
 });
 exports.shareListWithUsers = functions.https.onRequest(function (req, res) {
     req.body.users.forEach(function (user) {
-        admin.firestore().collection('/invites/').add({ to: user.email });
+        admin
+            .firestore()
+            .collection('/invites/')
+            .add({ to: user.email });
     });
     res.status(200).send();
 });

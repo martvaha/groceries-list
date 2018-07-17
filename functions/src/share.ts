@@ -3,7 +3,6 @@ import * as nodemailer from 'nodemailer';
 import { SendMailOptions } from 'nodemailer';
 import * as admin from 'firebase-admin';
 
-
 // Sends an email when a list is being shared
 export const sendEmail = functions.firestore.document('/invites/{uid}').onCreate(event => {
   const shareObject = event.data();
@@ -37,7 +36,7 @@ export const sendEmail = functions.firestore.document('/invites/{uid}').onCreate
 
   return mailTransport
     .sendMail(mailOptions)
-    .then((info) => {
+    .then(info => {
       console.log('Email sent');
       if (emailConfig.service === 'test') {
         console.log('Preview: ' + nodemailer.getTestMessageUrl(info));
@@ -46,10 +45,12 @@ export const sendEmail = functions.firestore.document('/invites/{uid}').onCreate
     .catch(error => console.error('There was an error while sending the email:', error));
 });
 
-
 export const shareListWithUsers = functions.https.onRequest((req, res) => {
   req.body.users.forEach(user => {
-    admin.firestore().collection('/invites/').add({ to: user.email })
+    admin
+      .firestore()
+      .collection('/invites/')
+      .add({ to: user.email });
   });
   res.status(200).send();
 });
