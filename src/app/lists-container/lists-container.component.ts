@@ -1,9 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { AuthService, User } from '../auth/auth.service';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { switchMap, map, mergeMap, concatMap, filter, tap, take } from 'rxjs/operators';
-import { Observable } from 'rxjs/Observable';
-import { forkJoin } from 'rxjs/observable/forkJoin';
+import { switchMap, map, filter, tap, take } from 'rxjs/operators';
+import { Observable, forkJoin, Subscription } from 'rxjs';
 import { DialogService } from '../shared/dialog-service/dialog.service';
 import { LoadingService } from '../shared/loading-service';
 
@@ -26,9 +25,9 @@ export class ListsContainerComponent implements OnInit {
   ) {}
 
   ngOnInit() {
+    this.loading.start();
     this.lists = this.auth.user.pipe(
       filter(user => !!user),
-      tap(() => this.loading.start()),
       switchMap((user: User) =>
         this.db
           .collection('lists', ref => ref.where('acl.' + user.uid, '==', true))
@@ -45,9 +44,9 @@ export class ListsContainerComponent implements OnInit {
             )
           )
       ),
-      tap(() => this.loading.end()),
       tap(console.log)
     );
+    this.lists.pipe(take(1)).subscribe(() => this.loading.end());
   }
 
   addList() {

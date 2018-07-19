@@ -3,8 +3,11 @@ import { Injectable } from '@angular/core';
 import { InfoDialogComponent, InfoDialogConfig } from './info-dialog.component';
 import { ConfirmDialogComponent } from './confirm-dialog.component';
 import { InputDialogComponent, InputDialogConfig } from './input-dialog.component';
+import { SharedModule } from '../shared.module';
 
-@Injectable()
+@Injectable({
+  providedIn: SharedModule
+})
 export class DialogService {
   constructor(private dialog: MatDialog) {}
 

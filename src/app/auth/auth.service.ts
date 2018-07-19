@@ -1,9 +1,7 @@
 import { Injectable } from '@angular/core';
 
-import { environment } from '../../environments/environment';
-import { FirebaseAuth, UserInfo } from '@firebase/auth-types';
-import { Observable } from 'rxjs/Observable';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { FirebaseAuth, UserInfo, FacebookAuthProvider } from '@firebase/auth-types';
+import { BehaviorSubject } from 'rxjs';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 import { Router } from '@angular/router';
@@ -64,7 +62,7 @@ export class AuthService {
       .then(function(result) {
         if (result.credential) {
           // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-          const token = result.credential.accessToken;
+          // const token = result.credential.accessToken;
         }
         // The signed-in user info.
         const user = result.user;

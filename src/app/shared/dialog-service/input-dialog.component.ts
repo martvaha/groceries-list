@@ -14,13 +14,13 @@ export interface InputDialogConfig extends MatDialogConfig {
 
   <h1 *ngIf="title" mat-dialog-title>{{ title }}</h1>
   <mat-dialog-content>
-    <mat-input-container floatPlaceholder="auto">
+    <mat-form-field floatLabel="auto">
         <input matInput
                #input
                type="text"
                required
                [placeholder]="placeholder">
-    </mat-input-container>
+    </mat-form-field>
   </mat-dialog-content>
   <mat-dialog-actions align="end">
     <button mat-raised-button color="primary" mat-dialog-close (click)="dialogRef.close(input.value)">{{actionLabel}}</button>

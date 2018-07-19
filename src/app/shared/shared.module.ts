@@ -11,13 +11,11 @@ import { LoadingService } from './loading-service';
 
 const modules = [CommonModule, MaterialModule, ReactiveFormsModule];
 const entryComponents = [ConfirmDialogComponent, InfoDialogComponent, InputDialogComponent];
-const services = [DialogService, LoadingService];
 
 @NgModule({
   imports: modules,
   exports: [...modules, ...entryComponents],
   declarations: [...entryComponents],
-  providers: services,
   entryComponents: entryComponents
 })
 export class SharedModule {}
