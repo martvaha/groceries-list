@@ -1,0 +1,16 @@
+<div class="list-share__container">
+  <mat-form-field class="list-share__user-chips">
+    <mat-chip-list #chipList>
+      <mat-chip *ngFor="let user of users" [removable]="true" (removed)="remove(user)">
+        {{user.email}}
+        <mat-icon matChipRemove>cancel</mat-icon>
+      </mat-chip>
+      <input type="email" placeholder="Share with..." [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+
+        (matChipInputTokenEnd)="add($event)">
+    </mat-chip-list>
+  </mat-form-field>
+  <div>
+    <button class="list-share__share-button" mat-raised-button (click)="share()">Share</button>
+  </div>
+</div>

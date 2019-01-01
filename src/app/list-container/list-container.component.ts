@@ -38,7 +38,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loading.start();
-    this.search.setOptions({ keys: ['name'], includeMatches: true });
+    this.search.setOptions({ keys: ['name'], includeMatches: true, threshold: 0.9 });
     this.inputControl = new FormControl('', [Validators.required]);
     this.inputForm = new FormGroup({ inputControl: this.inputControl });
     this.listId = this.route.paramMap.pipe(map((params: ParamMap) => params.get('id') as string));

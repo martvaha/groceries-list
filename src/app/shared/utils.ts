@@ -1,5 +1,4 @@
 export const highlight = function(text: string, indices: number[][]) {
-  console.log(text, indices);
   let result = '';
   let prev: number[] | null = null;
   indices.forEach((cur, index) => {

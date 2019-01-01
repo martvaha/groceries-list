@@ -11,12 +11,10 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { environment } from '../environments/environment';
 import { SharedModule } from './shared/shared.module';
 import { AppRoutingModule } from './/app-routing.module';
-import { AuthService } from './auth/auth.service';
 import { HomeComponent } from './home/home.component';
 import { AppComponent } from './app.component';
 import { RouterModule } from '@angular/router';
 import { SidenavMenuComponent } from './home/sidenav-menu/sidenav-menu.component';
-import { AuthComponent } from './auth/auth.component';
 import { ListsContainerComponent } from './lists-container/lists-container.component';
 import { AuthGuard } from './auth/auth.guard';
 import { UserAvatarComponent } from './user/user-avatar/user-avatar.component';
@@ -27,7 +25,6 @@ import { ListContainerComponent } from './list-container/list-container.componen
     AppComponent,
     HomeComponent,
     SidenavMenuComponent,
-    AuthComponent,
     ListsContainerComponent,
     UserAvatarComponent,
     ListContainerComponent
@@ -44,7 +41,7 @@ import { ListContainerComponent } from './list-container/list-container.componen
     AngularFireAuthModule,
     AngularFirestoreModule.enablePersistence()
   ],
-  providers: [AuthService, AuthGuard, MediaMatcher],
+  providers: [AuthGuard, MediaMatcher],
   bootstrap: [AppComponent]
 })
 export class AppModule {}

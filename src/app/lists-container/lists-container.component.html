@@ -1,6 +1,9 @@
 <mat-nav-list class="list-container__nav-list">
   <mat-list-item *ngFor="let list of lists | async">
     <a matLine [routerLink]="['/home/list', list.id]">{{ list.name }}</a>
+    <a mat-icon-button [routerLink]="['/home/share', list.id]">
+      <mat-icon>share</mat-icon>
+    </a>
     <button mat-icon-button (click)="deleteList(list.id)">
       <mat-icon>delete</mat-icon>
     </button>

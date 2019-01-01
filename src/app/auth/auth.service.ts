@@ -13,11 +13,13 @@ export interface User {
   photoURL?: string | null;
 }
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class AuthService {
   // public auth: FirebaseAuth;
 
-  private _user = new BehaviorSubject<User | null>(null);
+  private _user = new BehaviorSubject<User | null | undefined>(undefined);
   public user = this._user.asObservable();
 
   constructor(private firebase: AngularFireAuth, private router: Router) {
@@ -50,8 +52,10 @@ export class AuthService {
         if (this.firebase.auth.currentUser && (data.photoURL != photoURL || data.displayName != displayName)) {
           this.firebase.auth.currentUser.updateProfile({ displayName, photoURL });
         }
+        console.log(providerData);
         this._user.next({ uid, photoURL, displayName, email });
       } else {
+        console.log('auth state change without data');
       }
     });
   }

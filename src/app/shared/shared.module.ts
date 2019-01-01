@@ -8,14 +8,17 @@ import { DialogService } from './dialog-service/dialog.service';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LoadingService } from './loading-service';
+import { AuthComponent } from '../auth/auth.component';
+import { TestComponent } from './test.component';
 
 const modules = [CommonModule, MaterialModule, ReactiveFormsModule];
+const components = [AuthComponent, TestComponent];
 const entryComponents = [ConfirmDialogComponent, InfoDialogComponent, InputDialogComponent];
 
 @NgModule({
   imports: modules,
-  exports: [...modules, ...entryComponents],
-  declarations: [...entryComponents],
+  exports: [...modules, ...entryComponents, ...components],
+  declarations: [...entryComponents, ...components],
   entryComponents: entryComponents
 })
 export class SharedModule {}

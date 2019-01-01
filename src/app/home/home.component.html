@@ -4,7 +4,7 @@
   </button>
   <h1 class="home__heading">Groceries List</h1>
   <span class="spacer"></span>
-  <gl-user-avatar [user]="user | async"></gl-user-avatar>
+  <gl-user-avatar [user]="(user | async)"></gl-user-avatar>
 </mat-toolbar>
 
 <mat-sidenav-container class="home__sidenav-container">
@@ -14,8 +14,8 @@
   </mat-sidenav>
   <mat-sidenav-content class="home__sidenav-content" role="main">
     <router-outlet></router-outlet>
-    <div *ngIf="(loading.isLoading | async)" class="home__sidenav-content__spinner">
+    <!-- <div *ngIf="(loading.isLoading | async)" class="home__sidenav-content__spinner">
       <mat-spinner></mat-spinner>
-    </div>
+    </div> -->
   </mat-sidenav-content>
 </mat-sidenav-container>

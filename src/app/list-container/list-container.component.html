@@ -3,8 +3,8 @@
     <input matInput type="text" formControlName="inputControl" required placeholder="Lisa nimekirja"
       [matAutocomplete]="auto" [errorStateMatcher]='inputValid'>
     <mat-autocomplete #auto="matAutocomplete" [displayWith]="inputDisplay">
-      <mat-option [innerHTML]="item.displayName" *ngFor="let item of filteredItems | async" [value]="item">
-        {{ item.name }}
+      <mat-option [innerHTML]="item.displayName" *ngFor="let item of filteredItems | async"
+        [value]="item">
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>

@@ -1,0 +1,19 @@
+:host {
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+}
+
+.list-share__container {
+  padding: 1em;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+}
+
+
+@media screen and (min-width: 700px) {
+  .list-share__container {
+    flex: .5;
+  }
+}
