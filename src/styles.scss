@@ -1,4 +1,4 @@
-@import '~@angular/material/prebuilt-themes/indigo-pink.css';
+@import './theme.scss';
 
 html,
 body {
@@ -16,3 +16,5 @@ button.app__fab {
   right: 2rem;
   z-index: 1;
 }
+
+@include angular-material-theme($theme);

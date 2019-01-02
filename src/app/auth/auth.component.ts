@@ -8,7 +8,7 @@ import { AuthService } from './auth.service';
 })
 export class AuthComponent implements OnInit {
 
-  @Input() redirect: string = 'home';
+  @Input() redirect = 'home';
 
   constructor(private auth: AuthService) { }
 
@@ -19,7 +19,7 @@ export class AuthComponent implements OnInit {
     this.auth.signInWithFacebook(this.redirect);
   }
   logOut() {
-    this.auth.signOut();
+
   }
 
 }

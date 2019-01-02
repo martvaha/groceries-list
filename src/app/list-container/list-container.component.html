@@ -1,20 +1,29 @@
 <form class="list-container__form" novalidate [formGroup]="inputForm" (ngSubmit)="addItem()">
   <mat-form-field class="list-container__input" floatLabel="never">
-    <input matInput type="text" formControlName="inputControl" required placeholder="Lisa nimekirja"
-      [matAutocomplete]="auto" [errorStateMatcher]='inputValid'>
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="inputDisplay">
-      <mat-option [innerHTML]="item.displayName" *ngFor="let item of filteredItems | async"
-        [value]="item">
+    <input
+      matInput
+      type="text"
+      formControlName="inputControl"
+      required
+      placeholder="Lisa nimekirja"
+      [matAutocomplete]="auto"
+      [errorStateMatcher]="inputValid"
+    />
+    <mat-autocomplete
+      autoActiveFirstOption
+      #auto="matAutocomplete"
+      [displayWith]="inputDisplay"
+      (optionSelected)="addItem()"
+    >
+      <mat-option [innerHTML]="item.displayName" *ngFor="let item of (filteredItems$ | async); trackBy: trackById" [value]="item">
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
   <button mat-raised-button type="submit" color="primary" [disabled]="!inputForm.valid">Lisa</button>
 </form>
 
-
 <mat-list class="lists-container__item-list" [disableRipple]="false">
-  <!-- <h3 mat-subheader>Nimekiri</h3> -->
-  <mat-list-item *ngFor="let item of activeItems | async" (click)="markDone(item)">
-    <mat-checkbox>{{ item.name }}</mat-checkbox>
+  <mat-list-item *ngFor="let item of (activeItems | async); trackBy: trackById">
+    <mat-checkbox (click)="markDone(item)">{{ item.name }}</mat-checkbox>
   </mat-list-item>
 </mat-list>

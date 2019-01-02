@@ -13,7 +13,7 @@ export interface Item {
 }
 
 @Component({
-  selector: 'list-share',
+  selector: 'gl-list-share',
   styleUrls: ['./list-share.component.scss'],
   templateUrl: './list-share.component.html'
 })
@@ -21,12 +21,11 @@ export class ListShareComponent implements OnInit {
   private listId: Observable<string>;
   public users: any[] = [];
   constructor(private route: ActivatedRoute, private db: AngularFirestore) {}
+  readonly separatorKeysCodes = [ENTER, COMMA];
 
   ngOnInit() {
     this.listId = this.route.paramMap.pipe(map((params: ParamMap) => params.get('id') as string));
   }
-
-  readonly separatorKeysCodes = [ENTER, COMMA];
 
   add(event: MatChipInputEvent): void {
     const input = event.input;

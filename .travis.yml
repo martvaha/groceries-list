@@ -1,0 +1,30 @@
+language: node_js
+node_js:
+  - '8'
+
+branches:
+  only:
+    - master
+
+jobs:
+  include:
+    - stage: deploy
+      name: 'Deploy hosting'
+      before_script:
+        - yarn global add firebase-tools
+        - yarn install --frozen-lockfile
+      script:
+        - yarn build
+      after_success:
+        - firebase deploy --only hosting --token "$FIREBASE_TOKEN"
+
+    - name: 'Deploy functions'
+      before_script:
+        - cd functions
+        - yarn global add firebase-tools
+        - yarn install --frozen-lockfile
+      script:
+        - yarn lint
+        - yarn build
+      after_success:
+        - firebase deploy --only functions --token "$FIREBASE_TOKEN"

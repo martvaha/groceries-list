@@ -12,11 +12,12 @@ if (environment.production) {
   enableProdMode();
 }
 
-if (!environment.production) {
+if (!environment.production && environment.debug) {
   firebase.firestore.setLogLevel('debug');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  platformBrowserDynamic().bootstrapModule(AppModule)
-  .catch(err => console.log(err));
+  platformBrowserDynamic()
+    .bootstrapModule(AppModule)
+    .catch(err => console.log(err));
 });

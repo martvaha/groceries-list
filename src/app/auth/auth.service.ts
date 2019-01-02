@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-
-import { FirebaseAuth, UserInfo, FacebookAuthProvider } from '@firebase/auth-types';
 import { BehaviorSubject } from 'rxjs';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
@@ -19,41 +17,41 @@ export interface User {
 export class AuthService {
   // public auth: FirebaseAuth;
 
-  private _user = new BehaviorSubject<User | null | undefined>(undefined);
-  public user = this._user.asObservable();
+  private userSubject = new BehaviorSubject<User | null | undefined>(undefined);
+  public user = this.userSubject.asObservable();
 
-  constructor(private firebase: AngularFireAuth, private router: Router) {
+  constructor(private fireAuth: AngularFireAuth, private router: Router) {
     this.handleRedirect();
     this.registerAuthStateObserver();
   }
 
   async signInWithFacebook(redirect: string) {
-    this.firebase.auth.useDeviceLanguage();
+    this.fireAuth.auth.useDeviceLanguage();
     const provider = new firebase.auth.FacebookAuthProvider();
-    await this.firebase.auth.signInWithPopup(provider);
+    await this.fireAuth.auth.signInWithPopup(provider);
     return this.router.navigate([redirect]);
   }
 
   signOut() {
-    return this.firebase.auth
+    return this.fireAuth.auth
       .signOut()
-      .then(() => this._user.next(null))
-      .catch(err => console.log);
+      .then(() => this.userSubject.next(null))
+      .catch(err => console.log(err));
   }
 
   private registerAuthStateObserver() {
-    this.firebase.auth.onAuthStateChanged(data => {
-      if (!data) return this._user.next(null);
+    this.fireAuth.auth.onAuthStateChanged(data => {
+      if (!data) return this.userSubject.next(null);
       const uid = data.uid;
       const providerData = data.providerData[0];
       if (providerData) {
         const { displayName, photoURL, email } = providerData;
         // Update photo URL and display name when they change
-        if (this.firebase.auth.currentUser && (data.photoURL != photoURL || data.displayName != displayName)) {
-          this.firebase.auth.currentUser.updateProfile({ displayName, photoURL });
+        if (this.fireAuth.auth.currentUser && (data.photoURL !== photoURL || data.displayName !== displayName)) {
+          this.fireAuth.auth.currentUser.updateProfile({ displayName, photoURL });
         }
         console.log(providerData);
-        this._user.next({ uid, photoURL, displayName, email });
+        this.userSubject.next({ uid, photoURL, displayName, email });
       } else {
         console.log('auth state change without data');
       }
@@ -61,7 +59,7 @@ export class AuthService {
   }
 
   private handleRedirect() {
-    this.firebase.auth
+    this.fireAuth.auth
       .getRedirectResult()
       .then(function(result) {
         if (result.credential) {

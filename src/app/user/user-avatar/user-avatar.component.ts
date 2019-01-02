@@ -1,5 +1,5 @@
-import { Component, OnInit, Input, OnChanges, ChangeDetectionStrategy } from '@angular/core';
-import { User } from '../../auth/auth.service';
+import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
+import { User, AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'gl-user-avatar',
@@ -7,22 +7,10 @@ import { User } from '../../auth/auth.service';
   styleUrls: ['./user-avatar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UserAvatarComponent implements OnInit, OnChanges {
-  private _user: User;
-  @Input()
-  set user(user: User) {
-    console.log(user);
-    this._user = user;
-  }
-  get user() {
-    return this._user;
-  }
+export class UserAvatarComponent implements OnInit {
+  @Input() user: User;
 
-  constructor() {}
+  constructor(public authService: AuthService) {}
 
   ngOnInit() {}
-
-  ngOnChanges(change) {
-    console.log('user-change', change);
-  }
 }

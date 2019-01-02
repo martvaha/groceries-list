@@ -11,19 +11,16 @@ export interface InfoDialogConfig extends MatDialogConfig {
 
 @Component({
   template: `
-  <mat-toolbar class="cm-toolbar" *ngIf="title">
-    <h1 mat-dialog-title>{{title}}</h1>
-  </mat-toolbar>
-  <mat-dialog-content>
-    {{ message }}
-  </mat-dialog-content>
-  <mat-dialog-actions align="end">
-    <button mat-raised-button color="primary" mat-dialog-close>{{actionLabel}}</button>
-  </mat-dialog-actions>
+    <mat-toolbar class="cm-toolbar" *ngIf="title">
+      <h1 mat-dialog-title>{{ title }}</h1>
+    </mat-toolbar>
+    <mat-dialog-content> {{ message }} </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-raised-button color="primary" mat-dialog-close>{{ actionLabel || 'OK' }}</button>
+    </mat-dialog-actions>
   `
 })
 export class InfoDialogComponent {
-
   title: string;
   message: string;
   actionLabel: string;

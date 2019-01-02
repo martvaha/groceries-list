@@ -49,3 +49,4 @@ firestore.rules
 firestore.indexes.json
 firebase-debug.log
 .env-app-engine.json
+.firebase

@@ -15,9 +15,10 @@ export interface Item {
 }
 
 @Component({
-  selector: 'gl-list-invite',
-  styles: [``],
-  template: `<gl-list-invite [user]="user | async" [inviteId]="inviteId | async"></gl-list-invite>`
+  selector: 'gl-list-invite-container',
+  template: `
+    <gl-list-invite [user]="user | async" [inviteId]="inviteId | async"></gl-list-invite>
+  `
 })
 export class ListInviteContainerComponent implements OnInit, OnDestroy {
   public inviteId: Observable<string>;

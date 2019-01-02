@@ -1,7 +1,7 @@
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { Injectable } from '@angular/core';
 import { InfoDialogComponent, InfoDialogConfig } from './info-dialog.component';
-import { ConfirmDialogComponent } from './confirm-dialog.component';
+import { ConfirmDialogComponent, ConfirmDialogConfig } from './confirm-dialog.component';
 import { InputDialogComponent, InputDialogConfig } from './input-dialog.component';
 import { SharedModule } from '../shared.module';
 
@@ -15,7 +15,7 @@ export class DialogService {
     return this.dialog.open(InfoDialogComponent, config);
   }
 
-  confirm(config: InfoDialogConfig) {
+  confirm(config: ConfirmDialogConfig) {
     return this.dialog.open(ConfirmDialogComponent, config);
   }
 

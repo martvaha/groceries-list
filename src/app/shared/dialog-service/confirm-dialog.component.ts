@@ -2,31 +2,29 @@ import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef } from '@angular/material';
 
 export interface ConfirmDialogConfig extends MatDialogConfig {
-  data: {
-    message: string;
-    title?: string;
-  };
+  data: ConfirmDialogData;
+}
+
+export interface ConfirmDialogData {
+  message: string;
+  title?: string;
+  confirmLabel?: string;
+  cancelLabel?: string;
 }
 
 @Component({
   template: `
-  <h1 mat-dialog-title *ngIf="title">{{title}}</h1>
-  <mat-dialog-content>
-    {{ message }}
-  </mat-dialog-content>
-  <mat-dialog-actions>
-    <button mat-raised-button color="warn" (click)="dialogRef.close(true)">Jah</button>
-    <button mat-raised-button mat-dialog-close>Ei</button>
-  </mat-dialog-actions>
+    <h1 mat-dialog-title *ngIf="data.title">{{ data.title }}</h1>
+    <mat-dialog-content> {{ data.message }} </mat-dialog-content>
+    <mat-dialog-actions align="end">
+      <button mat-raised-button mat-dialog-close>{{ data.cancelLabel || 'Tühista' }}</button>
+      <button mat-raised-button color="warn" (click)="dialogRef.close(true)">{{ data.confirmLabel || 'Jah' }}</button>
+    </mat-dialog-actions>
   `
 })
 export class ConfirmDialogComponent {
-
-  title: string;
-  message: string;
-
-  constructor(public dialogRef: MatDialogRef<ConfirmDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
-    this.title = data.title;
-    this.message = data.message;
-  }
+  constructor(
+    public dialogRef: MatDialogRef<ConfirmDialogComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: ConfirmDialogData
+  ) {}
 }

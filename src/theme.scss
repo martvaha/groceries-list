@@ -1,0 +1,12 @@
+@import '~@angular/material/theming';
+@import './palette.scss';
+
+// Include non-theme styles for core.
+@include mat-core();
+
+// Define your application's custom theme.
+$primary: mat-palette($gl-blue);
+$accent: mat-palette($gl-deeppurple, 500, 300, 600);
+$theme: mat-light-theme($primary, $accent);
+
+$facebook-color: #3a5ca9;

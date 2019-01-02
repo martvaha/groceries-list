@@ -1,0 +1,19 @@
+@import '../../theme.scss';
+
+:host {
+  margin: 4rem 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  ::ng-deep .mat-raised-button.mat-primary {
+    background-color: $facebook-color;
+  }
+}
+
+.facebook {
+  margin-bottom: 1rem;
+  mat-icon {
+    padding-right: 1rem;
+  }
+}

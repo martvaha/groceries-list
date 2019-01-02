@@ -1,3 +1,15 @@
-<div class="user-avatar__container" *ngIf="user">
-  <div class="user-avatar__image" [ngStyle]="{'background-image': 'url(' + user.photoURL + ')'}"></div>
-</div>
+<button mat-button (click)="authService.signInWithFacebook()" *ngIf="!user; else menu">
+  <mat-icon>person</mat-icon>Logi sisse
+</button>
+<ng-template #menu>
+  <button
+    [matMenuTriggerFor]="menu"
+    class="user-avatar__image"
+    [ngStyle]="{ 'background-image': 'url(' + user?.photoURL + ')', 'border-color': '#007ac1' }"
+  ></button>
+  <mat-menu #menu="matMenu">
+    <ng-template matMenuContent>
+      <button mat-menu-item (click)="authService.signOut()">Logi välja</button>
+    </ng-template>
+  </mat-menu>
+</ng-template>

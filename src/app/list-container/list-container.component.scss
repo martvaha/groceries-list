@@ -3,7 +3,8 @@
   flex: 1;
   flex-direction: column;
   overflow-y: auto;
-  padding: 1em;
+  padding: 1rem;
+  max-width: 30rem;
 }
 
 .list-container__form {

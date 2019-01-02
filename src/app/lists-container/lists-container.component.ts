@@ -6,8 +6,9 @@ import { Observable, forkJoin, Subscription } from 'rxjs';
 import { DialogService } from '../shared/dialog-service/dialog.service';
 import { LoadingService } from '../shared/loading-service';
 
-export interface UserDocument {
-  lists: string[];
+export interface List {
+  id: string;
+  name: string;
 }
 
 @Component({
@@ -16,7 +17,7 @@ export interface UserDocument {
   styleUrls: ['./lists-container.component.scss']
 })
 export class ListsContainerComponent implements OnInit {
-  public lists: Observable<any[]>;
+  public lists$: Observable<List[]>;
   constructor(
     private db: AngularFirestore,
     private auth: AuthService,
@@ -26,11 +27,11 @@ export class ListsContainerComponent implements OnInit {
 
   ngOnInit() {
     this.loading.start();
-    this.lists = this.auth.user.pipe(
+    this.lists$ = this.auth.user.pipe(
       filter(user => !!user),
       switchMap((user: User) =>
         this.db
-          .collection('lists', ref => ref.where('acl.' + user.uid, '==', true))
+          .collection<List>('lists', ref => ref.where('acl.' + user.uid, '==', true))
           .snapshotChanges()
           .pipe(
             map(changes =>
@@ -43,10 +44,9 @@ export class ListsContainerComponent implements OnInit {
                 .sort((a: any, b: any) => a.name.localeCompare(b.name))
             )
           )
-      ),
-      tap(console.log)
+      )
     );
-    this.lists.pipe(take(1)).subscribe(() => this.loading.end());
+    this.lists$.pipe(take(1)).subscribe(() => this.loading.end());
   }
 
   addList() {
@@ -62,7 +62,16 @@ export class ListsContainerComponent implements OnInit {
     });
   }
 
-  deleteList(listId) {
-    this.db.doc('lists/' + listId).delete();
+  deleteList(list: List) {
+    const dialogRef = this.dialogService.confirm({
+      data: {
+        title: 'Nimekirja kustutamine',
+        message: `Kas oled kindel, et soovid nimekirja "${list.name}" kusutatad?`
+      }
+    });
+    dialogRef.afterClosed().subscribe(resp => {
+      if (!resp) return;
+      this.db.doc('lists/' + list.id).delete();
+    });
   }
 }

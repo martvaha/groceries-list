@@ -10,7 +10,9 @@ import {
   MatListModule,
   MatDialogModule,
   MatInputModule,
-  MatAutocompleteModule
+  MatAutocompleteModule,
+  MatSnackBarModule,
+  MatMenuModule
 } from '@angular/material';
 
 const modules = [
@@ -23,7 +25,9 @@ const modules = [
   MatListModule,
   MatDialogModule,
   MatInputModule,
-  MatAutocompleteModule
+  MatAutocompleteModule,
+  MatSnackBarModule,
+  MatMenuModule
 ];
 
 @NgModule({
