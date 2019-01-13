@@ -3,14 +3,14 @@
   flex: 1;
   flex-direction: column;
   overflow-y: auto;
-  padding: 1rem;
+  padding: 0 1rem;
   max-width: 30rem;
 }
 
 .list-container__form {
   display: flex;
   align-items: center;
-  justify-content: baseline;
+  flex-shrink: 0;
 }
 
 .list-container__input {
