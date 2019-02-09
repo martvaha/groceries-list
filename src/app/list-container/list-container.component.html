@@ -24,5 +24,7 @@
 <mat-list class="lists-container__item-list" [disableRipple]="false">
   <mat-list-item *ngFor="let item of (activeItems | async); trackBy: trackById">
     <mat-checkbox (click)="markDone(item)">{{ item.name }}</mat-checkbox>
+    <span class="space"></span>
+    <button mat-icon-button [routerLink]="['/home/item', listId | async, item.id]"><mat-icon>edit</mat-icon></button>
   </mat-list-item>
 </mat-list>

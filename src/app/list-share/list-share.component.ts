@@ -6,12 +6,6 @@ import { Observable } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { MatChipInputEvent } from '@angular/material';
 
-export interface Item {
-  id: string;
-  name: string;
-  displayName: string;
-}
-
 @Component({
   selector: 'gl-list-share',
   styleUrls: ['./list-share.component.scss'],

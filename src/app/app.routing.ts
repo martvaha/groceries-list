@@ -24,6 +24,10 @@ const routes: Routes = [
         loadChildren: './list-edit/list-edit.module#ListEditModule'
       },
       {
+        path: 'item',
+        loadChildren: './item-edit/item-edit.module#ItemEditModule'
+      },
+      {
         path: 'share',
         loadChildren: './list-share/list-share.module#ListShareModule'
       },

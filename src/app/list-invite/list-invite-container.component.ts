@@ -6,12 +6,6 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService, User } from '../auth/auth.service';
 import { OnDestroy } from '@angular/core';
 
-export interface Item {
-  id: string;
-  name: string;
-  displayName: string;
-}
-
 @Component({
   selector: 'gl-list-invite-container',
   template: `
