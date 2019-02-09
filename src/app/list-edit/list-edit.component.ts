@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { switchMap, map, take } from 'rxjs/operators';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AngularFirestore } from 'angularfire2/firestore';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { DialogService } from '../shared/dialog-service/dialog.service';
 
 export interface Item {

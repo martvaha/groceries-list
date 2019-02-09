@@ -1,23 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable, Subscription, combineLatest, BehaviorSubject, Subject } from 'rxjs';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { AngularFirestore, DocumentChangeAction } from 'angularfire2/firestore';
-import {
-  switchMap,
-  map,
-  debounceTime,
-  startWith,
-  delay,
-  tap,
-  take,
-  withLatestFrom,
-  throttleTime,
-  publishBehavior,
-  refCount,
-  takeUntil
-} from 'rxjs/operators';
+import { AngularFirestore } from '@angular/fire/firestore';
+import { switchMap, map, debounceTime, startWith, delay, tap, take, withLatestFrom, takeUntil } from 'rxjs/operators';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
-import { ErrorStateMatcher, MatAutocompleteSelectedEvent, MatSnackBar } from '@angular/material';
+import { ErrorStateMatcher, MatSnackBar } from '@angular/material';
 import { LoadingService } from '../shared/loading-service';
 import { highlight } from '../shared/utils';
 import * as Fuse from 'fuse.js';

@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { map, switchMap, filter, take } from 'rxjs/operators';
-import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
-import { AngularFirestore } from 'angularfire2/firestore';
-import { MatChipInputEvent } from '@angular/material';
+import { AngularFirestore } from '@angular/fire/firestore';
 import { AuthService, User } from '../auth/auth.service';
 import { OnDestroy } from '@angular/core';
 
