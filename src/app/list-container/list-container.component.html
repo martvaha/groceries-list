@@ -9,13 +9,12 @@
       [matAutocomplete]="auto"
       [errorStateMatcher]="inputValid"
     />
-    <mat-autocomplete
-      autoActiveFirstOption
-      #auto="matAutocomplete"
-      [displayWith]="inputDisplay"
-      (optionSelected)="addItem()"
-    >
-      <mat-option [innerHTML]="item.displayName" *ngFor="let item of (filteredItems$ | async); trackBy: trackById" [value]="item">
+    <mat-autocomplete #auto="matAutocomplete" [displayWith]="inputDisplay" (optionSelected)="addItem()">
+      <mat-option
+        [innerHTML]="item.displayName"
+        *ngFor="let item of (filteredItems$ | async); trackBy: trackById"
+        [value]="item"
+      >
       </mat-option>
     </mat-autocomplete>
   </mat-form-field>
