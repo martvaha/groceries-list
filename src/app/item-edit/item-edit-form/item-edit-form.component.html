@@ -3,4 +3,15 @@
     <input matInput placeholder="Nimi" formControlName="name" />
   </mat-form-field>
   <mat-checkbox formControlName="active">Nimekirjas</mat-checkbox>
+  <div class="item-edit-form__category-container">
+    <mat-form-field>
+      <mat-select placeholder="Kategooria" formControlName="categoryId">
+        <mat-option *ngFor="let category of categories" [value]="category.id">
+          {{ category.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    <button color="primary" mat-icon-button><mat-icon>add</mat-icon></button>
+  </div>
+  <button style="align-self: baseline;" mat-raised-button color="primary" (click)="onUpdate()">Salvesta</button>
 </form>

@@ -1,1 +1,1 @@
-<gl-item-edit-form *ngIf="(item | async); let item" [item]="item"></gl-item-edit-form>
+<gl-item-edit-form *ngIf="(item | async); let item" [item]="item" [categories]="categories" (updated)="onItemUpdated($event)"></gl-item-edit-form>

@@ -1,6 +1,13 @@
-export interface ListItem {
+export interface Item {
+  id?: string;
   name: string;
-  id: string;
   active: boolean;
+  categoryId: string;
   displayName?: string;
+}
+
+export interface Category {
+  id?: string;
+  name: string;
+  order: number;
 }

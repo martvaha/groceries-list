@@ -8,7 +8,7 @@ import { ErrorStateMatcher, MatSnackBar } from '@angular/material';
 import { LoadingService } from '../shared/loading-service';
 import { highlight } from '../shared/utils';
 import * as Fuse from 'fuse.js';
-import { ListItem } from '../shared/models';
+import { Item } from '../shared/models';
 
 export interface FuseMatch {
   indices: [number, number][];
@@ -28,16 +28,16 @@ export interface FuseAdvancedResult<T> {
   styleUrls: ['./list-container.component.scss']
 })
 export class ListContainerComponent implements OnInit, OnDestroy {
-  private itemsSubject = new BehaviorSubject<ListItem[]>([]);
+  private itemsSubject = new BehaviorSubject<Item[]>([]);
   private destroy$ = new Subject<any>();
 
   public listId: Observable<string>;
-  public activeItems: Observable<ListItem[]>;
-  public filteredItems$: Observable<ListItem[]>;
+  public activeItems: Observable<Item[]>;
+  public filteredItems$: Observable<Item[]>;
   public inputControl: FormControl;
   public inputForm: FormGroup;
   private unselectedSubscription: Subscription;
-  private fuse: Fuse<ListItem>;
+  private fuse: Fuse<Item>;
   public items = this.itemsSubject.asObservable();
 
   public inputValid: ErrorStateMatcher = {
@@ -55,7 +55,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.loading.start();
-    this.fuse = new Fuse<ListItem>([], {
+    this.fuse = new Fuse<Item>([], {
       keys: ['name'],
       includeMatches: true,
       threshold: 0.6
@@ -68,7 +68,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
         switchMap(listId => {
           const path = 'lists/' + listId + '/items';
           return this.db
-            .collection<ListItem>(path, ref => ref.orderBy('name'))
+            .collection<Item>(path, ref => ref.orderBy('name'))
             .snapshotChanges()
             .pipe(
               map(items =>
@@ -144,7 +144,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
     }
   }
 
-  markDone(item: ListItem) {
+  markDone(item: Item) {
     this.listId.pipe(delay(300)).subscribe(listId => {
       const path = 'lists/' + listId + '/items/' + item.id;
       this.db.doc(path).update({ active: false });
@@ -157,11 +157,11 @@ export class ListContainerComponent implements OnInit, OnDestroy {
     });
   }
 
-  inputDisplay(item?: ListItem): string | undefined {
+  inputDisplay(item?: Item): string | undefined {
     return item ? item.name : undefined;
   }
 
-  trackById(index: number, item: ListItem) {
+  trackById(index: number, item: Item) {
     return item.id;
   }
 

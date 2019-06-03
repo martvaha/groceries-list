@@ -1,22 +1,35 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { ListItem } from '../../shared/models';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Item, Category } from '../../shared/models';
 
 @Component({
   selector: 'gl-item-edit-form',
   templateUrl: './item-edit-form.component.html',
   styleUrls: ['./item-edit-form.component.scss']
 })
-export class ItemEditFormComponent implements OnInit {
-  @Input() item: ListItem;
-  form: FormGroup;
+export class ItemEditFormComponent {
+  @Input()
+  set item(value: Item) {
+    if (!value) return;
+    this._item = value;
+    this.form.patchValue(value);
+  }
+  get item() {
+    return this._item;
+  }
+  @Input() categories: Category[];
+  @Output() updated = new EventEmitter<Item>();
+  form = this.formBuilder.group({
+    name: [undefined, [Validators.required]],
+    active: [undefined, [Validators.required]],
+    categoryId: [undefined]
+  });
+  private _item: Item;
 
   constructor(private formBuilder: FormBuilder) {}
 
-  ngOnInit() {
-    this.form = this.formBuilder.group({
-      name: [this.item.name],
-      active: [this.item.active]
-    });
+  onUpdate() {
+    console.log(this.item, this.form.getRawValue());
+    this.updated.emit({ ...this.item, ...this.form.getRawValue() });
   }
 }
