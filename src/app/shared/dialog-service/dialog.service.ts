@@ -1,4 +1,4 @@
-import { MatDialog, MatDialogConfig } from '@angular/material';
+import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
 import { Injectable } from '@angular/core';
 import { InfoDialogComponent, InfoDialogConfig } from './info-dialog.component';
 import { ConfirmDialogComponent, ConfirmDialogConfig } from './confirm-dialog.component';

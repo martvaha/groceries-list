@@ -21,19 +21,19 @@ const routes: Routes = [
       { path: 'test', component: TestComponent },
       {
         path: 'edit',
-        loadChildren: './list-edit/list-edit.module#ListEditModule'
+        loadChildren: () => import('./list-edit/list-edit.module').then(m => m.ListEditModule)
       },
       {
         path: 'item',
-        loadChildren: './item-edit/item-edit.module#ItemEditModule'
+        loadChildren: () => import('./item-edit/item-edit.module').then(m => m.ItemEditModule)
       },
       {
         path: 'share',
-        loadChildren: './list-share/list-share.module#ListShareModule'
+        loadChildren: () => import('./list-share/list-share.module').then(m => m.ListShareModule)
       },
       {
         path: 'invite',
-        loadChildren: './list-invite/list-invite.module#ListInviteModule'
+        loadChildren: () => import('./list-invite/list-invite.module').then(m => m.ListInviteModule)
       }
     ]
   }
