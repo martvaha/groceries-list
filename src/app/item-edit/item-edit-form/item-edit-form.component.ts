@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Item, Category } from '../../shared/models';
+import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Item, Group } from '../../shared/models';
 
 @Component({
   selector: 'gl-item-edit-form',
@@ -17,13 +17,14 @@ export class ItemEditFormComponent {
   get item() {
     return this._item;
   }
-  @Input() categories: Category[];
+  @Input() groups: Group[];
   @Output() updated = new EventEmitter<Item>();
   form = this.formBuilder.group({
     name: [undefined, [Validators.required]],
     active: [undefined, [Validators.required]],
-    categoryId: [undefined]
+    groupId: [undefined]
   });
+  @Output() groupAdd = new EventEmitter<void>();
   private _item: Item;
 
   constructor(private formBuilder: FormBuilder) {}

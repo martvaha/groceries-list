@@ -1,13 +1,16 @@
 export interface Item {
-  id?: string;
+  id: string;
   name: string;
   active: boolean;
-  categoryId: string;
+  groupId: string;
   displayName?: string;
+  modified: Date;
 }
 
-export interface Category {
-  id?: string;
+export interface Group {
+  id: string;
   name: string;
-  order: number;
+  modified: Date;
+  nextId: string | null;
+  active: boolean;
 }

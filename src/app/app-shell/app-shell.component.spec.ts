@@ -1,6 +1,10 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AppShellComponent } from './app-shell.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatButtonModule } from '@angular/material/button';
 
 describe('AppShellComponent', () => {
   let component: AppShellComponent;
@@ -8,9 +12,9 @@ describe('AppShellComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AppShellComponent ]
-    })
-    .compileComponents();
+      imports: [MatButtonModule, MatIconModule, MatToolbarModule, MatProgressSpinnerModule],
+      declarations: [AppShellComponent]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

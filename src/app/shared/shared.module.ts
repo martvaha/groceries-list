@@ -4,10 +4,10 @@ import { MaterialModule } from './material.module';
 import { ConfirmDialogComponent } from './dialog-service/confirm-dialog.component';
 import { InfoDialogComponent } from './dialog-service/info-dialog.component';
 import { InputDialogComponent } from './dialog-service/input-dialog.component';
-import { DialogService } from './dialog-service/dialog.service';
+
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
-import { LoadingService } from './loading-service';
+
 import { AuthComponent } from '../auth/auth.component';
 import { TestComponent } from './test.component';
 

@@ -23,7 +23,7 @@ export const sendEmail = functions.firestore.document('/invites/{uid}').onCreate
     mailTransportConfig = {
       host: 'smtp.ethereal.email',
       port: 587,
-      auth: { user: 'eestybztixlicwd2@ethereal.email', pass: 'bBWTx1VDagfCMceQhv' }
+      auth: { user: 'deangelo.reinger5@ethereal.email', pass: '9mF37NSXzgVaARkyAs' }
     };
   } else {
     mailTransportConfig = {

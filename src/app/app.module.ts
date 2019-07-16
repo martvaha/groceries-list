@@ -19,6 +19,8 @@ import { ListsContainerComponent } from './lists-container/lists-container.compo
 import { AuthGuard } from './auth/auth.guard';
 import { UserAvatarComponent } from './user/user-avatar/user-avatar.component';
 import { ListContainerComponent } from './list-container/list-container.component';
+import { StoreModule } from '@ngrx/store';
+import { reducers, metaReducers } from './reducers';
 
 @NgModule({
   declarations: [
@@ -39,7 +41,14 @@ import { ListContainerComponent } from './list-container/list-container.componen
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase, 'groceries-list'),
     AngularFireAuthModule,
-    AngularFirestoreModule.enablePersistence()
+    AngularFirestoreModule.enablePersistence(),
+    StoreModule.forRoot(reducers, {
+      metaReducers,
+      runtimeChecks: {
+        strictStateImmutability: true,
+        strictActionImmutability: true
+      }
+    })
   ],
   providers: [AuthGuard, MediaMatcher],
   bootstrap: [AppComponent]

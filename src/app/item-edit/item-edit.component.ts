@@ -3,7 +3,10 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { map, filter, switchMap, take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { Item, Category } from '../shared/models';
+import { Item, Group } from '../shared/models';
+import { DialogService } from '../shared/dialog-service/dialog.service';
+import * as firebase from 'firebase/app';
+import { takeValue, takeAsyncValue } from '../shared/utils';
 
 @Component({
   selector: 'gl-item-edit',
@@ -13,12 +16,9 @@ import { Item, Category } from '../shared/models';
 export class ItemEditComponent implements OnInit {
   ids: Observable<{ listId: string; itemId: string }>;
   item: Observable<Item | undefined>;
-  categories: Category[] = [
-    { id: '1', name: 'Puuviljad', order: 1 },
-    { id: '2', name: 'Piimatooted', order: 2 },
-    { id: '4', name: 'Liha', order: 3 }
-  ];
-  constructor(private route: ActivatedRoute, private db: AngularFirestore) {}
+  groups: Observable<Group[]>;
+
+  constructor(private route: ActivatedRoute, private db: AngularFirestore, private dialogService: DialogService) {}
 
   ngOnInit() {
     this.ids = this.route.paramMap.pipe(
@@ -29,6 +29,34 @@ export class ItemEditComponent implements OnInit {
     this.item = this.ids.pipe(
       switchMap(({ listId, itemId }) => this.db.doc<Item>(`/lists/${listId}/items/${itemId}`).valueChanges())
     );
+
+    this.groups = this.ids.pipe(
+      switchMap(({ listId }) =>
+        this.db
+          .collection<Group>(`lists/${listId}/groups`)
+          .snapshotChanges()
+          .pipe(map(groups => groups.map(group => ({ id: group.payload.doc.id, ...group.payload.doc.data() }))))
+      )
+    );
+  }
+
+  onGroupAdd() {
+    // const dialogRef = this.dialogService.input({
+    //   data: { actionLabel: 'Lisa', title: 'Grupi lisamine', placeholder: 'Grupi nimi' }
+    // });
+    // dialogRef.afterClosed().subscribe(async name => {
+    //   if (!name) return;
+    //   const { listId } = takeValue(this.ids);
+    //   const groups = await takeAsyncValue(this.groups);
+    //   console.log('current groups', groups);
+    //   const lastGroup = groups[groups.length - 1];
+    //   const prevGroupId = lastGroup ? lastGroup.id : null;
+    //   this.db.collection<Group>(`lists/${listId}/groups`).add({
+    //     name,
+    //     prevGroupId,
+    //     modified: firebase.firestore.FieldValue.serverTimestamp() as any
+    //   } as Group);
+    // });
   }
 
   onItemUpdated(item: Item) {
