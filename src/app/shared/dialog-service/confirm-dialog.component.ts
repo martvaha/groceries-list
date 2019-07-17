@@ -9,6 +9,7 @@ export interface ConfirmDialogData {
   message: string;
   title?: string;
   confirmLabel?: string;
+  confirmColor?: 'primary' | 'accent' | 'warn';
   cancelLabel?: string;
 }
 
@@ -18,7 +19,9 @@ export interface ConfirmDialogData {
     <mat-dialog-content> {{ data.message }} </mat-dialog-content>
     <mat-dialog-actions align="end">
       <button mat-raised-button mat-dialog-close>{{ data.cancelLabel || 'Tühista' }}</button>
-      <button mat-raised-button color="warn" (click)="dialogRef.close(true)">{{ data.confirmLabel || 'Jah' }}</button>
+      <button mat-raised-button [color]="data.confirmColor || 'warn'" (click)="dialogRef.close(true)">
+        {{ data.confirmLabel || 'Jah' }}
+      </button>
     </mat-dialog-actions>
   `
 })

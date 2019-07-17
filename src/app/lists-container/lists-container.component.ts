@@ -2,14 +2,15 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService, User } from '../auth/auth.service';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { switchMap, map, filter, take } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { DialogService } from '../shared/dialog-service/dialog.service';
 import { LoadingService } from '../shared/loading-service';
-
-export interface List {
-  id: string;
-  name: string;
-}
+import { List } from '../shared/models';
+import { Store } from '@ngrx/store';
+import { State, selectLoading } from '../state/app.reducer';
+import { loadLists, addList, removeList } from '../state/lists/list.actions';
+import { selectAllLists } from '../state/lists/lists.reducer';
+import { takeValue } from '../shared/utils';
 
 @Component({
   selector: 'gl-lists-container',
@@ -18,47 +19,28 @@ export interface List {
 })
 export class ListsContainerComponent implements OnInit {
   public lists$: Observable<List[]>;
+  loading$: Observable<boolean>;
+
   constructor(
     private db: AngularFirestore,
     private auth: AuthService,
     private dialogService: DialogService,
-    private loading: LoadingService
+    private store: Store<State>
   ) {}
 
   ngOnInit() {
-    this.loading.start();
-    this.lists$ = this.auth.user.pipe(
-      filter(user => !!user),
-      switchMap((user: User) =>
-        this.db
-          .collection<List>('lists', ref => ref.where('acl.' + user.uid, '==', true))
-          .snapshotChanges()
-          .pipe(
-            map(changes =>
-              changes
-                .map(change => {
-                  const data = change.payload.doc.data();
-                  const id = change.payload.doc.id;
-                  return { id, ...data };
-                })
-                .sort((a: any, b: any) => a.name.localeCompare(b.name))
-            )
-          )
-      )
-    );
-    this.lists$.pipe(take(1)).subscribe(() => this.loading.end());
+    this.store.dispatch(loadLists());
+    this.loading$ = this.store.select(selectLoading);
+    this.lists$ = this.store.select(selectAllLists);
   }
 
   addList() {
-    this.auth.user.pipe(take(1)).subscribe(user => {
-      if (user) {
-        const dialog = this.dialogService.input({
-          data: { placeholder: 'Nimekirja pealkiri', title: 'Nimekirja lisamine' }
-        });
-        dialog.afterClosed().subscribe(name => {
-          this.db.collection('lists').add({ name, acl: { [user.uid]: true } });
-        });
-      }
+    const dialog = this.dialogService.input({
+      data: { placeholder: 'Nimekirja pealkiri', title: 'Nimekirja lisamine' }
+    });
+    dialog.afterClosed().subscribe(name => {
+      const list = { name } as List;
+      this.store.dispatch(addList({ list }));
     });
   }
 
@@ -71,7 +53,7 @@ export class ListsContainerComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(resp => {
       if (!resp) return;
-      this.db.doc('lists/' + list.id).delete();
+      this.store.dispatch(removeList({ list }));
     });
   }
 }

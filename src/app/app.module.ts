@@ -20,7 +20,10 @@ import { AuthGuard } from './auth/auth.guard';
 import { UserAvatarComponent } from './user/user-avatar/user-avatar.component';
 import { ListContainerComponent } from './list-container/list-container.component';
 import { StoreModule } from '@ngrx/store';
-import { reducers, metaReducers } from './reducers';
+import { reducers, metaReducers } from './state/app.reducer';
+import { EffectsModule } from '@ngrx/effects';
+import { AppEffects } from './state/app.effects';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 @NgModule({
   declarations: [
@@ -41,14 +44,16 @@ import { reducers, metaReducers } from './reducers';
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase, 'groceries-list'),
     AngularFireAuthModule,
-    AngularFirestoreModule.enablePersistence(),
+    AngularFirestoreModule,
     StoreModule.forRoot(reducers, {
       metaReducers,
       runtimeChecks: {
         strictStateImmutability: true,
         strictActionImmutability: true
       }
-    })
+    }),
+    EffectsModule.forRoot([AppEffects]),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
   ],
   providers: [AuthGuard, MediaMatcher],
   bootstrap: [AppComponent]

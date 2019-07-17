@@ -14,3 +14,10 @@ export interface Group {
   nextId: string | null;
   active: boolean;
 }
+
+export interface List {
+  modified: Date;
+  id: string;
+  name: string;
+  acl: { [id: string]: boolean };
+}

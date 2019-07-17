@@ -11,7 +11,6 @@ export interface InputDialogConfig extends MatDialogConfig {
 
 @Component({
   template: `
-
   <h1 *ngIf="title" mat-dialog-title>{{ title }}</h1>
   <mat-dialog-content>
     <mat-form-field floatLabel="auto">

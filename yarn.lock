@@ -542,6 +542,21 @@
     lodash.camelcase "^4.3.0"
     protobufjs "^6.8.6"
 
+"@ngrx/effects@^8.1.0":
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/effects/-/effects-8.1.0.tgz#76245d6d8658fbe84d610ade4016cc7d6091d09a"
+  integrity sha512-JQKD39Itsq70Mlq8kJ/yQuVbM08luAUexMqyi5HECe8izyRNkcIGJFh/2VkQSMLUGSNkU7qnT7y7xug8GA+AGA==
+
+"@ngrx/entity@^8.1.0":
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/entity/-/entity-8.1.0.tgz#2856121a288ef850e39c851edd39a6619d2d8910"
+  integrity sha512-/pPHCkT0QfNZSGIaJ1i864wMZCaVYXLkqWpdnujf+BQHvjYFBCR81rZf3aGcnKaB5s3N36xGlt2aGZshGxHxFQ==
+
+"@ngrx/store-devtools@^8.1.0":
+  version "8.1.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/store-devtools/-/store-devtools-8.1.0.tgz#b720be01c5d3a7250f33429767c6ae792a2b8de7"
+  integrity sha512-1xqZR728Jev2bjV/KDxFCT+B1aGhbIWbn3yeAm/gPyDGaJAmaQlBdE6M8Yxjsr3kCffwyPv8jtD3ekdY47l2VA==
+
 "@ngrx/store@^8.1.0":
   version "8.1.0"
   resolved "https://registry.yarnpkg.com/@ngrx/store/-/store-8.1.0.tgz#2ef648c591b2a56529a40ab3081327c49fb8ca93"
@@ -4419,6 +4434,11 @@ lodash.clonedeep@^4.5.0:
   resolved "https://registry.yarnpkg.com/lodash.clonedeep/-/lodash.clonedeep-4.5.0.tgz#e23f3f9c4f8fbdde872529c1071857a086e5ccef"
   integrity sha1-4j8/nE+Pvd6HJSnBBxhXoIblzO8=
 
+lodash.merge@^4.6.1:
+  version "4.6.2"
+  resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
+  integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
+
 lodash.tail@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/lodash.tail/-/lodash.tail-4.1.1.tgz#d2333a36d9e7717c8ad2f7cacafec7c32b444664"
@@ -4855,6 +4875,13 @@ neo-async@^2.6.0:
   version "2.6.1"
   resolved "https://registry.yarnpkg.com/neo-async/-/neo-async-2.6.1.tgz#ac27ada66167fa8849a6addd837f6b189ad2081c"
   integrity sha512-iyam8fBuCUpWeKPGpaNMetEocMt364qkCsfL9JuhjXX6dRnguRVOfk2GZaDpPjcOKiiXCPINZC1GczQ7iTq3Zw==
+
+ngrx-store-localstorage@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/ngrx-store-localstorage/-/ngrx-store-localstorage-7.0.1.tgz#58b9fb7797698d07e41330ec2f78fa25052dc245"
+  integrity sha512-Mw5Vjp/KbYZ9qvWw68ixt97+QXsqIAQyceeUIKiMwVQtoWdjs008rYAkO54mJDx57CXVseogVdsnjXokcRijOA==
+  dependencies:
+    lodash.merge "^4.6.1"
 
 nice-try@^1.0.4:
   version "1.0.5"
