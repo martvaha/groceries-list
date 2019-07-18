@@ -1,12 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { map, filter, switchMap, take } from 'rxjs/operators';
-import { Observable } from 'rxjs';
+import { Observable, of, combineLatest } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { Item, Group } from '../shared/models';
 import { DialogService } from '../shared/dialog-service/dialog.service';
 import * as firebase from 'firebase/app';
 import { takeValue, takeAsyncValue } from '../shared/utils';
+import { Store } from '@ngrx/store';
+import { State } from '../state/app.reducer';
+import { selectAllGroups } from '../state/group/group.reducer';
+import { selectActiveListId } from '../state/list/list.reducer';
+import { addGroup, getGroups } from '../state/group/group.actions';
+import { getItems, updateItem } from '../state/item/item.actions';
+import { selectItemEntities } from '../state/item/item.reducer';
 
 @Component({
   selector: 'gl-item-edit',
@@ -18,51 +25,45 @@ export class ItemEditComponent implements OnInit {
   item: Observable<Item | undefined>;
   groups: Observable<Group[]>;
 
-  constructor(private route: ActivatedRoute, private db: AngularFirestore, private dialogService: DialogService) {}
+  constructor(
+    private route: ActivatedRoute,
+    private db: AngularFirestore,
+    private dialogService: DialogService,
+    private store: Store<State>
+  ) {}
 
   ngOnInit() {
+    this.store.dispatch(getGroups());
+    this.store.dispatch(getItems());
     this.ids = this.route.paramMap.pipe(
       filter(params => params.get('listId') !== null && params.get('itemId') !== null),
       map((params: ParamMap) => ({ listId: params.get('listId') as string, itemId: params.get('itemId') as string }))
     );
 
-    this.item = this.ids.pipe(
-      switchMap(({ listId, itemId }) => this.db.doc<Item>(`/lists/${listId}/items/${itemId}`).valueChanges())
+    this.item = combineLatest(this.ids, this.store.select(selectItemEntities)).pipe(
+      map(([{ itemId }, entities]) => entities[itemId])
     );
 
-    this.groups = this.ids.pipe(
-      switchMap(({ listId }) =>
-        this.db
-          .collection<Group>(`lists/${listId}/groups`)
-          .snapshotChanges()
-          .pipe(map(groups => groups.map(group => ({ id: group.payload.doc.id, ...group.payload.doc.data() }))))
-      )
-    );
+    this.groups = this.store.select(selectAllGroups);
   }
 
   onGroupAdd() {
-    // const dialogRef = this.dialogService.input({
-    //   data: { actionLabel: 'Lisa', title: 'Grupi lisamine', placeholder: 'Grupi nimi' }
-    // });
-    // dialogRef.afterClosed().subscribe(async name => {
-    //   if (!name) return;
-    //   const { listId } = takeValue(this.ids);
-    //   const groups = await takeAsyncValue(this.groups);
-    //   console.log('current groups', groups);
-    //   const lastGroup = groups[groups.length - 1];
-    //   const prevGroupId = lastGroup ? lastGroup.id : null;
-    //   this.db.collection<Group>(`lists/${listId}/groups`).add({
-    //     name,
-    //     prevGroupId,
-    //     modified: firebase.firestore.FieldValue.serverTimestamp() as any
-    //   } as Group);
-    // });
+    const listId = takeValue(this.store.select(selectActiveListId));
+    if (!listId) return;
+    const dialogRef = this.dialogService.input({
+      data: { actionLabel: 'Lisa', title: 'Grupi lisamine', placeholder: 'Grupi nimi' }
+    });
+    dialogRef.afterClosed().subscribe(async name => {
+      if (!name) return;
+      const group = { name } as Group;
+      this.store.dispatch(addGroup({ group, listId }));
+    });
   }
 
   onItemUpdated(item: Item) {
     console.log(item);
-    this.ids.pipe(take(1)).subscribe(({ listId, itemId }) => {
-      this.db.doc(`/lists/${listId}/items/${itemId}`).update(item);
-    });
+    const listId = takeValue(this.store.select(selectActiveListId));
+    if (!listId) return;
+    this.store.dispatch(updateItem({ item, listId }));
   }
 }

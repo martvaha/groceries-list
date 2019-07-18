@@ -1,5 +1,8 @@
 import { Component, OnInit, ChangeDetectionStrategy, Input } from '@angular/core';
 import { User, AuthService } from '../../auth/auth.service';
+import { Store } from '@ngrx/store';
+import { State } from '../../state/app.reducer';
+import { logout, login } from '../../state/user/user.actions';
 
 @Component({
   selector: 'gl-user-avatar',
@@ -7,10 +10,16 @@ import { User, AuthService } from '../../auth/auth.service';
   styleUrls: ['./user-avatar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class UserAvatarComponent implements OnInit {
+export class UserAvatarComponent {
   @Input() user: User;
 
-  constructor(public authService: AuthService) {}
+  constructor(private store: Store<State>) {}
 
-  ngOnInit() {}
+  login() {
+    this.store.dispatch(login());
+  }
+
+  logout() {
+    this.store.dispatch(logout());
+  }
 }

@@ -1,15 +1,12 @@
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
+import { EntityState, EntityAdapter, createEntityAdapter, Dictionary } from '@ngrx/entity';
 import { createReducer, Action, on, createFeatureSelector, createSelector } from '@ngrx/store';
 import { List } from '../../shared/models';
 import * as ListActions from './list.actions';
+import { maxModified, sortByName } from '../utils';
 
 export interface ListState extends EntityState<List> {
   activeId: string | null;
   loading: boolean;
-}
-
-export function sortByName(a: List, b: List): number {
-  return a.name.localeCompare(b.name);
 }
 
 export const adapter: EntityAdapter<List> = createEntityAdapter<List>({
@@ -33,6 +30,10 @@ const listReducer = createReducer(
   // on(ListActions.addList, (state, { list }) => {
   //   return adapter.upsertOne(list, state);
   // }),
+  on(ListActions.upsertGroupsOrder, (state, { groupsOrder, id }) => {
+    return adapter.updateOne({ id, changes: { groupsOrder } }, state);
+  }),
+  on(ListActions.setActive, (state, { id }) => ({ ...state, activeId: id })),
   on(ListActions.removeListSuccess, (state, { list }) => {
     return adapter.removeOne(list.id, { ...state, loading: false });
   }),
@@ -54,10 +55,20 @@ const { selectIds, selectEntities, selectAll, selectTotal } = adapter.getSelecto
 
 export const selectListState = createFeatureSelector<ListState>('list');
 
+export const selectActiveListId = createSelector(
+  selectListState,
+  (state: ListState) => state.activeId
+);
+
 export const selectAllLists = createSelector(
   selectListState,
   selectAll
 );
+export const selectListEntities = createSelector(
+  selectListState,
+  selectEntities
+);
+
 export const selectListStateLoading = createSelector(
   selectListState,
   selectLoading
@@ -65,9 +76,16 @@ export const selectListStateLoading = createSelector(
 
 export const selectListMaxModified = createSelector(
   selectAllLists,
-  lists =>
-    lists.reduce((prev, cur) => {
-      const curModified = cur.modified || new Date(0);
-      return curModified.getTime() > prev.getTime() ? curModified : prev;
-    }, new Date(0))
+  maxModified
+);
+
+export const selectActiveList = createSelector(
+  selectListEntities,
+  selectActiveListId,
+  (entities, activeId) => (activeId ? entities[activeId] : null)
+);
+
+export const selectGroupsOrder = createSelector(
+  selectActiveList,
+  list => (list ? list.groupsOrder : null)
 );

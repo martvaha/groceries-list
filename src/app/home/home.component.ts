@@ -4,6 +4,10 @@ import { AuthService, User } from '../auth/auth.service';
 import { Observable, Subscription } from 'rxjs';
 import { LoadingService } from '../shared/loading-service';
 import { delay } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+import { State } from '../state/app.reducer';
+import { selectUser } from '../state/user/user.reducer';
+import { clearState } from '../state/app.actions';
 
 @Component({
   selector: 'gl-home',
@@ -22,7 +26,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
     private media: MediaMatcher,
-    private auth: AuthService,
+    private store: Store<State>,
     public loading: LoadingService
   ) {}
 
@@ -31,8 +35,12 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.opened = !this.mobileQuery.matches;
     this._mobileQueryListener = () => this.changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
-    this.user = this.auth.user;
+    this.user = this.store.select(selectUser);
     this._userChangeSubscription = this.user.pipe(delay(0)).subscribe(() => this.changeDetectorRef.detectChanges());
+  }
+
+  reload() {
+    this.store.dispatch(clearState());
   }
 
   ngOnDestroy() {

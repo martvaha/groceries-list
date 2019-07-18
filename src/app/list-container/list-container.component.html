@@ -20,13 +20,13 @@
   </mat-form-field>
   <button mat-raised-button type="submit" color="primary" [disabled]="!inputForm.valid">Lisa</button>
 </form>
-
+<mat-divider></mat-divider>
 <mat-list
   cdkDropList
   (cdkDropListDropped)="dropGroup($event)"
   class="lists-container__item-list"
   [disableRipple]="false"
-  *ngIf="activeGroups | async as groups"
+  *ngIf="groupsWithItems$ | async as groups"
   [cdkDropListData]="groups"
 >
   <div
@@ -35,16 +35,18 @@
     cdkDragLockAxis="y"
     cdkDrag
     [cdkDragData]="group"
+    [cdkDragStartDelay]="1000"
   >
     <div
       id="{{ group.id }}"
       cdkDropList
+      cdkDropListSortingDisabled
       *ngIf="group.active"
       [cdkDropListConnectedTo]="getConnectedGroups(group.id, groups)"
       [cdkDropListData]="group.id"
       (cdkDropListDropped)="drop($event)"
     >
-      <mat-divider *ngIf="!isFirst"></mat-divider>
+
       <h3 matSubheader>{{ group.name }}</h3>
       <ng-container *ngIf="group.active">
         <mat-list-item
@@ -52,6 +54,7 @@
           *ngFor="let item of group.items; trackBy: trackById"
           cdkDragLockAxis="y"
           cdkDrag
+          [cdkDragStartDelay]="1000"
         >
           <mat-checkbox (click)="markDone(item)">{{ item.name }}</mat-checkbox>
           <span class="space"></span>
@@ -60,6 +63,7 @@
           </button>
         </mat-list-item>
       </ng-container>
+      <mat-divider></mat-divider>
     </div>
   </div>
 </mat-list>

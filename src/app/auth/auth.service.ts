@@ -25,11 +25,14 @@ export class AuthService {
     this.registerAuthStateObserver();
   }
 
-  async signInWithFacebook(redirect: string) {
+  async signInWithFacebook(redirect?: string) {
     this.fireAuth.auth.useDeviceLanguage();
     const provider = new firebase.auth.FacebookAuthProvider();
     await this.fireAuth.auth.signInWithPopup(provider);
-    return this.router.navigate([redirect]);
+    if (redirect) {
+      await this.router.navigate([redirect]);
+    }
+    return this.user;
   }
 
   signOut() {

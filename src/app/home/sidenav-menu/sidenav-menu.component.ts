@@ -18,7 +18,7 @@ export class SidenavMenuComponent implements OnInit {
 
   handleClick() {
     if (this.nav && this.nav.mode === 'over') {
-       this.nav.close();
+      this.nav.close();
     }
-  };
+  }
 }

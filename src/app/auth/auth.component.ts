@@ -1,5 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AuthService } from './auth.service';
+import { Store } from '@ngrx/store';
+import { State } from '../state/app.reducer';
+import { login } from '../state/user/user.actions';
 
 @Component({
   selector: 'gl-auth',
@@ -7,19 +10,14 @@ import { AuthService } from './auth.service';
   styleUrls: ['./auth.component.scss']
 })
 export class AuthComponent implements OnInit {
-
   @Input() redirect = 'home';
 
-  constructor(private auth: AuthService) { }
+  constructor(private store: Store<State>) {}
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
   logIn() {
-    this.auth.signInWithFacebook(this.redirect);
+    this.store.dispatch(login(this.redirect));
   }
-  logOut() {
-
-  }
-
+  logOut() {}
 }

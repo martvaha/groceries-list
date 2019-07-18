@@ -3,7 +3,7 @@ import { Update, Predicate, EntityMap } from '@ngrx/entity';
 
 import { List } from '../../shared/models';
 
-export const loadLists = createAction('[List] load', (ignoreCache: boolean = false) => ({ ignoreCache }));
+export const loadLists = createAction('[List] load');
 export const loadListsNothingChanged = createAction('[List] load nothing changed');
 export const removeListSuccess = createAction('[List] remove success', props<{ list: List }>());
 export const removeListFail = createAction('[List] remove fail', props<{ error: Error; list: List }>());
@@ -13,10 +13,13 @@ export const removeListFailIgnore = createAction('[List] remove fail ignore', pr
 export const addList = createAction('[List] add', props<{ list: List }>());
 export const addListSuccess = createAction('[List] add success');
 export const upsertListSuccess = createAction('[List] upsert success', props<{ list: List }>());
-export const updateList = createAction('[List] update', props<{ list: Update<List> }>());
 
 export const removeList = createAction('[List] remove', props<{ list: List }>());
 export const reload = createAction('[List] reload');
+export const updateList = createAction('[List] update', props<{ list: Update<List> }>());
+
+export const setActive = createAction('[List] set active', props<{ id: string | null }>());
+export const upsertGroupsOrder = createAction('[List] upsert order', props<{ groupsOrder: string[]; id: string }>());
 
 // export const addUser = createAction('[List] Add User', props<{ user: List }>());
 // export const upsertUser = createAction('[List] Upsert User', props<{ user: List }>());

@@ -17,7 +17,7 @@ const routes: Routes = [
       { path: '', redirectTo: 'lists', pathMatch: 'full' },
       { path: 'lists', component: ListsContainerComponent, canActivate: [AuthGuard] },
       { path: 'login', component: AuthComponent },
-      { path: 'list/:id', component: ListContainerComponent },
+      { path: 'list/:listId', component: ListContainerComponent },
       { path: 'test', component: TestComponent },
       {
         path: 'edit',

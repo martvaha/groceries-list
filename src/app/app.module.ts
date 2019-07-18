@@ -24,6 +24,11 @@ import { reducers, metaReducers } from './state/app.reducer';
 import { EffectsModule } from '@ngrx/effects';
 import { AppEffects } from './state/app.effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { UserEffects } from './state/user/user.effects';
+import { ListEffects } from './state/list/list.effects';
+import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import { GroupEffects } from './state/group/group.effects';
+import { ItemEffects } from './state/item/item.effects';
 
 @NgModule({
   declarations: [
@@ -52,8 +57,9 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
         strictActionImmutability: true
       }
     }),
-    EffectsModule.forRoot([AppEffects]),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production })
+    EffectsModule.forRoot([AppEffects, ListEffects, UserEffects, GroupEffects, ItemEffects]),
+    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
+    StoreRouterConnectingModule.forRoot()
   ],
   providers: [AuthGuard, MediaMatcher],
   bootstrap: [AppComponent]
