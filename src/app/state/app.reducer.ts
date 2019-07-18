@@ -18,6 +18,7 @@ import { GroupWithItems } from '../list-container/list-container.component';
 import { Dictionary } from '@ngrx/entity';
 import { OTHERS_GROUP_ID } from '../shared/const';
 import { Item } from '../shared/models';
+import { sentryReducer } from '../shared/sentry';
 
 export interface State {
   list: ListState;
@@ -54,8 +55,8 @@ export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionRedu
 }
 
 export const metaReducers: MetaReducer<State>[] = !environment.production
-  ? [clearStateReducer, localStorageSyncReducer]
-  : [clearStateReducer, localStorageSyncReducer];
+  ? [clearStateReducer, localStorageSyncReducer, sentryReducer]
+  : [clearStateReducer, localStorageSyncReducer, sentryReducer];
 
 export const selectLoading = createSelector(
   selectListStateLoading,

@@ -29,6 +29,7 @@ import { ListEffects } from './state/list/list.effects';
 import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { GroupEffects } from './state/group/group.effects';
 import { ItemEffects } from './state/item/item.effects';
+import { sentryInstrumentation } from './shared/sentry';
 
 @NgModule({
   declarations: [
@@ -61,7 +62,7 @@ import { ItemEffects } from './state/item/item.effects';
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
     StoreRouterConnectingModule.forRoot()
   ],
-  providers: [AuthGuard, MediaMatcher],
+  providers: [AuthGuard, MediaMatcher, ...sentryInstrumentation],
   bootstrap: [AppComponent]
 })
 export class AppModule {}
