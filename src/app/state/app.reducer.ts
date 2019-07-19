@@ -102,7 +102,8 @@ export const selectOrderedGroupedItems = createSelector(
       (prev, cur) => ({ ...prev, [cur.id]: cur }),
       {}
     );
-    return groupsOrder
+    const orderedUnion = [...new Set([...groupsOrder, ...Object.keys(groupedItemsMap)])];
+    return orderedUnion
       .filter(groupId => groupedItemsMap[groupId])
       .map(groupId => groupedItemsMap[groupId] as GroupWithItems);
   }
