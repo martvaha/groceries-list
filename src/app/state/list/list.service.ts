@@ -45,7 +45,7 @@ export class ListService {
         if (!user) return EMPTY;
         return this.db
           .collection<List>('lists', ref =>
-            ref.where('acl.' + user.uid, '==', true).where('modified', '>', maxModified)
+            ref.where('acl', 'array-contains', user.uid).where('modified', '>', maxModified)
           )
           .stateChanges()
           .pipe(
@@ -76,17 +76,15 @@ export class ListService {
     }
     const finalList = {
       ...list,
-      acl: { [user.uid]: true },
+      acl: [user.uid],
       modified: firebase.firestore.FieldValue.serverTimestamp()
-    };
+    } as List;
     return this.db.collection('lists').add(finalList);
   }
 
   updateList(list: List) {
     const { id, ...others } = list;
-    return this.db
-      .doc(`/lists/${id}`)
-      .update({ ...others, modified: firebase.firestore.FieldValue.serverTimestamp() });
+    return this.db.doc(`/lists/${id}`).update({ ...others, modified: firebase.firestore.FieldValue.serverTimestamp() });
   }
 
   removeList(list: List) {

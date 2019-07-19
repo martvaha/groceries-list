@@ -1,8 +1,8 @@
 export interface List {
-  modified: Date;
+  modified: Date | firebase.firestore.FieldValue;
   id: string;
   name: string;
-  acl: { [id: string]: boolean };
+  acl: string[];
   groupsOrder: string[];
 }
 

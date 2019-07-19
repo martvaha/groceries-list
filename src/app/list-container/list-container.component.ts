@@ -4,7 +4,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { switchMap, map, debounceTime, startWith, delay, tap, take, withLatestFrom, takeUntil } from 'rxjs/operators';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, CdkDrag } from '@angular/cdk/drag-drop';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoadingService } from '../shared/loading-service';
@@ -54,6 +54,8 @@ export class ListContainerComponent implements OnInit, OnDestroy {
   inputForm: FormGroup;
   private fuse: Fuse<Item>;
   items: Observable<Item[]>;
+  dragDelay = 300;
+  draggingGroupId: string | null;
 
   inputValid: ErrorStateMatcher = {
     isErrorState: (control: FormControl) => {
@@ -169,7 +171,12 @@ export class ListContainerComponent implements OnInit, OnDestroy {
     });
   }
 
+  dragStart(id: string | null) {
+    this.draggingGroupId = id;
+  }
+
   drop(event: CdkDragDrop<string>) {
+    if (event.previousIndex === event.currentIndex) return;
     const listId = takeValue(this.store.select(selectActiveListId));
     if (!listId) return;
     const item = (event.item.data as unknown) as Item;
@@ -178,8 +185,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
   }
 
   dropGroup(event: CdkDragDrop<GroupWithItems[]>) {
-    console.log('group');
-    console.log(event);
+    if (event.previousIndex === event.currentIndex) return;
     const id = takeValue(this.store.select(selectActiveListId));
     if (!id) return;
     const groupsOrder = event.container.data.map(group => group.id);
@@ -192,7 +198,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
   }
 
   trackById(index: number, item: Item) {
-    return item.id;
+    return item ? item.id : undefined;
   }
 
   ngOnDestroy(): void {

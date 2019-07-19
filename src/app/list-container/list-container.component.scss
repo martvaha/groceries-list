@@ -1,3 +1,5 @@
+@import '~@angular/material/theming';
+
 :host {
   display: flex;
   flex: 1;
@@ -31,8 +33,13 @@
   opacity: 0;
 }
 
+.dragged {
+  @include mat-elevation(2);
+  background: #fff;
+}
+
 .cdk-drag-preview {
-  background: #fafafa;
+  background: #fff;
 
   &.list-container__group {
     .mat-subheader {

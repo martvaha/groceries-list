@@ -10,9 +10,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { AuthComponent } from '../auth/auth.component';
 import { TestComponent } from './test.component';
+import { LongPressDirective } from './long-press.directive';
 
 const modules = [CommonModule, MaterialModule, ReactiveFormsModule];
-const components = [AuthComponent, TestComponent];
+const components = [AuthComponent, TestComponent, LongPressDirective];
 const entryComponents = [ConfirmDialogComponent, InfoDialogComponent, InputDialogComponent];
 
 @NgModule({

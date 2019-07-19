@@ -35,7 +35,14 @@
     cdkDragLockAxis="y"
     cdkDrag
     [cdkDragData]="group"
-    [cdkDragStartDelay]="1000"
+    [cdkDragStartDelay]="dragDelay"
+    glLongPress
+    [duration]="dragDelay"
+    [ngClass]="{ dragged: draggingGroupId === group.id }"
+    (cdkDragStarted)="dragStart(group.id)"
+    (cdkDragReleased)="dragStart(null)"
+    (longPress)="dragStart(group.id)"
+    (longPressEnd)="dragStart(null)"
   >
     <div
       id="{{ group.id }}"
@@ -46,7 +53,6 @@
       [cdkDropListData]="group.id"
       (cdkDropListDropped)="drop($event)"
     >
-
       <h3 matSubheader>{{ group.name }}</h3>
       <ng-container *ngIf="group.active">
         <mat-list-item
@@ -54,7 +60,14 @@
           *ngFor="let item of group.items; trackBy: trackById"
           cdkDragLockAxis="y"
           cdkDrag
-          [cdkDragStartDelay]="1000"
+          [cdkDragStartDelay]="dragDelay"
+          glLongPress
+          [duration]="dragDelay"
+          [ngClass]="{ dragged: draggingGroupId === item.id }"
+          (cdkDragStarted)="dragStart(item.id)"
+          (cdkDragReleased)="dragStart(null)"
+          (longPress)="dragStart(item.id)"
+          (longPressEnd)="dragStart(null)"
         >
           <mat-checkbox (click)="markDone(item)">{{ item.name }}</mat-checkbox>
           <span class="space"></span>
@@ -63,7 +76,7 @@
           </button>
         </mat-list-item>
       </ng-container>
-      <mat-divider></mat-divider>
     </div>
+    <mat-divider></mat-divider>
   </div>
 </mat-list>
