@@ -59,7 +59,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
 
   inputValid: ErrorStateMatcher = {
     isErrorState: (control: FormControl) => {
-      return !control.pristine && !control.valid;
+      return control && !control.pristine && !control.valid;
     }
   };
 
