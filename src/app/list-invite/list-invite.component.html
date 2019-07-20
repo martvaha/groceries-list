@@ -2,4 +2,4 @@
   {{user | json}}
 </div>
 <mat-spinner *ngIf="user === undefined"></mat-spinner>
-<gl-auth *ngIf="user === null" [redirect]="redirect"></gl-auth>
+<app-auth *ngIf="user === null" [redirect]="redirect"></app-auth>

@@ -7,7 +7,7 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { MatChipInputEvent } from '@angular/material/chips';
 
 @Component({
-  selector: 'gl-list-share',
+  selector: 'app-list-share',
   styleUrls: ['./list-share.component.scss'],
   templateUrl: './list-share.component.html'
 })

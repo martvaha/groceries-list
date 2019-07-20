@@ -41,7 +41,7 @@ import { sentryInstrumentation } from './shared/sentry';
     ListContainerComponent
   ],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'serverApp' }),
+    BrowserModule.withServerTransition({ appId: 'groceries-list' }),
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
     BrowserAnimationsModule,
     AppRoutingModule,

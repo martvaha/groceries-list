@@ -1,6 +1,6 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
-import { AuthService, User } from '../auth/auth.service';
+import { User } from '../auth/auth.service';
 import { Observable, Subscription } from 'rxjs';
 import { LoadingService } from '../shared/loading-service';
 import { delay } from 'rxjs/operators';
@@ -8,9 +8,13 @@ import { Store } from '@ngrx/store';
 import { State } from '../state/app.reducer';
 import { selectUser } from '../state/user/user.reducer';
 import { clearState } from '../state/app.actions';
+import { MatIconRegistry } from '@angular/material/icon';
+import { DomSanitizer } from '@angular/platform-browser';
+import { getUser } from '../state/user/user.actions';
+import { loadLists } from '../state/list/list.actions';
 
 @Component({
-  selector: 'gl-home',
+  selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush
@@ -27,7 +31,9 @@ export class HomeComponent implements OnInit, OnDestroy {
     private changeDetectorRef: ChangeDetectorRef,
     private media: MediaMatcher,
     private store: Store<State>,
-    public loading: LoadingService
+    public loading: LoadingService,
+    private icons: MatIconRegistry,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit() {
@@ -36,7 +42,10 @@ export class HomeComponent implements OnInit, OnDestroy {
     this._mobileQueryListener = () => this.changeDetectorRef.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
     this.user = this.store.select(selectUser);
-    this._userChangeSubscription = this.user.pipe(delay(0)).subscribe(() => this.changeDetectorRef.detectChanges());
+    // this._userChangeSubscription = this.user.pipe(delay(0)).subscribe(() => this.changeDetectorRef.detectChanges());
+    this.store.dispatch(getUser());
+    this.store.dispatch(loadLists());
+    this.icons.addSvgIcon('flogo', this.sanitizer.bypassSecurityTrustResourceUrl('../assets/flogo.svg'));
   }
 
   reload() {
@@ -45,6 +54,6 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.mobileQuery.removeListener(this._mobileQueryListener);
-    this._userChangeSubscription.unsubscribe();
+    // this._userChangeSubscription.unsubscribe();
   }
 }

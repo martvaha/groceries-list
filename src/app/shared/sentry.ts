@@ -2,7 +2,7 @@ import * as Sentry from '@sentry/browser';
 import { ErrorHandler } from '@angular/core';
 
 import { environment } from '../../environments/environment';
-import cloneDeep from 'lodash-es/cloneDeep';
+import cloneDeep from 'clone-deep';
 import * as jsondiffpatch from 'jsondiffpatch';
 import { ActionReducer } from '@ngrx/store';
 import { State } from '../state/app.reducer';

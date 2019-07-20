@@ -1,6 +1,6 @@
 import { Directive, Input, Output, EventEmitter, HostBinding, HostListener } from '@angular/core';
 
-@Directive({ selector: '[glLongPress]' })
+@Directive({ selector: '[appLongPress]' })
 export class LongPressDirective {
   @Input() duration = 500;
 

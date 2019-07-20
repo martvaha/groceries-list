@@ -7,9 +7,9 @@ import { AuthService, User } from '../auth/auth.service';
 import { OnDestroy } from '@angular/core';
 
 @Component({
-  selector: 'gl-list-invite-container',
+  selector: 'app-list-invite-container',
   template: `
-    <gl-list-invite [user]="user | async" [inviteId]="inviteId | async"></gl-list-invite>
+    <app-list-invite [user]="user | async" [inviteId]="inviteId | async"></app-list-invite>
   `
 })
 export class ListInviteContainerComponent implements OnInit, OnDestroy {

@@ -3,7 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Item, Group } from '../../shared/models';
 
 @Component({
-  selector: 'gl-item-edit-form',
+  selector: 'app-item-edit-form',
   templateUrl: './item-edit-form.component.html',
   styleUrls: ['./item-edit-form.component.scss']
 })

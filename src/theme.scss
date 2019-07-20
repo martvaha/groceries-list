@@ -5,8 +5,8 @@
 @include mat-core();
 
 // Define your application's custom theme.
-$primary: mat-palette($gl-blue);
-$accent: mat-palette($gl-deeppurple, 500, 300, 600);
+$primary: mat-palette($app-blue);
+$accent: mat-palette($app-deeppurple, 500, 300, 600);
 $theme: mat-light-theme($primary, $accent);
 
 $facebook-color: #3a5ca9;

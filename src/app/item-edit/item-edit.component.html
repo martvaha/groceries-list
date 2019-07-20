@@ -1,7 +1,7 @@
-<gl-item-edit-form
+<app-item-edit-form
   *ngIf="item | async; let item"
   [item]="item"
   [groups]="groups | async"
   (updated)="onItemUpdated($event)"
   (groupAdd)="onGroupAdd()"
-></gl-item-edit-form>
+></app-item-edit-form>

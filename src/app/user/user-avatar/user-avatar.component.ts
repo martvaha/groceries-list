@@ -5,7 +5,7 @@ import { State } from '../../state/app.reducer';
 import { logout, login } from '../../state/user/user.actions';
 
 @Component({
-  selector: 'gl-user-avatar',
+  selector: 'app-user-avatar',
   templateUrl: './user-avatar.component.html',
   styleUrls: ['./user-avatar.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush

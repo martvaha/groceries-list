@@ -16,7 +16,7 @@ import { getItems, updateItem } from '../state/item/item.actions';
 import { selectItemEntities } from '../state/item/item.reducer';
 
 @Component({
-  selector: 'gl-item-edit',
+  selector: 'app-item-edit',
   templateUrl: './item-edit.component.html',
   styleUrls: ['./item-edit.component.scss']
 })

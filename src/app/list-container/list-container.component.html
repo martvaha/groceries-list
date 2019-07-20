@@ -36,7 +36,7 @@
     cdkDrag
     [cdkDragData]="group"
     [cdkDragStartDelay]="dragDelay"
-    glLongPress
+    appLongPress
     [duration]="dragDelay"
     [ngClass]="{ dragged: draggingGroupId === group.id }"
     (cdkDragStarted)="dragStart(group.id)"
@@ -61,7 +61,7 @@
           cdkDragLockAxis="y"
           cdkDrag
           [cdkDragStartDelay]="dragDelay"
-          glLongPress
+          appLongPress
           [duration]="dragDelay"
           [ngClass]="{ dragged: draggingGroupId === item.id }"
           (cdkDragStarted)="dragStart(item.id)"

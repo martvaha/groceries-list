@@ -12,7 +12,7 @@ export interface Item {
 }
 
 @Component({
-  selector: 'gl-list-edit',
+  selector: 'app-list-edit',
   template: `
     <mat-list dense>
       <mat-list-item *ngFor="let item of (items | async)">

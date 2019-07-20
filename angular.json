@@ -4,25 +4,41 @@
   "newProjectRoot": "projects",
   "projects": {
     "groceries-list": {
+      "schematics": {
+        "@schematics/angular:component": {
+          "prefix": "app",
+          "style": "scss"
+        },
+        "@schematics/angular:directive": {
+          "prefix": "app"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
+      "prefix": "app",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist",
+            "outputPath": "dist/groceries-list",
             "index": "src/index.html",
             "main": "src/main.ts",
-            "tsConfig": "src/tsconfig.app.json",
             "polyfills": "src/polyfills.ts",
+            "tsConfig": "tsconfig.app.json",
+            "aot": false,
             "assets": ["src/assets", "src/favicon.ico", "src/manifest.json", "src/manifest.webmanifest"],
             "styles": ["src/styles.scss"],
-            "scripts": [],
-            "aot": false
+            "scripts": []
           },
           "configurations": {
             "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -32,13 +48,14 @@
               "extractLicenses": true,
               "vendorChunk": false,
               "buildOptimizer": true,
-              "serviceWorker": true,
-              "fileReplacements": [
+              "budgets": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
                 }
               ],
+              "serviceWorker": true,
               "ngswConfigPath": "ngsw-config.json"
             }
           }
@@ -64,61 +81,73 @@
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
             "main": "src/test.ts",
-            "karmaConfig": "./karma.conf.js",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.spec.json",
-            "scripts": [],
+            "tsConfig": "tsconfig.spec.json",
+            "karmaConfig": "karma.conf.js",
+            "assets": ["src/assets", "src/favicon.ico", "src/manifest.json", "src/manifest.webmanifest"],
             "styles": ["src/styles.scss"],
-            "assets": ["src/assets", "src/favicon.ico", "src/manifest.json", "src/manifest.webmanifest"]
+            "scripts": []
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.spec.json"],
+            "tsConfig": ["tsconfig.app.json", "tsconfig.spec.json", "e2e/tsconfig.json"],
             "exclude": ["**/node_modules/**"]
+          }
+        },
+        "e2e": {
+          "builder": "@angular-devkit/build-angular:protractor",
+          "options": {
+            "protractorConfig": "e2e/protractor.conf.js",
+            "devServerTarget": "groceries-list:serve"
+          },
+          "configurations": {
+            "production": {
+              "devServerTarget": "groceries-list:serve:production"
+            }
           }
         },
         "server": {
           "builder": "@angular-devkit/build-angular:server",
           "options": {
-            "outputPath": "dist-server/",
-            "main": "main.server.ts",
+            "verbose": false,
+            "outputPath": "dist/groceries-list-server",
+            "main": "src/main.server.ts",
             "tsConfig": "tsconfig.server.json"
-          }
-        }
-      }
-    },
-    "groceries-list-e2e": {
-      "root": "",
-      "sourceRoot": "e2e",
-      "projectType": "application",
-      "architect": {
-        "e2e": {
-          "builder": "@angular-devkit/build-angular:protractor",
-          "options": {
-            "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "groceries-list:serve"
+          },
+          "configurations": {
+            "production": {
+              "fileReplacements": [
+                {
+                  "replace": "src/environments/environment.ts",
+                  "with": "src/environments/environment.prod.ts"
+                }
+              ],
+              "sourceMap": false,
+              "optimization": {
+                "scripts": false,
+                "styles": true
+              }
+            }
           }
         },
-        "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+        "app-shell": {
+          "builder": "@angular-devkit/build-angular:app-shell",
           "options": {
-            "tsConfig": ["e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**"]
+            "browserTarget": "groceries-list:build",
+            "serverTarget": "groceries-list:server",
+            "route": "shell"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "groceries-list:build:production",
+              "serverTarget": "groceries-list:server:production"
+            }
           }
         }
       }
     }
   },
-  "defaultProject": "groceries-list",
-  "schematics": {
-    "@schematics/angular:component": {
-      "prefix": "gl",
-      "styleext": "scss"
-    },
-    "@schematics/angular:directive": {
-      "prefix": "gl"
-    }
-  }
+  "defaultProject": "groceries-list"
 }

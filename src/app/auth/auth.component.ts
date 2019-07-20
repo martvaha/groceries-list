@@ -5,7 +5,7 @@ import { State } from '../state/app.reducer';
 import { login } from '../state/user/user.actions';
 
 @Component({
-  selector: 'gl-auth',
+  selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss']
 })

@@ -1,10 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Observable, combineLatest, BehaviorSubject, Subject, of } from 'rxjs';
+import { Observable, combineLatest, Subject } from 'rxjs';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { switchMap, map, debounceTime, startWith, delay, tap, take, withLatestFrom, takeUntil } from 'rxjs/operators';
+import { map, debounceTime, startWith, delay, take, withLatestFrom } from 'rxjs/operators';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
-import { CdkDragDrop, moveItemInArray, CdkDrag } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoadingService } from '../shared/loading-service';
@@ -12,11 +12,9 @@ import { highlight, takeValue } from '../shared/utils';
 import * as Fuse from 'fuse.js';
 import { Item, Group } from '../shared/models';
 import * as firebase from 'firebase/app';
-import { LinkedList } from '../shared/linked-list';
 import { Store } from '@ngrx/store';
 import { State, selectOrderedGroupedItems } from '../state/app.reducer';
 import { getGroups } from '../state/group/group.actions';
-import { selectAllGroups } from '../state/group/group.reducer';
 import { getItems, setGroupId } from '../state/item/item.actions';
 import { selectAllItems } from '../state/item/item.reducer';
 import { selectActiveListId } from '../state/list/list.reducer';
@@ -39,7 +37,7 @@ export interface GroupWithItems extends Group {
 }
 
 @Component({
-  selector: 'gl-list-container',
+  selector: 'app-list-container',
   templateUrl: './list-container.component.html',
   styleUrls: ['./list-container.component.scss']
 })
@@ -48,7 +46,6 @@ export class ListContainerComponent implements OnInit, OnDestroy {
   groupsWithItems$: Observable<GroupWithItems[]>;
   dragging = false;
   listId: Observable<string>;
-  activeGroups: Observable<LinkedList<GroupWithItems>>;
   filteredItems$: Observable<Item[]>;
   inputControl: FormControl;
   inputForm: FormGroup;
@@ -171,7 +168,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
     });
   }
 
-  dragStart(id: string | null) {
+  dragStart(id: string | null) {
     this.draggingGroupId = id;
   }
 

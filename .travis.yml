@@ -15,7 +15,7 @@ jobs:
         - yarn global add firebase-tools
         - yarn install --frozen-lockfile
       script:
-        - yarn build
+        - yarn build:shell
       after_success:
         - firebase deploy --only hosting --token "$FIREBASE_TOKEN"
 

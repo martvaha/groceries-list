@@ -5,13 +5,13 @@
   <h1 class="home__heading">Groceries List</h1>
   <span class="space"></span>
   <button mat-icon-button (click)="reload()"><mat-icon>refresh</mat-icon></button>
-  <gl-user-avatar [user]="(user | async)"></gl-user-avatar>
+  <app-user-avatar [user]="(user | async)"></app-user-avatar>
 </mat-toolbar>
 
 <mat-sidenav-container class="home__sidenav-container">
   <mat-sidenav #nav class="home__sidenav" [mode]="mobileQuery.matches ? 'over' : 'side'"
     opened="{{opened}}" role="navigation">
-    <gl-sidenav-menu [nav]="nav"></gl-sidenav-menu>
+    <app-sidenav-menu [nav]="nav"></app-sidenav-menu>
   </mat-sidenav>
   <mat-sidenav-content class="home__sidenav-content" role="main">
     <router-outlet></router-outlet>

@@ -19,6 +19,7 @@ import { Dictionary } from '@ngrx/entity';
 import { OTHERS_GROUP_ID } from '../shared/const';
 import { Item } from '../shared/models';
 import { sentryReducer } from '../shared/sentry';
+import { universalStorage } from './utils';
 
 export interface State {
   list: ListState;
@@ -50,7 +51,8 @@ export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionRedu
   return localStorageSync({
     keys: [{ list: ['entities', 'ids'] }, 'group', 'item'],
     rehydrate: true,
-    removeOnUndefined: true
+    removeOnUndefined: true,
+    storage: universalStorage
   })(reducer);
 }
 
