@@ -60,7 +60,8 @@ import { sentryInstrumentation } from './shared/sentry';
     }),
     EffectsModule.forRoot([AppEffects, ListEffects, UserEffects, GroupEffects, ItemEffects]),
     StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-    StoreRouterConnectingModule.forRoot()
+    StoreRouterConnectingModule.forRoot(),
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [AuthGuard, MediaMatcher, ...sentryInstrumentation],
   bootstrap: [AppComponent]
