@@ -1,6 +1,6 @@
 import { enableProdMode } from '@angular/core';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import * as firebase from 'firebase/app';
+import firebase from 'firebase/app';
 
 // Angular Material dependency
 import 'hammerjs';

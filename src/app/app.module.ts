@@ -30,6 +30,7 @@ import { StoreRouterConnectingModule } from '@ngrx/router-store';
 import { GroupEffects } from './state/group/group.effects';
 import { ItemEffects } from './state/item/item.effects';
 import { sentryInstrumentation } from './shared/sentry';
+// import { AppShellComponent } from './app-shell/app-shell.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { sentryInstrumentation } from './shared/sentry';
     SidenavMenuComponent,
     ListsContainerComponent,
     UserAvatarComponent,
-    ListContainerComponent
+    ListContainerComponent,
+    // AppShellComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'groceries-list' }),

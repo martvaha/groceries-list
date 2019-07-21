@@ -6,9 +6,11 @@ import { AuthComponent } from './auth/auth.component';
 import { ListsContainerComponent } from './lists-container/lists-container.component';
 import { AuthGuard } from './auth/auth.guard';
 import { ListContainerComponent } from './list-container/list-container.component';
+// import { AppShellComponent } from './app-shell/app-shell.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
+  // { path: 'shell', component: AppShellComponent },
   {
     path: 'home',
     component: HomeComponent,
