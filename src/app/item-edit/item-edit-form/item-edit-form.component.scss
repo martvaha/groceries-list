@@ -14,3 +14,11 @@
     flex: 1;
   }
 }
+
+.item-edit__controls {
+  flex: 1;
+  flex-direction: row;
+  .mat-raised-button:not(:last-child) {
+    margin-right: 1rem;
+  }
+}

@@ -1,5 +1,6 @@
-import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { Observable, of, combineLatest, timer, OperatorFunction } from 'rxjs';
+import { take, switchMap, map } from 'rxjs/operators';
+import { MIN_LOADING_DURATION } from './const';
 
 export const highlight = function(text: string, indices: number[][]) {
   let result = '';
@@ -23,4 +24,15 @@ export function takeValue<T>(observable: Observable<T>): T {
   let value: any;
   observable.pipe(take(1)).subscribe(data => (value = data));
   return value;
+}
+
+export function minLoadingTime(loadingTime = MIN_LOADING_DURATION): OperatorFunction<boolean, boolean> {
+  return source =>
+    source.pipe(
+      switchMap(loading =>
+        loading
+          ? of(loading)
+          : combineLatest(of(loading), timer(loadingTime)).pipe(map(([delayedLoading]) => delayedLoading))
+      )
+    );
 }

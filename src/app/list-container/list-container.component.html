@@ -44,39 +44,40 @@
     (longPress)="dragStart(group.id)"
     (longPressEnd)="dragStart(null)"
   >
-    <div
-      id="{{ group.id }}"
-      cdkDropList
-      cdkDropListSortingDisabled
-      *ngIf="group.active"
-      [cdkDropListConnectedTo]="getConnectedGroups(group.id, groups)"
-      [cdkDropListData]="group.id"
-      (cdkDropListDropped)="drop($event)"
-    >
-      <h3 matSubheader>{{ group.name }}</h3>
-      <ng-container *ngIf="group.active">
-        <mat-list-item
-          [cdkDragData]="item"
-          *ngFor="let item of group.items; trackBy: trackById"
-          cdkDragLockAxis="y"
-          cdkDrag
-          [cdkDragStartDelay]="dragDelay"
-          appLongPress
-          [duration]="dragDelay"
-          [ngClass]="{ dragged: draggingGroupId === item.id }"
-          (cdkDragStarted)="dragStart(item.id)"
-          (cdkDragReleased)="dragStart(null)"
-          (longPress)="dragStart(item.id)"
-          (longPressEnd)="dragStart(null)"
-        >
-          <mat-checkbox (click)="markDone(item)">{{ item.name }}</mat-checkbox>
-          <span class="space"></span>
-          <button mat-icon-button [routerLink]="['/home/item', listId | async, item.id]">
-            <mat-icon>edit</mat-icon>
-          </button>
-        </mat-list-item>
-      </ng-container>
+    <div *ngIf="group.active">
+      <div
+        id="{{ group.id }}"
+        cdkDropList
+        cdkDropListSortingDisabled
+        [cdkDropListConnectedTo]="getConnectedGroups(group.id, groups)"
+        [cdkDropListData]="group.id"
+        (cdkDropListDropped)="drop($event)"
+      >
+        <h3 matSubheader>{{ group.name }}</h3>
+        <ng-container>
+          <mat-list-item
+            [cdkDragData]="item"
+            *ngFor="let item of group.items; trackBy: trackById"
+            cdkDragLockAxis="y"
+            cdkDrag
+            [cdkDragStartDelay]="dragDelay"
+            appLongPress
+            [duration]="dragDelay"
+            [ngClass]="{ dragged: draggingGroupId === item.id }"
+            (cdkDragStarted)="dragStart(item.id)"
+            (cdkDragReleased)="dragStart(null)"
+            (longPress)="dragStart(item.id)"
+            (longPressEnd)="dragStart(null)"
+          >
+            <mat-checkbox (click)="markDone(item)">{{ item.name }}</mat-checkbox>
+            <span class="space"></span>
+            <button mat-icon-button [routerLink]="['/home/item', listId | async, item.id]">
+              <mat-icon>edit</mat-icon>
+            </button>
+          </mat-list-item>
+        </ng-container>
+      </div>
+      <mat-divider></mat-divider>
     </div>
-    <mat-divider></mat-divider>
   </div>
 </mat-list>

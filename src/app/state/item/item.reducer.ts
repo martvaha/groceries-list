@@ -1,12 +1,14 @@
 import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, Action, on, createFeatureSelector, createSelector } from '@ngrx/store';
 import { Item } from '../../shared/models';
-import { upsertItemSuccess, setGroupId } from './item.actions';
+import { upsertItemSuccess, setGroupId, updateItem } from './item.actions';
 import { selectActiveListId } from '../list/list.reducer';
 import { State } from '../app.reducer';
 import { maxModified, sortByName } from '../utils';
 
-export interface ItemState extends EntityState<Item> {}
+export interface ItemState extends EntityState<Item> {
+  loading: boolean;
+}
 export interface ItemListState {
   [id: string]: ItemState;
 }
@@ -15,7 +17,9 @@ export const adapter: EntityAdapter<Item> = createEntityAdapter<Item>({
   sortComparer: sortByName
 });
 
-export const initialItemState: ItemState = adapter.getInitialState();
+export const initialItemState: ItemState = adapter.getInitialState({
+  loading: false
+});
 export const initialState: ItemListState = {};
 
 function get(state: ItemListState, listId: string | null) {
@@ -26,10 +30,13 @@ const listReducer = createReducer(
   initialState,
   // on(upsertGroupSuccess, ListActions.addList, ListActions.removeList, state => ({ ...state, loading: true })),
   on(upsertItemSuccess, (state, { item, listId }) => {
-    return { ...state, [listId]: adapter.upsertOne(item, get(state, listId)) };
+    return { ...state, [listId]: { ...adapter.upsertOne(item, get(state, listId)), loading: false } };
   }),
   on(setGroupId, (state, { item, listId, groupId }) => {
     return { ...state, [listId]: adapter.updateOne({ id: item.id, changes: { groupId } }, get(state, listId)) };
+  }),
+  on(updateItem, (state, { listId }) => {
+    return { ...state, [listId]: { ...get(state, listId), loading: true } };
   })
   // on(ListActions.addList, (state, { list }) => {
   //   return adapter.upsertOne(list, state);
@@ -91,6 +98,11 @@ export const selectActiveItemsByGroup = createSelector(
     console.log('selectActiveItemsByGroup output', data);
     return data;
   }
+);
+
+export const selectItemLoading = createSelector(
+  selectActiveListItemState,
+  (state: ItemState) => state.loading
 );
 
 // export const selectActiveListId = createSelector(

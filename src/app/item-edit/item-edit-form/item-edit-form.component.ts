@@ -19,6 +19,7 @@ export class ItemEditFormComponent {
   }
   @Input() groups: Group[];
   @Output() updated = new EventEmitter<Item>();
+  @Output() return = new EventEmitter<void>();
   form = this.formBuilder.group({
     name: [undefined, [Validators.required]],
     active: [undefined, [Validators.required]],
