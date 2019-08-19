@@ -8,6 +8,10 @@
   // padding: 0 1rem 5rem;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 .list-container__form {
   display: flex;
   align-items: center;
@@ -19,6 +23,16 @@
   max-width: 400px;
   padding-right: 1em;
   flex: 1 1 auto;
+}
+
+.lists-container__search-items {
+  overflow: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.lists-container__search-item {
+  cursor: pointer;
 }
 
 .lists-container__item-list {

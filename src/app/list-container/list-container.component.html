@@ -1,4 +1,4 @@
-<form class="list-container__form" novalidate [formGroup]="inputForm" (ngSubmit)="addItem()">
+<form class="list-container__form" novalidate [formGroup]="inputForm" (ngSubmit)="addItemFromInput()">
   <mat-form-field class="list-container__input" floatLabel="never">
     <input
       matInput
@@ -6,22 +6,28 @@
       formControlName="inputControl"
       required
       placeholder="Lisa nimekirja"
-      [matAutocomplete]="auto"
       [errorStateMatcher]="inputValid"
     />
-    <mat-autocomplete #auto="matAutocomplete" [displayWith]="inputDisplay" (optionSelected)="addItem()">
+    <!-- <mat-autocomplete #auto="matAutocomplete" [displayWith]="inputDisplay" (optionSelected)="addItem()">
       <mat-option
         [innerHTML]="item.displayName"
         *ngFor="let item of filteredItems$ | async; trackBy: trackById"
         [value]="item"
       >
       </mat-option>
-    </mat-autocomplete>
+    </mat-autocomplete> -->
   </mat-form-field>
   <button mat-raised-button type="submit" color="primary" [disabled]="!inputForm.valid">Lisa</button>
 </form>
 <mat-divider></mat-divider>
+<mat-list [hidden]="!inputControl.value?.length" class="lists-container__search-items">
+  <mat-list-item #searchItem *ngFor="let item of filteredItems$ | async; trackBy: trackById" (click)="addItem(item)" class="lists-container__search-item"
+    ><span [innerHTML]="item.displayName"></span
+  ></mat-list-item>
+</mat-list>
+
 <mat-list
+  [hidden]="inputControl.value?.length"
   cdkDropList
   (cdkDropListDropped)="dropGroup($event)"
   class="lists-container__item-list"

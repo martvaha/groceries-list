@@ -1,8 +1,8 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChildren, QueryList, AfterContentInit, AfterViewInit } from '@angular/core';
 import { Observable, combineLatest, Subject } from 'rxjs';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { AngularFirestore } from '@angular/fire/firestore';
-import { map, debounceTime, startWith, delay, take, withLatestFrom } from 'rxjs/operators';
+import { map, debounceTime, startWith, delay, take, withLatestFrom, tap } from 'rxjs/operators';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { ErrorStateMatcher } from '@angular/material/core';
@@ -19,6 +19,8 @@ import { getItems, setGroupId } from '../state/item/item.actions';
 import { selectAllItems } from '../state/item/item.reducer';
 import { selectActiveListId } from '../state/list/list.reducer';
 import { upsertGroupsOrder } from '../state/list/list.actions';
+import { ListKeyManager } from '@angular/cdk/a11y';
+import { DOWN_ARROW, UP_ARROW, ENTER } from '@angular/cdk/keycodes';
 
 export interface FuseMatch {
   indices: [number, number][];
@@ -41,7 +43,7 @@ export interface GroupWithItems extends Group {
   templateUrl: './list-container.component.html',
   styleUrls: ['./list-container.component.scss']
 })
-export class ListContainerComponent implements OnInit, OnDestroy {
+export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit {
   private destroy$ = new Subject<any>();
   groupsWithItems$: Observable<GroupWithItems[]>;
   dragging = false;
@@ -53,6 +55,8 @@ export class ListContainerComponent implements OnInit, OnDestroy {
   items: Observable<Item[]>;
   dragDelay = 300;
   draggingGroupId: string | null;
+  @ViewChildren('searchItem') searchItems: QueryList<any>;
+  keyboardEventsManager: ListKeyManager<any>;
 
   inputValid: ErrorStateMatcher = {
     isErrorState: (control: FormControl) => {
@@ -67,6 +71,10 @@ export class ListContainerComponent implements OnInit, OnDestroy {
     private snackBar: MatSnackBar,
     private store: Store<State>
   ) {}
+
+  ngAfterViewInit(): void {
+    this.searchItems.changes.subscribe(items => (this.keyboardEventsManager = new ListKeyManager(this.searchItems)));
+  }
 
   ngOnInit() {
     this.store.dispatch(getGroups());
@@ -108,6 +116,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
             }))
           : items.map(item => ({ ...item, displayName: item.name }))
       )
+      // tap(items => (this.keyboardEventsManager = new ListKeyManager(this.searchItems)))
     );
   }
 
@@ -120,39 +129,56 @@ export class ListContainerComponent implements OnInit, OnDestroy {
     return groupIds;
   }
 
-  addItem() {
+  addItemFromInput() {
     const { valid, value } = this.inputControl;
     if (valid && value) {
-      if (typeof value === 'object' && 'id' in value) {
-        console.log('add object', value);
-        this.listId.pipe(take(1)).subscribe(listId => {
-          const path = 'lists/' + listId + '/items/' + value.id;
-          this.db.doc(path).update({ active: true, modified: firebase.firestore.FieldValue.serverTimestamp() });
+      console.log('add string', `"${value}"`);
+      const trimmedValue = value.trim();
+      this.listId
+        .pipe(
+          withLatestFrom(this.items),
+          take(1)
+        )
+        .subscribe(([listId, items]) => {
+          const existingValue = items.find(item => item.name === trimmedValue);
+          console.log(existingValue);
+          existingValue
+            ? this.db
+                .doc('lists/' + listId + '/items/' + existingValue.id)
+                .update({ active: true, modified: firebase.firestore.FieldValue.serverTimestamp() })
+            : this.db.collection('lists/' + listId + '/items').add({
+                name: trimmedValue,
+                active: true,
+                modified: firebase.firestore.FieldValue.serverTimestamp()
+              });
         });
-      } else if (typeof value === 'string') {
-        console.log('add string', `"${value}"`);
-        const trimmedValue = value.trim();
-        this.listId
-          .pipe(
-            withLatestFrom(this.items),
-            take(1)
-          )
-          .subscribe(([listId, items]) => {
-            const existingValue = items.find(item => item.name === trimmedValue);
-            console.log(existingValue);
-            existingValue
-              ? this.db
-                  .doc('lists/' + listId + '/items/' + existingValue.id)
-                  .update({ active: true, modified: firebase.firestore.FieldValue.serverTimestamp() })
-              : this.db.collection('lists/' + listId + '/items').add({
-                  name: trimmedValue,
-                  active: true,
-                  modified: firebase.firestore.FieldValue.serverTimestamp()
-                });
-          });
-      }
       this.inputControl.reset('', { emitEvent: true });
     }
+  }
+
+  handleKeyUp(event: KeyboardEvent) {
+    event.stopImmediatePropagation();
+    if (this.keyboardEventsManager) {
+      console.log(event.keyCode);
+      if (event.keyCode === DOWN_ARROW || event.keyCode === UP_ARROW) {
+        // passing the event to key manager so we get a change fired
+        this.keyboardEventsManager.onKeydown(event);
+        return false;
+      } else if (event.keyCode === ENTER) {
+        // when we hit enter, the keyboardManager should call the selectItem method of the `ListItemComponent`
+        this.keyboardEventsManager.activeItem.selectItem();
+        return false;
+      }
+    }
+  }
+
+  addItem(value: Item) {
+    console.log('add object', value);
+    this.listId.pipe(take(1)).subscribe(listId => {
+      const path = 'lists/' + listId + '/items/' + value.id;
+      this.db.doc(path).update({ active: true, modified: firebase.firestore.FieldValue.serverTimestamp() });
+    });
+    this.inputControl.reset('', { emitEvent: true });
   }
 
   markDone(item: Item) {

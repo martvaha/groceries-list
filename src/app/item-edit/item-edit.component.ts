@@ -68,7 +68,7 @@ export class ItemEditComponent implements OnInit {
     console.log(item);
     const listId = takeValue(this.store.select(selectActiveListId));
     if (!listId) return;
-    this.store.dispatch(updateItem({ item, listId }));
+    this.store.dispatch(updateItem(item, listId, true));
   }
 
   onReturn() {

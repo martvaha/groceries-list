@@ -1,16 +1,20 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { switchMap, mergeMap, map, concatMap, tap, withLatestFrom } from 'rxjs/operators';
-import { ROUTER_NAVIGATED } from '@ngrx/router-store';
+import { switchMap, filter, tap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { State } from '../app.reducer';
-import { selectRouteParams } from '../router/reducer';
 import { ItemService } from './item.service';
-import { getItems, setGroupId, updateItem } from './item.actions';
+import { getItems, setGroupId, updateItem, updateItemSuccess, updateItemFail } from './item.actions';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class ItemEffects {
-  constructor(private actions$: Actions, private store: Store<State>, private itemService: ItemService) {}
+  constructor(
+    private actions$: Actions,
+    private store: Store<State>,
+    private itemService: ItemService,
+    private router: Router
+  ) {}
 
   load$ = createEffect(() =>
     this.actions$.pipe(
@@ -30,11 +34,24 @@ export class ItemEffects {
     { dispatch: false }
   );
 
-  update$ = createEffect(
+  update$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(updateItem),
+      switchMap(({ item, listId, returnToList }) =>
+        this.itemService
+          .updateItem(item, listId)
+          .then(resp => updateItemSuccess({ item, listId, returnToList }))
+          .catch(error => updateItemFail(error))
+      )
+    )
+  );
+
+  returnToList$ = createEffect(
     () =>
       this.actions$.pipe(
-        ofType(updateItem),
-        switchMap(({ item, listId }) => this.itemService.updateItem(item, listId))
+        ofType(updateItemSuccess),
+        filter(({ returnToList }) => returnToList),
+        tap(({ listId }) => this.router.navigate(['home', 'list', listId]))
       ),
     { dispatch: false }
   );
