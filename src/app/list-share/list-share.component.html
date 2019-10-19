@@ -2,12 +2,19 @@
   <mat-form-field class="list-share__user-chips">
     <mat-chip-list #chipList>
       <mat-chip *ngFor="let user of users" [removable]="true" (removed)="remove(user)">
-        {{user.email}}
+        {{ user.email }}
         <mat-icon matChipRemove>cancel</mat-icon>
       </mat-chip>
-      <input type="email" placeholder="Share with..." [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
-
-        (matChipInputTokenEnd)="add($event)">
+      <input
+        type="email"
+        (paste)="onPaste($event)"
+        placeholder="Share with..."
+        [formControl]="emailControl"
+        matChipInputAddOnBlur="true"
+        [matChipInputFor]="chipList"
+        [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+        (matChipInputTokenEnd)="add($event)"
+      />
     </mat-chip-list>
   </mat-form-field>
   <div>
