@@ -1,5 +1,8 @@
 {
   "name": "functions",
+  "engines": {
+    "node": "10"
+  },
   "scripts": {
     "lint": "tslint -c tslint.json --project tsconfig.json",
     "build": "tsc",
@@ -30,6 +33,7 @@
     "@types/node": "^12.11.1",
     "@types/nodemailer": "^4.6.2",
     "firebase-functions-test": "^0.1.6",
+    "firebase-tools": "^7.6.1",
     "jest": "^24.9.0",
     "leaked-handles": "^5.2.0",
     "ts-jest": "^24.1.0",
