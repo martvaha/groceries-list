@@ -1,65 +1,65 @@
-import { Component, OnInit } from '@angular/core';
-import { switchMap, map, take } from 'rxjs/operators';
-import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Observable } from 'rxjs';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { DialogService } from '../shared/dialog-service/dialog.service';
-
-export interface Item {
-  id: string;
-  name: string;
-  displayName: string;
-}
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
+import { switchMap, map, take } from "rxjs/operators";
+import { ActivatedRoute, ParamMap } from "@angular/router";
+import { Observable } from "rxjs";
+import { AngularFirestore } from "@angular/fire/firestore";
+import { DialogService } from "../shared/dialog-service/dialog.service";
+import { State } from "../state/app.reducer";
+import { Store } from "@ngrx/store";
+import { getGroups } from "../state/group/group.actions";
+import { getItems, deleteItem, updateItem } from "../state/item/item.actions";
+import { selectAllItems } from "../state/item/item.reducer";
+import { Item, Group } from "../shared/models";
+import { selectAllGroups } from "../state/group/group.reducer";
+import { MatSelectChange } from "@angular/material/select";
+import { takeValue } from "../shared/utils";
 
 @Component({
-  selector: 'app-list-edit',
-  template: `
-    <mat-list dense>
-      <mat-list-item *ngFor="let item of (items | async)">
-        {{ item.name }} <button mat-icon-button (click)="deleteList(item)"><mat-icon>delete</mat-icon></button>
-      </mat-list-item>
-    </mat-list>
-  `
+  selector: "app-list-edit",
+  styleUrls: ["./list-edit.component.scss"],
+  templateUrl: "./list-edit.component.html",
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListEditComponent implements OnInit {
   private listId: Observable<string>;
-  public items: Observable<Item[]>;
-  constructor(private route: ActivatedRoute, private db: AngularFirestore, private dialogService: DialogService) {}
+  public items$: Observable<Item[]>;
+  public groups$: Observable<Group[]>;
+  constructor(
+    private route: ActivatedRoute,
+    private store: Store<State>,
+    private db: AngularFirestore,
+    private dialogService: DialogService
+  ) {}
 
   ngOnInit() {
-    this.listId = this.route.paramMap.pipe(map((params: ParamMap) => params.get('id') as string));
-    this.items = this.listId.pipe(
-      switchMap(listId => {
-        const path = 'lists/' + listId + '/items';
-        return this.db
-          .collection(path)
-          .snapshotChanges()
-          .pipe(
-            map(items =>
-              items.map(item => {
-                const data = item.payload.doc.data();
-                const id = item.payload.doc.id;
-                return { id, ...data } as Item;
-              })
-            ),
-            map(items => items.sort((a, b) => a.name.localeCompare(b.name)))
-          );
-      })
+    this.listId = this.route.paramMap.pipe(
+      map((params: ParamMap) => params.get("listId") as string)
     );
+
+    this.store.dispatch(getGroups());
+    this.store.dispatch(getItems());
+
+    this.items$ = this.store.select(selectAllItems);
+    this.groups$ = this.store.select(selectAllGroups);
   }
 
   deleteList(item: Item) {
     const dialogRef = this.dialogService.confirm({
       data: {
-        title: 'Kustutamine',
+        title: "Kustutamine",
         message: `Kas oled kindel, et soovid "${item.name}" kusutatad?`
       }
     });
     dialogRef.afterClosed().subscribe(resp => {
       if (!resp) return;
-      this.listId.pipe(take(1)).subscribe(listId => {
-        this.db.doc('lists/' + listId + '/items/' + item.id).delete();
-      });
+      const listId = takeValue(this.listId);
+      this.store.dispatch(deleteItem({ item, listId }));
     });
+  }
+
+  onSelectionChange(event: MatSelectChange, item: Item) {
+    const groupId = event.value;
+    const listId = takeValue(this.listId);
+    this.store.dispatch(updateItem({ ...item, groupId }, listId));
   }
 }

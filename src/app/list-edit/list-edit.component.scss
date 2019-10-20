@@ -1,0 +1,15 @@
+.list-edit__table {
+  margin: 1rem;
+}
+
+.item-edit__delete {
+  opacity: 0.3;
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.list-edit__item-group {
+  min-width: 10rem;
+  max-width: 15rem;
+}

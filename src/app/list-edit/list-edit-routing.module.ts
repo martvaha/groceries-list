@@ -5,7 +5,7 @@ import { ListEditComponent } from './list-edit.component';
 
 const routes: Routes = [
   // { path: '', pathMatch: 'full', redirectTo: 'share' },
-  { path: ':id', component: ListEditComponent }
+  { path: ':listId', component: ListEditComponent }
 ];
 
 @NgModule({

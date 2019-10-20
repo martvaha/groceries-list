@@ -1,10 +1,23 @@
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { createReducer, Action, on, createFeatureSelector, createSelector } from '@ngrx/store';
-import { Item } from '../../shared/models';
-import { upsertItemSuccess, setGroupId, updateItem } from './item.actions';
-import { selectActiveListId } from '../list/list.reducer';
-import { State } from '../app.reducer';
-import { maxModified, sortByName } from '../utils';
+import { EntityState, EntityAdapter, createEntityAdapter } from "@ngrx/entity";
+import {
+  createReducer,
+  Action,
+  on,
+  createFeatureSelector,
+  createSelector
+} from "@ngrx/store";
+import { Item } from "../../shared/models";
+import {
+  upsertItemSuccess,
+  setGroupId,
+  updateItem,
+  deleteItem,
+  deleteItemSuccess,
+  deleteItemFail
+} from "./item.actions";
+import { selectActiveListId } from "../list/list.reducer";
+import { State } from "../app.reducer";
+import { maxModified, sortByName } from "../utils";
 
 export interface ItemState extends EntityState<Item> {
   loading: boolean;
@@ -29,14 +42,34 @@ function get(state: ItemListState, listId: string | null) {
 const listReducer = createReducer(
   initialState,
   // on(upsertGroupSuccess, ListActions.addList, ListActions.removeList, state => ({ ...state, loading: true })),
-  on(upsertItemSuccess, (state, { item, listId }) => {
-    return { ...state, [listId]: { ...adapter.upsertOne(item, get(state, listId)), loading: false } };
+  on(upsertItemSuccess, deleteItemFail, (state, { item, listId }) => {
+    return {
+      ...state,
+      [listId]: {
+        ...adapter.upsertOne(item, get(state, listId)),
+        loading: false
+      }
+    };
   }),
   on(setGroupId, (state, { item, listId, groupId }) => {
-    return { ...state, [listId]: adapter.updateOne({ id: item.id, changes: { groupId } }, get(state, listId)) };
+    return {
+      ...state,
+      [listId]: adapter.updateOne(
+        { id: item.id, changes: { groupId } },
+        get(state, listId)
+      )
+    };
   }),
   on(updateItem, (state, { listId }) => {
     return { ...state, [listId]: { ...get(state, listId), loading: true } };
+  }),
+  on(deleteItem, (state, { item, listId }) => {
+    const updatedList = adapter.removeOne(item.id, get(state, listId));
+    return { ...state, [listId]: { ...updatedList, loading: true } };
+  }),
+  on(deleteItemSuccess, (state, { item, listId }) => {
+    const updatedList = { ...get(state, listId), loading: false };
+    return { ...state, [listId]: updatedList };
   })
   // on(ListActions.addList, (state, { list }) => {
   //   return adapter.upsertOne(list, state);
@@ -62,9 +95,16 @@ export function reducer(state: ItemListState | undefined, action: Action) {
 }
 
 // export const selectLoading = (state: GroupState) => state.loading;
-const { selectIds, selectEntities, selectAll, selectTotal } = adapter.getSelectors();
+const {
+  selectIds,
+  selectEntities,
+  selectAll,
+  selectTotal
+} = adapter.getSelectors();
 
-export const selectItemState = createFeatureSelector<State, ItemListState>('item');
+export const selectItemState = createFeatureSelector<State, ItemListState>(
+  "item"
+);
 
 export const selectActiveListItemState = createSelector(
   selectItemState,
@@ -90,12 +130,15 @@ export const selectAllActiveItems = createSelector(
 export const selectActiveItemsByGroup = createSelector(
   selectAllActiveItems,
   items => {
-    console.log('selectActiveItemsByGroup input', items);
+    console.log("selectActiveItemsByGroup input", items);
     const data = items.reduce(
-      (prev, cur) => ({ ...prev, [cur.groupId]: prev[cur.groupId] ? [...prev[cur.groupId], cur] : [cur] }),
+      (prev, cur) => ({
+        ...prev,
+        [cur.groupId]: prev[cur.groupId] ? [...prev[cur.groupId], cur] : [cur]
+      }),
       {} as { [groupId: string]: Item[] }
     );
-    console.log('selectActiveItemsByGroup output', data);
+    console.log("selectActiveItemsByGroup output", data);
     return data;
   }
 );

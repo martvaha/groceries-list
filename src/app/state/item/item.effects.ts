@@ -1,11 +1,20 @@
-import { Injectable } from '@angular/core';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { switchMap, filter, tap } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
-import { State } from '../app.reducer';
-import { ItemService } from './item.service';
-import { getItems, setGroupId, updateItem, updateItemSuccess, updateItemFail } from './item.actions';
-import { Router } from '@angular/router';
+import { Injectable } from "@angular/core";
+import { Actions, createEffect, ofType } from "@ngrx/effects";
+import { switchMap, filter, tap } from "rxjs/operators";
+import { Store } from "@ngrx/store";
+import { State } from "../app.reducer";
+import { ItemService } from "./item.service";
+import {
+  getItems,
+  setGroupId,
+  updateItem,
+  updateItemSuccess,
+  updateItemFail,
+  deleteItem,
+  deleteItemSuccess,
+  deleteItemFail
+} from "./item.actions";
+import { Router } from "@angular/router";
 
 @Injectable()
 export class ItemEffects {
@@ -29,7 +38,9 @@ export class ItemEffects {
     () =>
       this.actions$.pipe(
         ofType(setGroupId),
-        switchMap(({ item, groupId, listId }) => this.itemService.updateItem({ ...item, groupId }, listId))
+        switchMap(({ item, groupId, listId }) =>
+          this.itemService.updateItem({ ...item, groupId }, listId)
+        )
       ),
     { dispatch: false }
   );
@@ -40,8 +51,19 @@ export class ItemEffects {
       switchMap(({ item, listId, returnToList }) =>
         this.itemService
           .updateItem(item, listId)
-          .then(resp => updateItemSuccess({ item, listId, returnToList }))
+          .then(() => updateItemSuccess({ item, listId, returnToList }))
           .catch(error => updateItemFail(error))
+      )
+    )
+  );
+  delete$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(deleteItem),
+      switchMap(({ item, listId }) =>
+        this.itemService
+          .deleteItem(item, listId)
+          .then(() => deleteItemSuccess({ item, listId }))
+          .catch(error => deleteItemFail(error))
       )
     )
   );
@@ -51,7 +73,7 @@ export class ItemEffects {
       this.actions$.pipe(
         ofType(updateItemSuccess),
         filter(({ returnToList }) => returnToList),
-        tap(({ listId }) => this.router.navigate(['home', 'list', listId]))
+        tap(({ listId }) => this.router.navigate(["home", "list", listId]))
       ),
     { dispatch: false }
   );
