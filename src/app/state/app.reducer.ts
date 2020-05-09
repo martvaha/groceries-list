@@ -1,23 +1,34 @@
-import { ActionReducerMap, createSelector, MetaReducer, ActionReducer } from '@ngrx/store';
+import {
+  ActionReducerMap,
+  createSelector,
+  MetaReducer,
+  ActionReducer,
+} from '@ngrx/store';
 import { environment } from '../../environments/environment';
 import {
   ListState,
   reducer as listReducer,
   selectListStateLoading,
   selectGroupsOrder,
-  selectActiveList
 } from './list/list.reducer';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { clearState } from './app.actions';
 import { reducer as userReducer, UserState } from './user/user.reducer';
 import { RouterState } from './router/reducer';
 import { routerReducer } from '@ngrx/router-store';
-import { GroupListState, reducer as groupReducer, selectAllGroups } from './group/group.reducer';
-import { ItemListState, reducer as itemReducer, selectAllItems, selectActiveItemsByGroup } from './item/item.reducer';
+import {
+  GroupListState,
+  reducer as groupReducer,
+  selectAllGroups,
+} from './group/group.reducer';
+import {
+  ItemListState,
+  reducer as itemReducer,
+  selectActiveItemsByGroup,
+} from './item/item.reducer';
 import { GroupWithItems } from '../list-container/list-container.component';
 import { Dictionary } from '@ngrx/entity';
 import { OTHERS_GROUP_ID } from '../shared/const';
-import { Item } from '../shared/models';
 import { sentryReducer } from '../shared/sentry';
 import { universalStorage } from './utils';
 
@@ -30,7 +41,7 @@ export interface State {
 }
 
 export function clearStateReducer(reducer) {
-  return function(state, action) {
+  return function (state, action) {
     if (action.type === clearState.type) {
       state = undefined;
     }
@@ -44,15 +55,17 @@ export const reducers: ActionReducerMap<State> = {
   user: userReducer,
   router: routerReducer,
   group: groupReducer,
-  item: itemReducer
+  item: itemReducer,
 };
 
-export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
+export function localStorageSyncReducer(
+  reducer: ActionReducer<any>
+): ActionReducer<any> {
   return localStorageSync({
     keys: [{ list: ['entities', 'ids'] }, 'group', 'item'],
     rehydrate: true,
     removeOnUndefined: true,
-    storage: universalStorage
+    storage: universalStorage,
   })(reducer);
 }
 
@@ -62,7 +75,7 @@ export const metaReducers: MetaReducer<State>[] = !environment.production
 
 export const selectLoading = createSelector(
   selectListStateLoading,
-  listLoading => listLoading
+  (listLoading) => listLoading
 );
 
 export const selectGroupedItems = createSelector(
@@ -78,7 +91,10 @@ export const selectGroupedItems = createSelector(
       delete itemsByGroupLocal[group.id];
       return { ...group, items, active: !!items.length } as GroupWithItems;
     });
-    const unknownGroup = Object.keys(itemsByGroupLocal).reduce((prev, cur) => [...prev, ...itemsByGroupLocal[cur]], []);
+    const unknownGroup = Object.keys(itemsByGroupLocal).reduce(
+      (prev, cur) => [...prev, ...itemsByGroupLocal[cur]],
+      []
+    );
     if (othersGroupIndex !== undefined) {
       groupsWithItems[othersGroupIndex].items.push(...unknownGroup);
     } else {
@@ -87,7 +103,7 @@ export const selectGroupedItems = createSelector(
         name: 'Muu',
         items: unknownGroup,
         modified: new Date(0),
-        active: !!unknownGroup.length
+        active: !!unknownGroup.length,
       } as GroupWithItems);
     }
     console.log('selectGroupedItems return', groupsWithItems);
@@ -104,9 +120,11 @@ export const selectOrderedGroupedItems = createSelector(
       (prev, cur) => ({ ...prev, [cur.id]: cur }),
       {}
     );
-    const orderedUnion = [...new Set([...groupsOrder, ...Object.keys(groupedItemsMap)])];
+    const orderedUnion = [
+      ...new Set([...groupsOrder, ...Object.keys(groupedItemsMap)]),
+    ];
     return orderedUnion
-      .filter(groupId => groupedItemsMap[groupId])
-      .map(groupId => groupedItemsMap[groupId] as GroupWithItems);
+      .filter((groupId) => groupedItemsMap[groupId])
+      .map((groupId) => groupedItemsMap[groupId] as GroupWithItems);
   }
 );

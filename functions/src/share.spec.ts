@@ -1,17 +1,17 @@
-import functionsTestFactory from "firebase-functions-test";
+import functionsTestFactory from 'firebase-functions-test';
 require('dotenv').config();
-require("leaked-handles");
+require('leaked-handles');
 
-const databaseURL = "https://com-groceries-list.firebaseio.com";
-const projectId = "com-groceries-list";
-const storageBucket = "com-groceries-list.appspot.com";
+const databaseURL = 'https://com-groceries-list.firebaseio.com';
+const projectId = 'com-groceries-list';
+const storageBucket = 'com-groceries-list.appspot.com';
 
 const functionsTest = functionsTestFactory({
   databaseURL,
   storageBucket,
-  projectId
+  projectId,
 });
-import { sendEmail } from "./share";
+import { sendEmail } from './share';
 
 afterAll(() => {
   // Do cleanup tasks.
@@ -23,14 +23,14 @@ afterAll(() => {
   //   .remove();
 });
 
-test("should send out email", async () => {
+test('should send out email', async () => {
   // [START assertOnline]
   // Create a DataSnapshot with the value 'input' and the reference path 'messages/11111/original'.
 
   // const snap = functionsTest.firestore.exampleDocumentSnapshot()
   const snap = functionsTest.firestore.makeDocumentSnapshot(
-    { from: "martvaha@gmail.com", to: "martvaha@gmail.com" },
-    "/invites/1111"
+    { from: 'martvaha@gmail.com', to: 'martvaha@gmail.com' },
+    '/invites/1111'
   );
 
   // Wrap the makeUppercase function

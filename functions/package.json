@@ -6,9 +6,9 @@
   "scripts": {
     "lint": "tslint -c tslint.json --project tsconfig.json",
     "build": "tsc",
-    "serve": "npm run build && firebase serve --only functions",
-    "shell": "npm run build && firebase functions:shell",
-    "start": "npm run shell",
+    "serve": "yarn build && firebase serve --only functions",
+    "shell": "yarn build && firebase functions:shell",
+    "start": "yarn shell",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log",
     "test": "jest"
@@ -28,17 +28,17 @@
     "@firebase/app-types": "^0.4.6",
     "@types/dotenv": "^6.1.1",
     "@types/html-to-text": "^1.4.31",
-    "@types/jest": "^24.0.19",
+    "@types/jest": "^25.2.1",
     "@types/mjml": "^4.0.2",
     "@types/node": "^12.11.1",
     "@types/nodemailer": "^4.6.2",
     "firebase-functions-test": "^0.1.6",
     "firebase-tools": "^7.6.1",
-    "jest": "^24.9.0",
+    "jest": "^26.0.1",
     "leaked-handles": "^5.2.0",
-    "ts-jest": "^24.1.0",
+    "ts-jest": "^25.5.1",
     "tslint": "^5.20.0",
-    "typescript": "^3.6.4"
+    "typescript": "^3.8.3"
   },
   "private": true
 }
