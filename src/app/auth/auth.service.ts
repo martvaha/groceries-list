@@ -12,7 +12,7 @@ export interface User {
 }
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   // public auth: FirebaseAuth;
@@ -26,9 +26,9 @@ export class AuthService {
   }
 
   async signInWithFacebook(redirect?: string) {
-    this.fireAuth.auth.useDeviceLanguage();
+    this.fireAuth.useDeviceLanguage();
     const provider = new firebase.auth.FacebookAuthProvider();
-    await this.fireAuth.auth.signInWithPopup(provider);
+    await this.fireAuth.signInWithPopup(provider);
     if (redirect) {
       await this.router.navigate([redirect]);
     }
@@ -36,22 +36,30 @@ export class AuthService {
   }
 
   signOut() {
-    return this.fireAuth.auth
+    return this.fireAuth
       .signOut()
       .then(() => this.userSubject.next(null))
-      .catch(err => console.log(err));
+      .catch((err) => console.log(err));
   }
 
   private registerAuthStateObserver() {
-    this.fireAuth.auth.onAuthStateChanged(data => {
+    this.fireAuth.onAuthStateChanged((data) => {
       if (!data) return this.userSubject.next(null);
       const uid = data.uid;
       const providerData = data.providerData[0];
       if (providerData) {
         const { displayName, photoURL, email } = providerData;
         // Update photo URL and display name when they change
-        if (this.fireAuth.auth.currentUser && (data.photoURL !== photoURL || data.displayName !== displayName)) {
-          this.fireAuth.auth.currentUser.updateProfile({ displayName, photoURL });
+        if (
+          this.fireAuth.currentUser &&
+          (data.photoURL !== photoURL || data.displayName !== displayName)
+        ) {
+          this.fireAuth.currentUser.then((user) =>
+            user.updateProfile({
+              displayName,
+              photoURL,
+            })
+          );
         }
         console.log(providerData);
         this.userSubject.next({ uid, photoURL, displayName, email });
@@ -62,9 +70,9 @@ export class AuthService {
   }
 
   private handleRedirect() {
-    this.fireAuth.auth
+    this.fireAuth
       .getRedirectResult()
-      .then(function(result) {
+      .then(function (result) {
         if (result.credential) {
           // This gives you a Facebook Access Token. You can use it to access the Facebook API.
           // const token = result.credential.accessToken;
@@ -72,7 +80,7 @@ export class AuthService {
         // The signed-in user info.
         const user = result.user;
       })
-      .catch(function(error) {
+      .catch(function (error) {
         // Handle Errors here.
         const errorCode = error.code;
         const errorMessage = error.message;

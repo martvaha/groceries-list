@@ -1,4 +1,8 @@
-import { BrowserModule } from '@angular/platform-browser';
+import {
+  BrowserModule,
+  HAMMER_GESTURE_CONFIG,
+  HammerModule,
+} from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -26,10 +30,15 @@ import { AppEffects } from './state/app.effects';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { UserEffects } from './state/user/user.effects';
 import { ListEffects } from './state/list/list.effects';
-import { StoreRouterConnectingModule } from '@ngrx/router-store';
+import {
+  StoreRouterConnectingModule,
+  DefaultRouterStateSerializer,
+  RouterState,
+} from '@ngrx/router-store';
 import { GroupEffects } from './state/group/group.effects';
 import { ItemEffects } from './state/item/item.effects';
 import { sentryInstrumentation } from './shared/sentry';
+import { GestureConfig } from '../gesture-config';
 // import { AppShellComponent } from './app-shell/app-shell.component';
 
 @NgModule({
@@ -44,7 +53,9 @@ import { sentryInstrumentation } from './shared/sentry';
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'groceries-list' }),
-    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production }),
+    ServiceWorkerModule.register('/ngsw-worker.js', {
+      enabled: environment.production,
+    }),
     BrowserAnimationsModule,
     AppRoutingModule,
     RouterModule,
@@ -57,15 +68,34 @@ import { sentryInstrumentation } from './shared/sentry';
       metaReducers,
       runtimeChecks: {
         strictStateImmutability: true,
-        strictActionImmutability: true
-      }
+        strictActionImmutability: true,
+      },
     }),
-    EffectsModule.forRoot([AppEffects, ListEffects, UserEffects, GroupEffects, ItemEffects]),
-    StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: environment.production }),
-    StoreRouterConnectingModule.forRoot(),
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    EffectsModule.forRoot([
+      AppEffects,
+      ListEffects,
+      UserEffects,
+      GroupEffects,
+      ItemEffects,
+    ]),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25,
+      logOnly: environment.production,
+    }),
+    StoreRouterConnectingModule.forRoot({
+      routerState: RouterState.Minimal,
+    }),
+    ServiceWorkerModule.register('ngsw-worker.js', {
+      enabled: environment.production,
+    }),
+    HammerModule,
   ],
-  providers: [AuthGuard, MediaMatcher, ...sentryInstrumentation],
-  bootstrap: [AppComponent]
+  providers: [
+    AuthGuard,
+    MediaMatcher,
+    ...sentryInstrumentation,
+    { provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig },
+  ],
+  bootstrap: [AppComponent],
 })
 export class AppModule {}

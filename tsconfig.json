@@ -7,6 +7,7 @@
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
+    "skipLibCheck": true,
     "module": "esnext",
     "moduleResolution": "node",
     "importHelpers": true,
@@ -16,7 +17,6 @@
     "allowSyntheticDefaultImports": true
   },
   "angularCompilerOptions": {
-    "enableIvy": false,
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true
   }
