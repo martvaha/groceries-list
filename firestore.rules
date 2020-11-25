@@ -1,0 +1,41 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+  	function signedIn() {
+    	return request.auth != null;
+    }
+
+    function getRoleExample(rsc) {
+      return rsc.data.acl[request.auth.uid];
+    }
+
+    function hasRoleExample(rsc, array) {
+      return signedIn() && (getRoleExample(rsc) in array);
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    match /invites/{uid} {
+      allow read, write: if signedIn;
+    }
+
+    match /users/{uid} {
+    	allow read, write: if request.auth.uid == uid
+    }
+
+    match /lists/{listId} {
+    	allow create: if signedIn();
+    	allow read, write: if request.auth.uid in resource.data.acl;
+    }
+
+    match /lists/{listId}/items/{item} {
+    	allow read, write: if request.auth.uid in get(/databases/$(database)/documents/lists/$(listId)).data.acl;
+    }
+
+    match /lists/{listId}/groups/{group} {
+    	allow read, write: if request.auth.uid in get(/databases/$(database)/documents/lists/$(listId)).data.acl;
+    }
+  }
+}

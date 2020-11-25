@@ -1,0 +1,12 @@
+<mat-nav-list class="sidenav__menu">
+  <a mat-list-item routerLink="/home/lists" (click)="closeSidenavOnMobile()"
+    >Home</a
+  >
+  <a
+    mat-list-item
+    routerLink="/home/login"
+    *ngIf="!user"
+    (click)="closeSidenavOnMobile()"
+    >Login</a
+  >
+</mat-nav-list>

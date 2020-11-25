@@ -1,6 +1,0 @@
-{
-  "rules": {
-    "no-console": false,
-    "arrow-return-shorthand": true
-  }
-}

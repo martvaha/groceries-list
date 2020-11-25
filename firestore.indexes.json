@@ -1,0 +1,19 @@
+{
+  "indexes": [
+    {
+      "collectionGroup": "lists",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {
+          "fieldPath": "acl",
+          "arrayConfig": "CONTAINS"
+        },
+        {
+          "fieldPath": "modified",
+          "order": "ASCENDING"
+        }
+      ]
+    }
+  ],
+  "fieldOverrides": []
+}

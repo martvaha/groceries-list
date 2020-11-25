@@ -1,0 +1,44 @@
+@import '../../theme.scss';
+
+:host {
+  flex: 1;
+  padding-top: 2rem;
+  ::ng-deep .mat-raised-button.mat-primary {
+    background-color: $facebook-color;
+  }
+  text-align: center;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  height: 100%;
+}
+
+.background {
+  height: 100px;
+  width: 100%;
+  flex-shrink: 0;
+  background-image: url('../../assets/slanted.svg');
+  background-repeat: no-repeat;
+}
+
+.welcome {
+  padding: 1rem;
+  color: #ffffff;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  flex-direction: column;
+  width: calc(100% - 2rem);
+  background-color: #05a9f4;
+}
+
+.facebook {
+  margin-bottom: 1rem;
+  mat-icon {
+    padding-right: 1rem;
+  }
+}

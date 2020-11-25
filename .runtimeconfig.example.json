@@ -1,0 +1,14 @@
+{
+  "sentry": {
+    "dsn": "https://**********",
+    "enabled": false
+  },
+  "smtpConfig": {
+    "host": "smtp.ethereal.email",
+    "port": 587,
+    "auth": {
+      "user": "deangelo.reinger5@ethereal.email",
+      "pass": "9mF37NSXzgVaARkyAs"
+    }
+  }
+}

@@ -1,0 +1,21 @@
+<div class="user-avatar__container">
+  <button mat-button (click)="login()" *ngIf="!user; else menu">
+    <mat-icon>person</mat-icon>Logi sisse
+  </button>
+  <ng-template #menu>
+    <button
+      [matMenuTriggerFor]="menu"
+      class="user-avatar__image"
+      [ngStyle]="{
+        'background-image':
+          'url(' + (user?.photoURL ? user!.photoURL : '/assets/avatar.svg') + ')'
+      }"
+    ></button>
+    <mat-menu #menu="matMenu">
+      <ng-template matMenuContent>
+        <button mat-menu-item (click)="logout()">Sign out</button>
+        <button mat-menu-item (click)="reload.emit()">Reload</button>
+      </ng-template>
+    </mat-menu>
+  </ng-template>
+</div>
