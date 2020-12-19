@@ -41,4 +41,5 @@ Thumbs.db
 
 # project
 .runtimeconfig.json
+.firebase
 project

@@ -1,12 +1,22 @@
 {
   "projects": {
-    "default": "groceries-list-dev"
+    "default": "com-groceries-list",
+    "dev": "groceries-list-dev",
+    "test": "com-groceries-list",
+    "production": "groceries-list-production"
   },
   "targets": {
     "groceries-list-dev": {
       "hosting": {
         "groceries-list": [
           "groceries-list-dev"
+        ]
+      }
+    },
+    "com-groceries-list": {
+      "hosting": {
+        "groceries-list": [
+          "com-groceries-list"
         ]
       }
     }

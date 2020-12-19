@@ -61,6 +61,14 @@
               ],
               "serviceWorker": true,
               "ngswConfigPath": "apps/groceries-list/ngsw-config.json"
+            },
+            "test": {
+              "fileReplacements": [
+                {
+                  "replace": "apps/groceries-list/src/environments/environment.ts",
+                  "with": "apps/groceries-list/src/environments/environment.test.ts"
+                }
+              ]
             }
           }
         },
@@ -114,6 +122,16 @@
               ],
               "sourceMap": false,
               "optimization": true
+            },
+            "test": {
+              "outputHashing": "media",
+              "fileReplacements": [
+                {
+                  "replace": "apps/groceries-list/src/environments/environment.ts",
+                  "with": "apps/groceries-list/src/environments/environment.test.ts"
+                }
+              ],
+              "optimization": true
             }
           }
         },
@@ -128,6 +146,10 @@
             "production": {
               "browserTarget": "groceries-list:build:production",
               "serverTarget": "groceries-list:server:production"
+            },
+            "test": {
+              "browserTarget": "groceries-list:build:test",
+              "serverTarget": "groceries-list:server:test"
             }
           }
         },
