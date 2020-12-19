@@ -86,9 +86,7 @@
           "builder": "@nrwl/linter:eslint",
           "options": {
             "lintFilePatterns": ["apps/groceries-list/src/**/*.ts"],
-            "tsConfig": [
-              "apps/groceries-list/tsconfig.worker.json"
-            ]
+            "tsConfig": ["apps/groceries-list/tsconfig.worker.json"]
           }
         },
         "test": {

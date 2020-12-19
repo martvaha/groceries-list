@@ -1,10 +1,11 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
 import firebase from 'firebase/app';
 import { Router } from '@angular/router';
 import { captureException } from '../shared/sentry';
 import { distinctUntilChanged } from 'rxjs/operators';
+import { isPlatformServer } from '@angular/common';
 
 export interface User {
   uid: string;
@@ -19,7 +20,12 @@ export interface User {
 export class AuthService {
   private userSubject = new BehaviorSubject<User | null | undefined>(undefined);
 
-  constructor(private fireAuth: AngularFireAuth, private router: Router) {
+  constructor(
+    private fireAuth: AngularFireAuth,
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: any
+  ) {
+    if (isPlatformServer(this.platformId)) return;
     this.handleRedirect();
     this.registerAuthStateObserver();
   }

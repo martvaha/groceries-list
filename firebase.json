@@ -9,7 +9,7 @@
   "hosting": [
     {
       "target": "groceries-list",
-      "public": "dist/apps/groceries-list",
+      "public": "dist/apps/groceries-list/browser",
       "ignore": ["**/.*"],
       "headers": [
         {
