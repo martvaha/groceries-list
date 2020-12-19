@@ -19,15 +19,15 @@ jobs:
       after_success:
         - firebase deploy --only hosting --token "$FIREBASE_TOKEN"
 
-    - name: 'Deploy functions'
-      node_js: '8'
-      before_install:
-        - cd functions
-      install:
-        - yarn global add firebase-tools
-        - yarn install --frozen-lockfile
-      script:
-        - yarn lint
-        - yarn build
-      after_success:
-        - firebase deploy --only functions --token "$FIREBASE_TOKEN"
+    # - name: 'Deploy functions'
+    #   node_js: '8'
+    #   before_install:
+    #     - cd functions
+    #   install:
+    #     - yarn global add firebase-tools
+    #     - yarn install --frozen-lockfile
+    #   script:
+    #     - yarn lint
+    #     - yarn build
+    #   after_success:
+    #     - firebase deploy --only functions --token "$FIREBASE_TOKEN"
