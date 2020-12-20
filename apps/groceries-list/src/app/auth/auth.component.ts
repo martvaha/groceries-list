@@ -7,7 +7,7 @@ import { login } from '../state/user/user.actions';
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
 })
 export class AuthComponent {
   @Input() redirect = 'home';

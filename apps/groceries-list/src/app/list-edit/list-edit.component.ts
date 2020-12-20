@@ -18,7 +18,7 @@ import { takeValue } from '../shared/utils';
   selector: 'app-list-edit',
   styleUrls: ['./list-edit.component.scss'],
   templateUrl: './list-edit.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
 })
 export class ListEditComponent implements OnInit {
   private listId!: Observable<string>;

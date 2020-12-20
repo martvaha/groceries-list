@@ -12,7 +12,7 @@ import { User } from '../auth/auth.service';
   selector: 'app-list-share',
   styleUrls: ['./list-share.component.scss'],
   templateUrl: './list-share.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
 })
 export class ListShareComponent implements OnInit {
   emailControl = new FormControl(undefined, [

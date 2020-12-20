@@ -1,11 +1,4 @@
-import {
-  Component,
-  OnInit,
-  OnDestroy,
-  ChangeDetectorRef,
-  ChangeDetectionStrategy,
-  ViewChild,
-} from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { User } from '../auth/auth.service';
 import { Observable } from 'rxjs';
@@ -23,7 +16,6 @@ import { MatSidenav } from '@angular/material/sidenav';
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class HomeComponent implements OnInit, OnDestroy {
   public mobileQuery!: MediaQueryList;
@@ -40,10 +32,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private icons: MatIconRegistry,
     private sanitizer: DomSanitizer
   ) {
-    this.icons.addSvgIcon(
-      'flogo',
-      this.sanitizer.bypassSecurityTrustResourceUrl('../assets/flogo.svg')
-    );
+    this.icons.addSvgIcon('flogo', this.sanitizer.bypassSecurityTrustResourceUrl('../assets/flogo.svg'));
   }
 
   ngOnInit() {

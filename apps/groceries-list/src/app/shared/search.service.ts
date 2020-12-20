@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 import Fuse from 'fuse.js';
 
 @Injectable({
@@ -9,7 +9,7 @@ export class SearchService {
   fuse?: Fuse<unknown>;
   options: Fuse.IFuseOptions<unknown> = {};
 
-  constructor() {
+  constructor(private ngZone: NgZone) {
     if (typeof Worker !== 'undefined') {
       this.worker = new Worker('./search.worker', { type: 'module' });
     }
@@ -30,11 +30,11 @@ export class SearchService {
   search<T>(pattern: string) {
     console.log('6057', pattern);
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    let resolve = (value?: Fuse.FuseResult<T>[] | undefined) => {};
-    const promise = new Promise<Fuse.FuseResult<T>[]>((res) => {
+    let resolve = (value: Fuse.FuseResult<T>[] | undefined) => {};
+    const promise = new Promise<Fuse.FuseResult<T>[] | undefined>((res) => {
       resolve = (val) => {
         console.log('8289', val);
-        res(val);
+        this.ngZone.run(() => res(val));
       };
     });
 

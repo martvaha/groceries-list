@@ -1,5 +1,5 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, of } from 'rxjs';
 import { AngularFireAuth } from '@angular/fire/auth';
 import firebase from 'firebase/app';
 import { Router } from '@angular/router';
@@ -19,33 +19,51 @@ export interface User {
 })
 export class AuthService {
   private userSubject = new BehaviorSubject<User | null | undefined>(undefined);
+  private test = new BehaviorSubject<User | null | undefined>(undefined);
 
-  constructor(
-    private fireAuth: AngularFireAuth,
-    private router: Router,
-    @Inject(PLATFORM_ID) private platformId: any
-  ) {
+  constructor(private fireAuth: AngularFireAuth, private router: Router, @Inject(PLATFORM_ID) private platformId: any) {
     if (isPlatformServer(this.platformId)) return;
     this.handleRedirect();
     this.registerAuthStateObserver();
   }
 
-  async signInWithFacebook(redirect?: string | string[]) {
+  signInWithFacebook(redirect?: string | string[]) {
     this.fireAuth.useDeviceLanguage();
     const provider = new firebase.auth.FacebookAuthProvider();
-    await this.fireAuth.signInWithPopup(provider);
-    if (redirect) return this.redirect(redirect);
-    return true;
+    return this.fireAuth.signInWithPopup(provider).then(() => {
+      if (redirect) return this.redirect(redirect);
+      return true;
+    });
   }
 
-  async signOut(redirect?: string | string[]) {
+  signOut(redirect?: string | string[]) {
     this.userSubject.next(null);
-    if (redirect) await this.redirect(redirect);
-    return this.fireAuth.signOut();
+    if (redirect) {
+      return this.redirect(redirect).then(() => this.fireAuth.signOut());
+    } else {
+      return this.fireAuth.signOut();
+    }
   }
 
   getUser() {
-    return this.userSubject.asObservable().pipe(distinctUntilChanged());
+    setTimeout(() => {
+      this.test.next({
+        displayName: 'Märt Vaha',
+        email: 'martvaha@gmail.com',
+        photoURL: 'https://graph.facebook.com/1498477000200703/picture',
+        uid: '60QOc9NE97V5C7ZlLmN4LVre8eG2',
+      });
+    }, 2000);
+    setTimeout(() => {
+      this.test.next({
+        displayName: 'Märt Vaha',
+        email: 'martvaha@gmail.com',
+        photoURL: 'https://graph.facebook.com/1498477000200703/picture',
+        uid: '60QOc9NE97V5C7ZlLmN4LVre8eG2',
+      });
+    }, 1000);
+    // return this.test.asObservable().pipe(distinctUntilChanged());
+    return this.userSubject.asObservable().pipe();
   }
 
   private redirect(redirect: string | string[]) {
@@ -67,10 +85,7 @@ export class AuthService {
    * @param user
    * @param providerData
    */
-  private updateProfileFromProvider(
-    user: firebase.User,
-    providerData: firebase.UserInfo
-  ) {
+  private updateProfileFromProvider(user: firebase.User, providerData: firebase.UserInfo) {
     const { displayName, photoURL, email } = providerData;
     if (user.photoURL !== photoURL || user.displayName !== displayName) {
       user.updateProfile({
@@ -84,6 +99,12 @@ export class AuthService {
   }
 
   private minimalUser(user: firebase.User): User {
+    return {
+      displayName: 'Märt Vaha',
+      email: 'martvaha@gmail.com',
+      photoURL: 'https://graph.facebook.com/1498477000200703/picture',
+      uid: '60QOc9NE97V5C7ZlLmN4LVre8eG2',
+    };
     const { uid, photoURL, displayName, email } = user;
     return {
       uid,
@@ -104,12 +125,7 @@ export class AuthService {
         // The signed-in user info.
         const user = result.user;
       })
-      .catch(function (error: {
-        code: any;
-        message: string;
-        email: string;
-        credential: string;
-      }) {
+      .catch(function (error: { code: any; message: string; email: string; credential: string }) {
         captureException((error as unknown) as Error);
       });
   }

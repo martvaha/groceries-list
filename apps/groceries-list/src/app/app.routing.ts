@@ -4,7 +4,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { AuthComponent } from './auth/auth.component';
 import { ListsContainerComponent } from './lists-container/lists-container.component';
-import { AuthGuard } from './auth/auth.guard';
+import { canActivate, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 // import { AppShellComponent } from './app-shell/app-shell.component';
 
 const routes: Routes = [
@@ -18,43 +18,35 @@ const routes: Routes = [
       {
         path: 'lists',
         component: ListsContainerComponent,
-        canActivate: [AuthGuard],
+        // canActivate: [AuthGuard],
+        ...canActivate(() => redirectUnauthorizedTo(['home', 'login'])),
       },
       { path: 'login', component: AuthComponent },
       // { path: 'list/:listId', component: ListContainerComponent },
       {
         path: 'list',
-        canActivate: [AuthGuard],
-        loadChildren: () =>
-          import('./list/list.module').then((m) => m.ListModule),
+        ...canActivate(() => redirectUnauthorizedTo(['home', 'login'])),
+        loadChildren: () => import('./list/list.module').then((m) => m.ListModule),
       },
       {
         path: 'edit',
-        canActivate: [AuthGuard],
-        loadChildren: () =>
-          import('./list-edit/list-edit.module').then((m) => m.ListEditModule),
+        ...canActivate(() => redirectUnauthorizedTo(['home', 'login'])),
+        loadChildren: () => import('./list-edit/list-edit.module').then((m) => m.ListEditModule),
       },
       {
         path: 'item',
-        canActivate: [AuthGuard],
-        loadChildren: () =>
-          import('./item-edit/item-edit.module').then((m) => m.ItemEditModule),
+        ...canActivate(() => redirectUnauthorizedTo(['home', 'login'])),
+        loadChildren: () => import('./item-edit/item-edit.module').then((m) => m.ItemEditModule),
       },
       {
         path: 'share',
-        canActivate: [AuthGuard],
-        loadChildren: () =>
-          import('./list-share/list-share.module').then(
-            (m) => m.ListShareModule
-          ),
+        ...canActivate(() => redirectUnauthorizedTo(['home', 'login'])),
+        loadChildren: () => import('./list-share/list-share.module').then((m) => m.ListShareModule),
       },
       {
         path: 'invite',
-        canActivate: [AuthGuard],
-        loadChildren: () =>
-          import('./list-invite/list-invite.module').then(
-            (m) => m.ListInviteModule
-          ),
+        ...canActivate(() => redirectUnauthorizedTo(['home', 'login'])),
+        loadChildren: () => import('./list-invite/list-invite.module').then((m) => m.ListInviteModule),
       },
     ],
   },

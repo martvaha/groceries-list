@@ -34,7 +34,7 @@ export interface ConfirmDialogData {
       </button>
     </mat-dialog-actions>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
 })
 export class ConfirmDialogComponent {
   constructor(

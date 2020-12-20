@@ -11,16 +11,12 @@ import { selectAllLists } from '../state/list/list.reducer';
   selector: 'app-lists-container',
   templateUrl: './lists-container.component.html',
   styleUrls: ['./lists-container.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListsContainerComponent implements OnInit {
   lists$!: Observable<List[]>;
   loading$!: Observable<boolean>;
 
-  constructor(
-    private dialogService: DialogService,
-    private store: Store<State>
-  ) {}
+  constructor(private dialogService: DialogService, private store: Store<State>) {}
 
   ngOnInit() {
     this.loading$ = this.store.select(selectLoading);
@@ -32,6 +28,7 @@ export class ListsContainerComponent implements OnInit {
       data: { placeholder: 'Nimekirja pealkiri', title: 'Nimekirja lisamine' },
     });
     dialog.afterClosed().subscribe((name) => {
+      if (!name) return;
       const list = { name } as List;
       this.store.dispatch(addList({ list }));
     });

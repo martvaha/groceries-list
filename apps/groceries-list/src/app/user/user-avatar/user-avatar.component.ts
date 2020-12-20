@@ -14,7 +14,7 @@ import { logout, login } from '../../state/user/user.actions';
   selector: 'app-user-avatar',
   templateUrl: './user-avatar.component.html',
   styleUrls: ['./user-avatar.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
 })
 export class UserAvatarComponent {
   @Input() user?: User | null;

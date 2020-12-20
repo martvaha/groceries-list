@@ -16,15 +16,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { combineLatest, from, Observable, of, Subject } from 'rxjs';
-import {
-  debounceTime,
-  delay,
-  map,
-  startWith,
-  switchMap,
-  take,
-  withLatestFrom,
-} from 'rxjs/operators';
+import { debounceTime, delay, map, startWith, switchMap, take, withLatestFrom } from 'rxjs/operators';
 import { LoadingService } from '../../shared/loading-service';
 import { GroupWithItems, Item } from '../../shared/models';
 import { highlight, takeValue } from '../../shared/utils';
@@ -53,15 +45,14 @@ export interface FuseAdvancedResult<T> {
   selector: 'app-list-container',
   templateUrl: './list-container.component.html',
   styleUrls: ['./list-container.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
 })
-export class ListContainerComponent
-  implements OnInit, OnDestroy, AfterViewInit {
+export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit {
   private destroy$: Subject<void> | undefined = new Subject<void>();
   groupsWithItems$!: Observable<GroupWithItems[]>;
   dragging = false;
   listId!: Observable<string>;
-  filteredItems$!: Observable<Item[]>;
+  filteredItems$!: Observable<Item[] | undefined>;
   inputControl!: FormControl;
   inputForm!: FormGroup;
   items!: Observable<Item[]>;
@@ -91,10 +82,7 @@ export class ListContainerComponent
   ) {}
 
   ngAfterViewInit(): void {
-    this.searchItems.changes.subscribe(
-      (items) =>
-        (this.keyboardEventsManager = new ListKeyManager(this.searchItems))
-    );
+    // this.searchItems.changes.subscribe((items) => (this.keyboardEventsManager = new ListKeyManager(this.searchItems)));
   }
 
   ngOnInit() {
@@ -106,18 +94,14 @@ export class ListContainerComponent
 
     this.inputControl = new FormControl('', [Validators.required]);
     this.inputForm = new FormGroup({ inputControl: this.inputControl });
-    this.listId = this.route.paramMap.pipe(
-      map((params: ParamMap) => params.get('listId') as string)
-    );
+    this.listId = this.route.paramMap.pipe(map((params: ParamMap) => params.get('listId') as string));
 
     // const activeItems = this.items.pipe(map(items => items.filter(item => item.active)));
 
     const search$ = this.inputControl.valueChanges.pipe(
       startWith(''),
       debounceTime(300),
-      map((input: string | { name: string }) =>
-        typeof input === 'string' ? input : input.name
-      )
+      map((input: string | { name: string }) => (typeof input === 'string' ? input : input.name))
     );
 
     const unselected$ = this.items.pipe(
@@ -134,12 +118,9 @@ export class ListContainerComponent
         if (items && search.length) {
           return from(this.search.search<Item>(search)).pipe(
             map((matches) =>
-              matches.map((match) => ({
+              matches?.map((match) => ({
                 ...match.item,
-                displayName: highlight(
-                  match.item.name,
-                  (match?.matches?.[0]?.indices as unknown) as number[][]
-                ),
+                displayName: highlight(match.item.name, (match?.matches?.[0]?.indices as unknown) as number[][]),
               }))
             )
           );
@@ -164,16 +145,12 @@ export class ListContainerComponent
     const { valid, value } = this.inputControl;
     if (valid && typeof value === 'string') {
       const trimmedValue = value.trim();
-      this.listId
-        .pipe(withLatestFrom(this.items), take(1))
-        .subscribe(([listId, items]) => {
-          const existingValue = items.find(
-            (item) => item.name === trimmedValue
-          );
-          existingValue
-            ? this.listService.markItemDone(listId, existingValue)
-            : this.listService.addNewItem(listId, trimmedValue);
-        });
+      this.listId.pipe(withLatestFrom(this.items), take(1)).subscribe(([listId, items]) => {
+        const existingValue = items.find((item) => item.name === trimmedValue);
+        existingValue
+          ? this.listService.markItemDone(listId, existingValue)
+          : this.listService.addNewItem(listId, trimmedValue);
+      });
       this.inputControl.reset('', { emitEvent: true });
     }
   }

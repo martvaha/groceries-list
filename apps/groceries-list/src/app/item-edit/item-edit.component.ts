@@ -21,7 +21,7 @@ import { Location } from '@angular/common';
   selector: 'app-item-edit',
   templateUrl: './item-edit.component.html',
   styleUrls: ['./item-edit.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
 })
 export class ItemEditComponent implements OnInit {
   ids!: Observable<{ listId: string; itemId: string }>;

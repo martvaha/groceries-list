@@ -1,23 +1,18 @@
-import { EntityState, EntityAdapter, createEntityAdapter } from "@ngrx/entity";
-import {
-  createReducer,
-  Action,
-  on,
-  createFeatureSelector,
-  createSelector
-} from "@ngrx/store";
-import { Item } from "../../shared/models";
+import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
+import { createReducer, Action, on, createFeatureSelector, createSelector } from '@ngrx/store';
+import { Item } from '../../shared/models';
 import {
   upsertItemSuccess,
   setGroupId,
   updateItem,
   deleteItem,
   deleteItemSuccess,
-  deleteItemFail
-} from "./item.actions";
-import { selectActiveListId } from "../list/list.reducer";
-import { State } from "../app.reducer";
-import { maxModified, sortByName } from "../utils";
+  deleteItemFail,
+  upsertItemListSuccess,
+} from './item.actions';
+import { selectActiveListId } from '../list/list.reducer';
+import { State } from '../app.reducer';
+import { maxModified, sortByName } from '../utils';
 
 export interface ItemState extends EntityState<Item> {
   loading: boolean;
@@ -27,11 +22,11 @@ export interface ItemListState {
 }
 
 export const adapter: EntityAdapter<Item> = createEntityAdapter<Item>({
-  sortComparer: sortByName
+  sortComparer: sortByName,
 });
 
 export const initialItemState: ItemState = adapter.getInitialState({
-  loading: false
+  loading: false,
 });
 export const initialState: ItemListState = {};
 
@@ -47,17 +42,23 @@ const listReducer = createReducer(
       ...state,
       [listId]: {
         ...adapter.upsertOne(item, get(state, listId)),
-        loading: false
-      }
+        loading: false,
+      },
+    };
+  }),
+  on(upsertItemListSuccess, (state, { items, listId }) => {
+    return {
+      ...state,
+      [listId]: {
+        ...adapter.upsertMany(items, get(state, listId)),
+        loading: false,
+      },
     };
   }),
   on(setGroupId, (state, { item, listId, groupId }) => {
     return {
       ...state,
-      [listId]: adapter.updateOne(
-        { id: item.id, changes: { groupId } },
-        get(state, listId)
-      )
+      [listId]: adapter.updateOne({ id: item.id, changes: { groupId } }, get(state, listId)),
     };
   }),
   on(updateItem, (state, { listId }) => {
@@ -95,58 +96,34 @@ export function reducer(state: ItemListState | undefined, action: Action) {
 }
 
 // export const selectLoading = (state: GroupState) => state.loading;
-const {
-  selectIds,
-  selectEntities,
-  selectAll,
-  selectTotal
-} = adapter.getSelectors();
+const { selectIds, selectEntities, selectAll, selectTotal } = adapter.getSelectors();
 
-export const selectItemState = createFeatureSelector<State, ItemListState>(
-  "item"
+export const selectItemState = createFeatureSelector<State, ItemListState>('item');
+
+export const selectActiveListItemState = createSelector(selectItemState, selectActiveListId, (state, listId) =>
+  get(state, listId)
 );
 
-export const selectActiveListItemState = createSelector(
-  selectItemState,
-  selectActiveListId,
-  (state, listId) => get(state, listId)
-);
+export const selectAllItems = createSelector(selectActiveListItemState, selectAll);
 
-export const selectAllItems = createSelector(
-  selectActiveListItemState,
-  selectAll
-);
+export const selectItemEntities = createSelector(selectActiveListItemState, selectEntities);
 
-export const selectItemEntities = createSelector(
-  selectActiveListItemState,
-  selectEntities
-);
+export const selectAllActiveItems = createSelector(selectAllItems, (items) => items.filter((item) => item.active));
 
-export const selectAllActiveItems = createSelector(
-  selectAllItems,
-  items => items.filter(item => item.active)
-);
+export const selectActiveItemsByGroup = createSelector(selectAllActiveItems, (items) => {
+  console.log('selectActiveItemsByGroup input', items);
+  const data = items.reduce(
+    (prev, cur) => ({
+      ...prev,
+      [cur.groupId]: prev[cur.groupId] ? [...prev[cur.groupId], cur] : [cur],
+    }),
+    {} as { [groupId: string]: Item[] }
+  );
+  console.log('selectActiveItemsByGroup output', data);
+  return data;
+});
 
-export const selectActiveItemsByGroup = createSelector(
-  selectAllActiveItems,
-  items => {
-    console.log("selectActiveItemsByGroup input", items);
-    const data = items.reduce(
-      (prev, cur) => ({
-        ...prev,
-        [cur.groupId]: prev[cur.groupId] ? [...prev[cur.groupId], cur] : [cur]
-      }),
-      {} as { [groupId: string]: Item[] }
-    );
-    console.log("selectActiveItemsByGroup output", data);
-    return data;
-  }
-);
-
-export const selectItemLoading = createSelector(
-  selectActiveListItemState,
-  (state: ItemState) => state.loading
-);
+export const selectItemLoading = createSelector(selectActiveListItemState, (state: ItemState) => state.loading);
 
 // export const selectActiveListId = createSelector(
 //   selectListState,
@@ -162,7 +139,4 @@ export const selectItemLoading = createSelector(
 //   selectLoading
 // );
 
-export const selectItemMaxModified = createSelector(
-  selectAllItems,
-  maxModified
-);
+export const selectItemMaxModified = createSelector(selectAllItems, maxModified);

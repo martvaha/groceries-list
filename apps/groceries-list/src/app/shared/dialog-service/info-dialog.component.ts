@@ -28,7 +28,7 @@ export interface InfoDialogConfig extends MatDialogConfig {
       </button>
     </mat-dialog-actions>
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+
 })
 export class InfoDialogComponent {
   title: string;

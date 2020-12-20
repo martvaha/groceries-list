@@ -1,8 +1,5 @@
 import { Injectable } from '@angular/core';
-import {
-  AngularFirestore,
-  DocumentChangeAction,
-} from '@angular/fire/firestore';
+import { AngularFirestore, DocumentChangeAction } from '@angular/fire/firestore';
 import { map, tap, mergeMap, exhaustMap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { State } from '../app.reducer';
@@ -20,18 +17,13 @@ export class ItemService {
   constructor(private db: AngularFirestore, private store: Store<State>) {}
 
   getItems() {
-    return combineLatest([
-      this.store.select(selectActiveListId),
-      this.store.select(selectItemMaxModified),
-    ]).pipe(
+    return combineLatest([this.store.select(selectActiveListId), this.store.select(selectItemMaxModified)]).pipe(
       tap((c) => console.log('items', c)),
       exhaustMap(([listId, maxModified]) => {
         if (!listId) return EMPTY;
         return this.db
           .collection<Item>(`lists/${listId}/items`, (ref) =>
-            maxModified.getTime() > 0
-              ? ref.where('modified', '>', maxModified)
-              : ref
+            maxModified.getTime() > 0 ? ref.where('modified', '>', maxModified) : ref
           )
           .stateChanges()
           .pipe(
@@ -41,6 +33,7 @@ export class ItemService {
             tap((c) => console.log(c)),
             map((change) => {
               if (!change) return getItemsNothingChanged();
+              console.log('####', change.type, this.extractItem(change));
               const item = this.extractItem(change);
               switch (change.type) {
                 case 'added':
@@ -91,8 +84,7 @@ export class ItemService {
   private extractItem(change: DocumentChangeAction<Item>) {
     const data = change.payload.doc.data();
     const id = change.payload.doc.id;
-    const modified =
-      (data.modified && (data.modified as any).toDate()) || new Date(0);
+    const modified = (data.modified && (data.modified as any).toDate()) || new Date(0);
     const groupId = data.groupId || 'others';
     const group = { ...data, id, modified, groupId } as Item;
     console.log(group);

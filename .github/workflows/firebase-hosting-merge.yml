@@ -22,7 +22,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build app
-        run: yarn nx app-shell groceries-list --c=production,test
+        run: yarn nx run groceries-list:app-shell:test
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:

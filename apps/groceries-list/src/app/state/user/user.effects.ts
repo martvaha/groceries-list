@@ -9,19 +9,7 @@ import { getUser, getUserSuccess, login, logout } from './user.actions';
 
 @Injectable()
 export class UserEffects implements OnInitEffects {
-  constructor(
-    private actions$: Actions,
-    private auth: AuthService,
-    private dialogService: DialogService
-  ) {}
-
-  /**
-   * getUser effect is run after effect init. This is necessary to
-   * bootstrap sync between firebase auth and Store.
-   */
-  ngrxOnInitEffects(): Action {
-    return getUser();
-  }
+  constructor(private actions$: Actions, private auth: AuthService, private dialogService: DialogService) {}
 
   get$ = createEffect(() =>
     this.actions$.pipe(
@@ -50,4 +38,12 @@ export class UserEffects implements OnInitEffects {
       switchMap(() => this.auth.signOut(['/home/login']).then(() => clearState()))
     )
   );
+
+  /**
+   * getUser effect is run after effect init. This is necessary to
+   * bootstrap sync between firebase auth and Store.
+   */
+  ngrxOnInitEffects(): Action {
+    return getUser();
+  }
 }
