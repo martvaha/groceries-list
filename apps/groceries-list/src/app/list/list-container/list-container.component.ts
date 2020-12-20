@@ -3,6 +3,7 @@ import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { DOWN_ARROW, ENTER, UP_ARROW } from '@angular/cdk/keycodes';
 import {
   AfterViewInit,
+  ChangeDetectionStrategy,
   Component,
   OnDestroy,
   OnInit,
@@ -14,7 +15,6 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
-import Fuse from 'fuse.js';
 import { combineLatest, from, Observable, of, Subject } from 'rxjs';
 import {
   debounceTime,
@@ -53,6 +53,7 @@ export interface FuseAdvancedResult<T> {
   selector: 'app-list-container',
   templateUrl: './list-container.component.html',
   styleUrls: ['./list-container.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListContainerComponent
   implements OnInit, OnDestroy, AfterViewInit {

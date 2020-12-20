@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { map } from 'rxjs/operators';
-import { COMMA, ENTER, SEMICOLON, FF_SEMICOLON } from '@angular/cdk/keycodes';
+import { COMMA, ENTER, FF_SEMICOLON } from '@angular/cdk/keycodes';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -12,6 +12,7 @@ import { User } from '../auth/auth.service';
   selector: 'app-list-share',
   styleUrls: ['./list-share.component.scss'],
   templateUrl: './list-share.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListShareComponent implements OnInit {
   emailControl = new FormControl(undefined, [
@@ -19,7 +20,7 @@ export class ListShareComponent implements OnInit {
     Validators.email,
   ]);
   users: Partial<User>[] = [];
-  private listId: Observable<string>;
+  private listId!: Observable<string>;
   constructor(private route: ActivatedRoute, private db: AngularFirestore) {}
 
   readonly separatorKeysCodes = [ENTER, COMMA, FF_SEMICOLON];
@@ -75,13 +76,13 @@ export class ListShareComponent implements OnInit {
     form.patchValue(value);
     if (form.invalid) return { error: form.errors, value: value };
 
-    return { value, error: undefined as unknown as ValidationErrors };
+    return { value, error: (undefined as unknown) as ValidationErrors };
   }
 
   share(): void {
     if (this.users.length < 1) return;
-    this.listId.subscribe(listId => {
-      this.users.forEach(user => {
+    this.listId.subscribe((listId) => {
+      this.users.forEach((user) => {
         this.db.collection('invites').add({ listId: listId, to: user.email });
       });
     });

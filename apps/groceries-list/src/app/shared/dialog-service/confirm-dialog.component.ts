@@ -1,5 +1,9 @@
-import { Component, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import {
+  MAT_DIALOG_DATA,
+  MatDialogConfig,
+  MatDialogRef,
+} from '@angular/material/dialog';
 
 export interface ConfirmDialogConfig extends MatDialogConfig {
   data: ConfirmDialogData;
@@ -18,12 +22,19 @@ export interface ConfirmDialogData {
     <h1 mat-dialog-title *ngIf="data.title">{{ data.title }}</h1>
     <mat-dialog-content> {{ data.message }} </mat-dialog-content>
     <mat-dialog-actions align="end">
-      <button mat-raised-button mat-dialog-close>{{ data.cancelLabel || 'Tühista' }}</button>
-      <button mat-raised-button [color]="data.confirmColor || 'warn'" (click)="dialogRef.close(true)">
+      <button mat-raised-button mat-dialog-close>
+        {{ data.cancelLabel || 'Tühista' }}
+      </button>
+      <button
+        mat-raised-button
+        [color]="data.confirmColor || 'warn'"
+        (click)="dialogRef.close(true)"
+      >
         {{ data.confirmLabel || 'Jah' }}
       </button>
     </mat-dialog-actions>
-  `
+  `,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ConfirmDialogComponent {
   constructor(

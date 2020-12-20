@@ -15,7 +15,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "allowedCommonJsDependencies": ["jsondiffpatch"],
+            "allowedCommonJsDependencies": [
+              "jsondiffpatch"
+            ],
             "outputPath": "dist/apps/groceries-list/browser",
             "index": "apps/groceries-list/src/index.html",
             "main": "apps/groceries-list/src/main.ts",
@@ -27,7 +29,9 @@
               "apps/groceries-list/src/assets",
               "apps/groceries-list/src/manifest.webmanifest"
             ],
-            "styles": ["apps/groceries-list/src/styles.scss"],
+            "styles": [
+              "apps/groceries-list/src/styles.scss"
+            ],
             "scripts": [],
             "webWorkerTsConfig": "apps/groceries-list/tsconfig.worker.json"
           },
@@ -42,7 +46,6 @@
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
-              "extractCss": true,
               "namedChunks": false,
               "extractLicenses": true,
               "vendorChunk": false,
@@ -70,7 +73,10 @@
                 }
               ]
             }
-          }
+          },
+          "outputs": [
+            "{options.outputPath}"
+          ]
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -93,16 +99,25 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/groceries-list/src/**/*.ts"],
-            "tsConfig": ["apps/groceries-list/tsconfig.worker.json"]
+            "lintFilePatterns": [
+              "apps/groceries-list/src/**/*.ts",
+              "apps/groceries-list/src/**/*.html"
+            ],
+            "tsConfig": [
+              "apps/groceries-list/tsconfig.worker.json"
+            ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/groceries-list/jest.config.js",
-            "passWithNoTests": true
-          }
+            "passWithNoTests": true,
+            "tsConfig": "apps/groceries-list/tsconfig.spec.json"
+          },
+          "outputs": [
+            "coverage/apps/groceries-list"
+          ]
         },
         "server": {
           "builder": "@angular-devkit/build-angular:server",
@@ -180,7 +195,9 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/groceries-list-e2e/**/*.{js,ts}"]
+            "lintFilePatterns": [
+              "apps/groceries-list-e2e/**/*.{js,ts}"
+            ]
           }
         }
       }
@@ -194,15 +211,21 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["libs/api-interfaces/**/*.ts"]
+            "lintFilePatterns": [
+              "libs/api-interfaces/**/*.ts"
+            ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "libs/api-interfaces/jest.config.js",
-            "passWithNoTests": true
-          }
+            "passWithNoTests": true,
+            "tsConfig": "libs/api-interfaces/tsconfig.spec.json"
+          },
+          "outputs": [
+            "coverage/libs/api-interfaces"
+          ]
         }
       }
     },
@@ -240,7 +263,10 @@
                 }
               ]
             }
-          }
+          },
+          "outputs": [
+            "{options.outputPath}"
+          ]
         },
         "build": {
           "builder": "@nrwl/workspace:run-commands",
@@ -285,15 +311,21 @@
         "lint": {
           "builder": "@nrwl/linter:eslint",
           "options": {
-            "lintFilePatterns": ["apps/functions/**/*.ts"]
+            "lintFilePatterns": [
+              "apps/functions/**/*.ts"
+            ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
           "options": {
             "jestConfig": "apps/functions/jest.config.js",
-            "passWithNoTests": true
-          }
+            "passWithNoTests": true,
+            "tsConfig": "apps/functions/tsconfig.spec.json"
+          },
+          "outputs": [
+            "coverage/apps/functions"
+          ]
         }
       }
     }

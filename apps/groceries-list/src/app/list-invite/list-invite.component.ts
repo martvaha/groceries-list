@@ -1,10 +1,11 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { User } from '../auth/auth.service';
 
 @Component({
   selector: 'app-list-invite',
   templateUrl: './list-invite.component.html',
   styleUrls: ['./list-invite.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListInviteComponent {
   @Input() user: User | null | undefined;

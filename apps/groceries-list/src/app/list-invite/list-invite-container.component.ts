@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { map, switchMap } from 'rxjs/operators';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
@@ -15,6 +15,7 @@ import { User } from '../auth/auth.service';
       [inviteId]="inviteId | async"
     ></app-list-invite>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ListInviteContainerComponent implements OnInit {
   public inviteId!: Observable<string>;

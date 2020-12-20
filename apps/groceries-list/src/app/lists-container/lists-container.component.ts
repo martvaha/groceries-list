@@ -1,20 +1,21 @@
-import { Component, OnInit } from "@angular/core";
-import { Observable, of } from "rxjs";
-import { DialogService } from "../shared/dialog-service/dialog.service";
-import { List } from "../shared/models";
-import { Store } from "@ngrx/store";
-import { State, selectLoading } from "../state/app.reducer";
-import { addList, removeList } from "../state/list/list.actions";
-import { selectAllLists } from "../state/list/list.reducer";
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { DialogService } from '../shared/dialog-service/dialog.service';
+import { List } from '../shared/models';
+import { Store } from '@ngrx/store';
+import { State, selectLoading } from '../state/app.reducer';
+import { addList, removeList } from '../state/list/list.actions';
+import { selectAllLists } from '../state/list/list.reducer';
 
 @Component({
-  selector: "app-lists-container",
-  templateUrl: "./lists-container.component.html",
-  styleUrls: ["./lists-container.component.scss"]
+  selector: 'app-lists-container',
+  templateUrl: './lists-container.component.html',
+  styleUrls: ['./lists-container.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListsContainerComponent implements OnInit {
-  public lists$: Observable<List[]>;
-  loading$: Observable<boolean>;
+  lists$!: Observable<List[]>;
+  loading$!: Observable<boolean>;
 
   constructor(
     private dialogService: DialogService,
@@ -28,9 +29,9 @@ export class ListsContainerComponent implements OnInit {
 
   addList() {
     const dialog = this.dialogService.input({
-      data: { placeholder: "Nimekirja pealkiri", title: "Nimekirja lisamine" }
+      data: { placeholder: 'Nimekirja pealkiri', title: 'Nimekirja lisamine' },
     });
-    dialog.afterClosed().subscribe(name => {
+    dialog.afterClosed().subscribe((name) => {
       const list = { name } as List;
       this.store.dispatch(addList({ list }));
     });
@@ -39,11 +40,11 @@ export class ListsContainerComponent implements OnInit {
   deleteList(list: List) {
     const dialogRef = this.dialogService.confirm({
       data: {
-        title: "Nimekirja kustutamine",
-        message: `Kas oled kindel, et soovid nimekirja "${list.name}" kusutatad?`
-      }
+        title: 'Nimekirja kustutamine',
+        message: `Kas oled kindel, et soovid nimekirja "${list.name}" kusutatad?`,
+      },
     });
-    dialogRef.afterClosed().subscribe(resp => {
+    dialogRef.afterClosed().subscribe((resp) => {
       if (!resp) return;
       this.store.dispatch(removeList({ list }));
     });
