@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { User } from '../auth/auth.service';
-import { Observable, Subscription } from 'rxjs';
+import { Observable } from 'rxjs';
 import { LoadingService } from '../shared/loading-service';
 import { Store } from '@ngrx/store';
 import { State } from '../state/app.reducer';
@@ -16,10 +16,8 @@ import { selectUser } from '../state/user/user.reducer';
 import { clearState } from '../state/app.actions';
 import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { getUser } from '../state/user/user.actions';
 import { loadLists } from '../state/list/list.actions';
 import { MatSidenav } from '@angular/material/sidenav';
-import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-home',

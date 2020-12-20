@@ -12,7 +12,7 @@
     #nav
     class="home__sidenav"
     [opened]="opened"
-    [mode]="mobileQuery.matches ? 'over' : 'side'"
+    [mode]="mobileQuery?.matches ? 'over' : 'side'"
     role="navigation"
   >
     <app-sidenav-menu
