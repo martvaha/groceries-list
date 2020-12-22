@@ -46,24 +46,7 @@ export class AuthService {
   }
 
   getUser() {
-    setTimeout(() => {
-      this.test.next({
-        displayName: 'Märt Vaha',
-        email: 'martvaha@gmail.com',
-        photoURL: 'https://graph.facebook.com/1498477000200703/picture',
-        uid: '60QOc9NE97V5C7ZlLmN4LVre8eG2',
-      });
-    }, 2000);
-    setTimeout(() => {
-      this.test.next({
-        displayName: 'Märt Vaha',
-        email: 'martvaha@gmail.com',
-        photoURL: 'https://graph.facebook.com/1498477000200703/picture',
-        uid: '60QOc9NE97V5C7ZlLmN4LVre8eG2',
-      });
-    }, 1000);
-    // return this.test.asObservable().pipe(distinctUntilChanged());
-    return this.userSubject.asObservable().pipe();
+    return this.userSubject.asObservable().pipe(distinctUntilChanged());
   }
 
   private redirect(redirect: string | string[]) {
@@ -99,12 +82,6 @@ export class AuthService {
   }
 
   private minimalUser(user: firebase.User): User {
-    return {
-      displayName: 'Märt Vaha',
-      email: 'martvaha@gmail.com',
-      photoURL: 'https://graph.facebook.com/1498477000200703/picture',
-      uid: '60QOc9NE97V5C7ZlLmN4LVre8eG2',
-    };
     const { uid, photoURL, displayName, email } = user;
     return {
       uid,
