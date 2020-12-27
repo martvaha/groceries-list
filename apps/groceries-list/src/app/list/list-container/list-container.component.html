@@ -84,3 +84,7 @@
     </div>
   </div>
 </mat-list>
+
+<div class="loading" *ngIf="loading$ | async">
+  <mat-spinner></mat-spinner>
+</div>

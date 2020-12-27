@@ -1,4 +1,3 @@
-
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @import '~@angular/material/theming';
@@ -20,13 +19,15 @@ $groceries-list-warn: mat-palette($mat-red);
 
 // Create the theme object. A theme consists of configurations for individual
 // theming systems such as "color" or "typography".
-$groceries-list-theme: mat-light-theme((
-  color: (
-    primary: $groceries-list-primary,
-    accent: $groceries-list-accent,
-    warn: $groceries-list-warn,
+$groceries-list-theme: mat-light-theme(
+  (
+    color: (
+      primary: $groceries-list-primary,
+      accent: $groceries-list-accent,
+      warn: $groceries-list-warn,
+    ),
   )
-));
+);
 
 // Include theme styles for core and each component used in your app.
 // Alternatively, you can import and @include the theme mixins for each component
@@ -39,6 +40,11 @@ html,
 body {
   margin: 0;
   height: 100%;
+}
+
+body {
+  /* Disables pull-to-refresh but allows overscroll glow effects. */
+  overscroll-behavior-y: contain;
 }
 
 .space {
@@ -54,5 +60,11 @@ button.app__fab {
 
 @include angular-material-theme($theme);
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}

@@ -7,7 +7,10 @@ export const upsertItemSuccess = createAction('[Item] upsert', props<{ item: Ite
 export const upsertItemListSuccess = createAction('[Item] upsert list', props<{ items: Item[]; listId: string }>());
 
 export const deleteItem = createAction('[Item] delete', props<{ item: Item; listId: string }>());
-export const deleteItemSuccess = createAction('[Item] delete success', props<{ item: Item; listId: string }>());
+export const deleteItemSuccess = createAction(
+  '[Item] delete success',
+  props<{ item: Item | Item[]; listId: string }>()
+);
 export const deleteItemFail = createAction('[Item] delete fail', props<{ item: Item; listId: string }>());
 // export const upsertGroup = createAction('[Item] get not changed');
 

@@ -17,13 +17,12 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { combineLatest, from, Observable, of, Subject } from 'rxjs';
 import { debounceTime, delay, map, startWith, switchMap, take, withLatestFrom } from 'rxjs/operators';
-import { LoadingService } from '../../shared/loading-service';
 import { GroupWithItems, Item } from '../../shared/models';
 import { highlight, takeValue } from '../../shared/utils';
 import { selectOrderedGroupedItems, State } from '../../state/app.reducer';
 import { getGroups } from '../../state/group/group.actions';
 import { getItems, setGroupId } from '../../state/item/item.actions';
-import { selectAllItems } from '../../state/item/item.reducer';
+import { selectAllItems, selectItemLoading } from '../../state/item/item.reducer';
 import { upsertGroupsOrder } from '../../state/list/list.actions';
 import { selectActiveListId } from '../../state/list/list.reducer';
 import { ListService } from '../list.service';
@@ -45,10 +44,10 @@ export interface FuseAdvancedResult<T> {
   selector: 'app-list-container',
   templateUrl: './list-container.component.html',
   styleUrls: ['./list-container.component.scss'],
-
 })
 export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit {
   private destroy$: Subject<void> | undefined = new Subject<void>();
+  loading$!: Observable<boolean>;
   groupsWithItems$!: Observable<GroupWithItems[]>;
   dragging = false;
   listId!: Observable<string>;
@@ -75,18 +74,19 @@ export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit 
   constructor(
     private route: ActivatedRoute,
     private listService: ListService,
-    private loading: LoadingService,
     private snackBar: MatSnackBar,
     private store: Store<State>,
     private search: SearchService
   ) {}
 
   ngAfterViewInit(): void {
+    console.log('3240');
     // this.searchItems.changes.subscribe((items) => (this.keyboardEventsManager = new ListKeyManager(this.searchItems)));
   }
 
   ngOnInit() {
     console.log('6084', 'list-container');
+    this.loading$ = this.store.select(selectItemLoading);
     this.store.dispatch(getGroups());
     this.store.dispatch(getItems());
     this.items = this.store.select(selectAllItems);

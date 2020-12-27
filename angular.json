@@ -10,7 +10,7 @@
       },
       "root": "apps/groceries-list",
       "sourceRoot": "apps/groceries-list/src",
-      "prefix": "app",
+      "prefix": "groceries-list",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",

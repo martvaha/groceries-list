@@ -1,6 +1,11 @@
-export function maxModified(items: any[] | undefined | null) {
+interface ModifiableObject {
+  modified: Date | undefined;
+}
+
+export function maxModified(items: ModifiableObject[] | undefined | null) {
+  if (!items || !items?.length) return new Date(0);
   return (items || []).reduce((prev, cur) => {
-    const curModified = cur.modified || new Date(0);
+    const curModified = cur?.modified || new Date(0);
     return curModified.getTime() > prev.getTime() ? curModified : prev;
   }, new Date(0));
 }

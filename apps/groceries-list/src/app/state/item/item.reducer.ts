@@ -9,6 +9,8 @@ import {
   deleteItemSuccess,
   deleteItemFail,
   upsertItemListSuccess,
+  updateItemSuccess,
+  updateItemFail,
 } from './item.actions';
 import { selectActiveListId } from '../list/list.reducer';
 import { State } from '../app.reducer';
@@ -64,6 +66,9 @@ const listReducer = createReducer(
   on(updateItem, (state, { listId }) => {
     return { ...state, [listId]: { ...get(state, listId), loading: true } };
   }),
+  on(updateItemSuccess, updateItemFail, (state, { listId }) => {
+    return { ...state, [listId]: { ...get(state, listId), loading: false } };
+  }),
   on(deleteItem, (state, { item, listId }) => {
     const updatedList = adapter.removeOne(item.id, get(state, listId));
     return { ...state, [listId]: { ...updatedList, loading: true } };
@@ -96,7 +101,7 @@ export function reducer(state: ItemListState | undefined, action: Action) {
 }
 
 // export const selectLoading = (state: GroupState) => state.loading;
-const { selectIds, selectEntities, selectAll, selectTotal } = adapter.getSelectors();
+const { selectEntities, selectAll } = adapter.getSelectors();
 
 export const selectItemState = createFeatureSelector<State, ItemListState>('item');
 
@@ -134,9 +139,6 @@ export const selectItemLoading = createSelector(selectActiveListItemState, (stat
 //   selectListState,
 //   selectAll
 // );
-// export const selectListStateLoading = createSelector(
-//   selectListState,
-//   selectLoading
-// );
+// export const selectListStateLoading = createSelector(selectListState, selectLoading);
 
 export const selectItemMaxModified = createSelector(selectAllItems, maxModified);

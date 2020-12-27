@@ -1,41 +1,22 @@
 import { Injectable } from '@angular/core';
-import {
-  AngularFirestore,
-  DocumentChangeAction,
-} from '@angular/fire/firestore';
+import { AngularFirestore, DocumentChangeAction } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
 import firebase from 'firebase/app';
 import { combineLatest, EMPTY } from 'rxjs';
-import {
-  debounceTime,
-  distinctUntilChanged,
-  map,
-  mergeMap,
-  startWith,
-  switchMap,
-  tap,
-} from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, map, mergeMap, startWith, switchMap, tap } from 'rxjs/operators';
 import { AuthService } from '../../auth/auth.service';
 import { List } from '../../shared/models';
 import { takeValue } from '../../shared/utils';
 import { State } from '../app.reducer';
 import { selectUser } from '../user/user.reducer';
-import {
-  loadListsNothingChanged,
-  removeListSuccess,
-  upsertListSuccess,
-} from './list.actions';
+import { loadListsNothingChanged, removeListSuccess, upsertListSuccess } from './list.actions';
 import { selectListMaxModified } from './list.reducer';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ListService {
-  constructor(
-    private db: AngularFirestore,
-    private auth: AuthService,
-    private store: Store<State>
-  ) {}
+  constructor(private db: AngularFirestore, private auth: AuthService, private store: Store<State>) {}
 
   getLists() {
     return combineLatest([
@@ -54,9 +35,7 @@ export class ListService {
         if (!user) return EMPTY;
         return this.db
           .collection<List>('lists', (ref) =>
-            ref
-              .where('acl', 'array-contains', user.uid)
-              .where('modified', '>', maxModified)
+            ref.where('acl', 'array-contains', user.uid).where('modified', '>', maxModified)
           )
           .stateChanges()
           .pipe(
@@ -86,7 +65,8 @@ export class ListService {
     const finalList = {
       ...list,
       acl: [user.uid],
-      modified: firebase.firestore.FieldValue.serverTimestamp(),
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      modified: firebase.firestore.FieldValue.serverTimestamp() as any,
     } as List;
     return this.db.collection('lists').add(finalList);
   }
@@ -95,8 +75,9 @@ export class ListService {
     const { id, ...others } = list;
     return this.db.doc(`/lists/${id}`).update({
       ...others,
-      modified: firebase.firestore.FieldValue.serverTimestamp(),
-    });
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      modified: firebase.firestore.FieldValue.serverTimestamp() as any,
+    } as List);
   }
 
   removeList(list: List) {
@@ -107,8 +88,7 @@ export class ListService {
   private extractList(change: DocumentChangeAction<List>) {
     const data = change.payload.doc.data();
     const id = change.payload.doc.id;
-    const modified =
-      (data.modified && (data.modified as any).toDate()) || new Date(0);
+    const modified = (data?.modified as any)?.toDate() || new Date(0);
     const list = { ...data, id, modified } as List;
     return list;
   }

@@ -1,5 +1,5 @@
 export interface List {
-  modified: Date | firebase.default.firestore.FieldValue;
+  modified: Date;
   id: string;
   name: string;
   acl: string[];

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { AngularFirestore, DocumentChangeAction } from '@angular/fire/firestore';
+import { AngularFirestore, DocumentChange } from '@angular/fire/firestore';
 import { map, tap, mergeMap, exhaustMap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { State } from '../app.reducer';
 import * as firebase from 'firebase/app';
-import { combineLatest, empty, of, EMPTY } from 'rxjs';
+import { combineLatest, EMPTY } from 'rxjs';
 import { selectActiveListId } from '../list/list.reducer';
-import { getItemsNothingChanged, upsertItemSuccess } from './item.actions';
+import { deleteItemSuccess, getItemsNothingChanged, upsertItemListSuccess } from './item.actions';
 import { Item } from '../../shared/models';
 import { selectItemMaxModified } from './item.reducer';
 
@@ -27,21 +27,40 @@ export class ItemService {
           )
           .stateChanges()
           .pipe(
-            tap((c) => console.log('items all changes', c)),
-            mergeMap((changes) => (changes.length ? changes : [null])),
-            // filter(change => !(change && change.payload.doc.metadata.fromCache)),
-            tap((c) => console.log(c)),
+            mergeMap((changes) => {
+              if (!changes?.length) return [null];
+
+              const groupedChanges: Record<string, DocumentChange<Item>[]> = {
+                added: [],
+                modified: [],
+                removed: [],
+              };
+
+              for (const change of changes) {
+                groupedChanges[change.type].push(change.payload);
+              }
+
+              // Returns list of changes with grouped changesš
+              // [{type: 'added', payload: [{}, {},...]}, {type: 'removed', ...}]
+              return Object.keys(groupedChanges)
+                .filter((key) => groupedChanges[key]?.length)
+                .map((key) => ({ type: key, payload: groupedChanges[key] }));
+            }),
             map((change) => {
               if (!change) return getItemsNothingChanged();
-              console.log('####', change.type, this.extractItem(change));
-              const item = this.extractItem(change);
+              if (!Array.isArray(change.payload)) change.payload = [change.payload];
+
+              console.log('####', change.type, this.extractItem(change.payload[0]));
               switch (change.type) {
                 case 'added':
                 case 'modified':
-                  return upsertItemSuccess({ item, listId });
+                  return upsertItemListSuccess({ listId, items: change.payload.map((data) => this.extractItem(data)) });
+
                 case 'removed':
                   console.error('item remove not implemented!');
-                  return upsertItemSuccess({ item, listId });
+                  return deleteItemSuccess({ listId, item: change.payload.map((data) => this.extractItem(data)) });
+                default:
+                  return getItemsNothingChanged();
               }
             })
           );
@@ -81,13 +100,12 @@ export class ItemService {
     return this.db.doc(`/lists/${listId}/items/${item.id}`).delete();
   }
 
-  private extractItem(change: DocumentChangeAction<Item>) {
-    const data = change.payload.doc.data();
-    const id = change.payload.doc.id;
-    const modified = (data.modified && (data.modified as any).toDate()) || new Date(0);
+  private extractItem(payload: DocumentChange<Item>) {
+    const data = payload.doc.data();
+    const id = payload.doc.id;
+    const modified = (data.modified as any)?.toDate() || new Date(0);
     const groupId = data.groupId || 'others';
     const group = { ...data, id, modified, groupId } as Item;
-    console.log(group);
     return group;
   }
 }
