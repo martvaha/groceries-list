@@ -11,6 +11,7 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
 import { loadLists } from '../state/list/list.actions';
 import { MatSidenav } from '@angular/material/sidenav';
+import { TitleService } from '../shared/title.service';
 
 @Component({
   selector: 'app-home',
@@ -18,11 +19,12 @@ import { MatSidenav } from '@angular/material/sidenav';
   styleUrls: ['./home.component.scss'],
 })
 export class HomeComponent implements OnInit, OnDestroy {
+  @ViewChild('nav') sidenav?: MatSidenav;
   public mobileQuery!: MediaQueryList;
   public opened = true;
   public user$!: Observable<User | null | undefined>;
+  public title$!: Observable<string>;
   private mediaListener = () => this.toggleSidenav(this.shouldSidenavBeOpen());
-  @ViewChild('nav') sidenav?: MatSidenav;
 
   constructor(
     private changeDetectorRef: ChangeDetectorRef,
@@ -30,7 +32,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     private store: Store<State>,
     public loading: LoadingService,
     private icons: MatIconRegistry,
-    private sanitizer: DomSanitizer
+    private sanitizer: DomSanitizer,
+    private titleService: TitleService
   ) {
     this.icons.addSvgIcon('flogo', this.sanitizer.bypassSecurityTrustResourceUrl('../assets/flogo.svg'));
   }
@@ -41,6 +44,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.opened = this.shouldSidenavBeOpen();
     this.user$ = this.store.select(selectUser);
     this.store.dispatch(loadLists());
+    this.title$ = this.titleService.title$;
   }
 
   private shouldSidenavBeOpen() {

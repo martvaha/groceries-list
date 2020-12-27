@@ -2,7 +2,7 @@
   <button mat-icon-button (click)="toggleSidenav()">
     <mat-icon>menu</mat-icon>
   </button>
-  <h1 class="home__heading">Groceries List</h1>
+  <h1 class="home__heading">{{ title$ | async }}</h1>
   <span class="space"></span>
   <app-user-avatar [user]="user$ | async" (reload)="reload()"></app-user-avatar>
 </mat-toolbar>

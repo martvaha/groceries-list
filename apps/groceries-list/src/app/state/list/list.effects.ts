@@ -11,6 +11,8 @@ import { selectRouteParams } from '../router/reducer';
 import { Params } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { State } from '../app.reducer';
+import { selectActiveList } from './list.reducer';
+import { TitleService } from '../../shared/title.service';
 
 @Injectable()
 export class ListEffects {
@@ -18,17 +20,31 @@ export class ListEffects {
     private actions$: Actions,
     private listService: ListService,
     private dialogService: DialogService,
-    private store: Store<State>
+    private store: Store<State>,
+    private title: TitleService
   ) {}
 
   active$ = createEffect(() =>
     this.actions$.pipe(
       ofType(ROUTER_NAVIGATED),
       withLatestFrom(this.store.select(selectRouteParams)),
-      map(([action, params]) => ((params && params.listId) || null) as string | null),
+      map(([action, params]) => (params?.listId || null) as string | null),
       distinctUntilChanged(),
-      map(id => ListActions.setActive({ id }))
+      map((id) => ListActions.setActive({ id }))
     )
+  );
+
+  listTitle$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(ListActions.setActive),
+        switchMap(() =>
+          this.store
+            .select(selectActiveList)
+            .pipe(tap((list) => (list ? this.title.setTitle(list.name) : this.title.clearTitle())))
+        )
+      ),
+    { dispatch: false }
   );
 
   groupsOrder$ = createEffect(
@@ -63,7 +79,7 @@ export class ListEffects {
         this.listService
           .removeList(list)
           .then(() => ListActions.removeListSuccess({ list }))
-          .catch(error => ListActions.removeListFail({ error, list }))
+          .catch((error) => ListActions.removeListFail({ error, list }))
       )
     )
   );
@@ -73,11 +89,11 @@ export class ListEffects {
       ofType(ListActions.removeListFail),
       switchMap(({ error, list }) => {
         const dialogRef = this.dialogService.confirm({
-          data: { title: error.name, message: error.message, confirmLabel: 'Värskenda lehte', confirmColor: 'accent' }
+          data: { title: error.name, message: error.message, confirmLabel: 'Värskenda lehte', confirmColor: 'accent' },
         });
 
         return dialogRef.afterClosed().pipe(
-          map(resp => {
+          map((resp) => {
             if (resp) {
               return ListActions.removeListFailReload({ error, list });
             } else {

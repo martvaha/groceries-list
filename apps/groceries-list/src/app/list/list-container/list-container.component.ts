@@ -178,6 +178,7 @@ export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   markDone(item: Item) {
+    // Add delay so animation has time to finish
     this.listId.pipe(delay(300)).subscribe((listId) => {
       this.listService.markItemDone(listId, item);
       const snackBarRef = this.snackBar.open(`${item.name} done!`, 'Revert', {
