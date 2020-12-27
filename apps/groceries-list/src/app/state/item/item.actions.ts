@@ -2,6 +2,7 @@ import { createAction, props } from '@ngrx/store';
 import { Item } from '../../shared/models';
 
 export const getItems = createAction('[Item] get');
+export const getItemsFail = createAction('[Item] get fail', props<{ error: Error }>());
 export const getItemsNothingChanged = createAction('[Item] get nothing changed');
 export const upsertItemSuccess = createAction('[Item] upsert', props<{ item: Item; listId: string }>());
 export const upsertItemListSuccess = createAction('[Item] upsert list', props<{ items: Item[]; listId: string }>());

@@ -13,6 +13,7 @@ import {
   deleteItem,
   deleteItemSuccess,
   deleteItemFail,
+  getItemsFail,
 } from './item.actions';
 import { Router } from '@angular/router';
 
@@ -34,13 +35,20 @@ export class ItemEffects {
     )
   );
 
+  loadFail$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(getItemsFail),
+        tap(() => this.router.navigate(['home']))
+      ),
+    { dispatch: false }
+  );
+
   setGroup$ = createEffect(
     () =>
       this.actions$.pipe(
         ofType(setGroupId),
-        switchMap(({ item, groupId, listId }) =>
-          this.itemService.updateItem({ ...item, groupId }, listId)
-        )
+        switchMap(({ item, groupId, listId }) => this.itemService.updateItem({ ...item, groupId }, listId))
       ),
     { dispatch: false }
   );

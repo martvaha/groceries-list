@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentChange } from '@angular/fire/firestore';
-import { map, tap, mergeMap, exhaustMap } from 'rxjs/operators';
+import { map, tap, mergeMap, exhaustMap, catchError } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { State } from '../app.reducer';
 import * as firebase from 'firebase/app';
-import { combineLatest, EMPTY } from 'rxjs';
+import { combineLatest, empty, EMPTY, of } from 'rxjs';
 import { selectActiveListId } from '../list/list.reducer';
-import { deleteItemSuccess, getItemsNothingChanged, upsertItemListSuccess } from './item.actions';
+import { deleteItemSuccess, getItemsFail, getItemsNothingChanged, upsertItemListSuccess } from './item.actions';
 import { Item } from '../../shared/models';
 import { selectItemMaxModified } from './item.reducer';
 
@@ -62,6 +62,9 @@ export class ItemService {
                 default:
                   return getItemsNothingChanged();
               }
+            }),
+            catchError((error: firebase.default.FirebaseError) => {
+              return of(getItemsFail({ error }));
             })
           );
       })
