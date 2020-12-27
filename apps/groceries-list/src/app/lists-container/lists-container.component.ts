@@ -11,6 +11,7 @@ import { selectAllLists } from '../state/list/list.reducer';
   selector: 'app-lists-container',
   templateUrl: './lists-container.component.html',
   styleUrls: ['./lists-container.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListsContainerComponent implements OnInit {
   lists$!: Observable<List[]>;

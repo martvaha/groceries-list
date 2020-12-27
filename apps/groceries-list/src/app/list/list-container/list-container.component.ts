@@ -22,9 +22,9 @@ import { highlight, takeValue } from '../../shared/utils';
 import { selectOrderedGroupedItems, State } from '../../state/app.reducer';
 import { getGroups } from '../../state/group/group.actions';
 import { getItems, setGroupId } from '../../state/item/item.actions';
-import { selectAllItems, selectItemLoading } from '../../state/item/item.reducer';
+import { selectAllItems } from '../../state/item/item.reducer';
 import { upsertGroupsOrder } from '../../state/list/list.actions';
-import { selectActiveListId } from '../../state/list/list.reducer';
+import { selectActiveListId, selectListStateLoading } from '../../state/list/list.reducer';
 import { ListService } from '../list.service';
 import { SearchService } from '../../shared/search.service';
 
@@ -44,6 +44,7 @@ export interface FuseAdvancedResult<T> {
   selector: 'app-list-container',
   templateUrl: './list-container.component.html',
   styleUrls: ['./list-container.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit {
   private destroy$: Subject<void> | undefined = new Subject<void>();
@@ -86,7 +87,7 @@ export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit 
 
   ngOnInit() {
     console.log('6084', 'list-container');
-    this.loading$ = this.store.select(selectItemLoading);
+    this.loading$ = this.store.select(selectListStateLoading);
     this.store.dispatch(getGroups());
     this.store.dispatch(getItems());
     this.items = this.store.select(selectAllItems);
