@@ -3,6 +3,14 @@
   flex-direction: column;
   height: 100%;
   margin: 1rem;
+  max-width: 35rem;
+
+  & > * {
+    margin-bottom: 0.5rem;
+  }
+  mat-checkbox {
+    margin-bottom: 1rem;
+  }
 }
 
 .item-edit-form__category-container {

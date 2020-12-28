@@ -6,7 +6,7 @@ import { Item, Group } from '../../shared/models';
   selector: 'app-item-edit-form',
   templateUrl: './item-edit-form.component.html',
   styleUrls: ['./item-edit-form.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ItemEditFormComponent {
   @Input()
@@ -23,6 +23,7 @@ export class ItemEditFormComponent {
   @Output() return = new EventEmitter<void>();
   form = this.formBuilder.group({
     name: [undefined, [Validators.required]],
+    description: [undefined],
     active: [undefined, [Validators.required]],
     groupId: [undefined],
   });

@@ -73,8 +73,8 @@
             (longPressEnd)="dragStart(null)"
           >
             <mat-checkbox (click)="markDone(item)">{{ item.name }}</mat-checkbox>
-            <span class="space"></span>
-            <button mat-icon-button [routerLink]="['/home/item', listId | async, item.id]">
+            <span class="description mat-hint">{{ item.description }}</span>
+            <button mat-icon-button class="mat-hint" [routerLink]="['/home/item', listId | async, item.id]">
               <mat-icon>edit</mat-icon>
             </button>
           </mat-list-item>
