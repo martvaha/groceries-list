@@ -89,7 +89,8 @@ export class ListService {
     const data = change.payload.doc.data();
     const id = change.payload.doc.id;
     const modified = (data?.modified as any)?.toDate() || new Date(0);
-    const list = { ...data, id, modified } as List;
+    const shared = data.acl?.length > 1;
+    const list = { ...data, id, modified, shared } as List;
     return list;
   }
 }

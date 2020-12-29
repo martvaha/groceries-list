@@ -7,3 +7,15 @@ $accent: mat-palette($app-deeppurple, 500, 300, 600);
 $theme: mat-light-theme($primary, $accent);
 
 $facebook-color: #3a5ca9;
+
+// Define an alternate dark theme.
+$dark-primary: mat-palette($app-blue);
+$dark-accent: mat-palette($app-deeppurple, 500, 300, 600);
+$dark-theme: mat-dark-theme(
+  (
+    color: (
+      primary: $dark-primary,
+      accent: $dark-accent,
+    ),
+  )
+);

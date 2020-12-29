@@ -22,3 +22,8 @@ $avatar-size: 50px;
   background-color: rgba(0, 122, 193, 0.2);
   background-repeat: no-repeat;
 }
+
+mat-radio-group {
+  display: flex;
+  flex-direction: column;
+}

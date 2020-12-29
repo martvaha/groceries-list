@@ -1,15 +1,28 @@
 <mat-nav-list class="list-container__nav-list">
   <mat-list-item *ngFor="let list of lists$ | async">
+    <mat-icon matListIcon>{{ list.acl && list.acl.length > 1 ? 'folder_shared' : 'folder' }}</mat-icon>
     <a matLine [routerLink]="['/home/list', list.id]">{{ list.name }}</a>
-    <button mat-icon-button class="mat-hint" [routerLink]="['/home/edit', list.id]">
-      <mat-icon>edit</mat-icon>
+
+    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="List actions">
+      <mat-icon>more_vert</mat-icon>
     </button>
-    <button mat-icon-button color="accent" [routerLink]="['/home/share', list.id]">
-      <mat-icon>share</mat-icon>
-    </button>
-    <button mat-icon-button color="warn" (click)="deleteList(list)">
-      <mat-icon>delete</mat-icon>
-    </button>
+    <mat-menu #menu="matMenu">
+      <ng-template matMenuContent>
+        <button mat-menu-item class="mat-hint" [routerLink]="['/home/edit', list.id]">
+          <mat-icon>edit</mat-icon>
+          <span>Edit</span>
+        </button>
+        <button mat-menu-item color="accent" [routerLink]="['/home/share', list.id]">
+          <mat-icon>share</mat-icon>
+
+          <span>Share</span>
+        </button>
+        <button mat-menu-item color="warn" (click)="deleteList(list)">
+          <mat-icon>delete</mat-icon>
+          <span>Delete</span>
+        </button>
+      </ng-template>
+    </mat-menu>
   </mat-list-item>
 </mat-nav-list>
 

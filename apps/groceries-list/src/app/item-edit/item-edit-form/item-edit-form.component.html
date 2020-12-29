@@ -3,13 +3,13 @@
     <input matInput placeholder="Nimi" formControlName="name" />
   </mat-form-field>
   <mat-form-field>
-    <mat-label>Lisainfo</mat-label>
+    <mat-label>Details</mat-label>
     <textarea matInput formControlName="description"></textarea>
   </mat-form-field>
-  <mat-checkbox formControlName="active">Nimekirjas</mat-checkbox>
+  <mat-checkbox formControlName="active">Active</mat-checkbox>
   <div class="item-edit-form__group-container">
     <mat-form-field>
-      <mat-select placeholder="Kategooria" formControlName="groupId">
+      <mat-select placeholder="Group" formControlName="groupId">
         <mat-option *ngFor="let group of groups" [value]="group.id">
           {{ group.name }}
         </mat-option>
@@ -18,7 +18,7 @@
     <button color="primary" mat-icon-button (click)="groupAdd.emit()"><mat-icon>add</mat-icon></button>
   </div>
   <div class="item-edit__controls">
-    <button mat-raised-button (click)="return.emit()">Tagasi</button>
-    <button mat-raised-button color="primary" (click)="onUpdate()">Salvesta</button>
+    <button mat-raised-button (click)="return.emit()">Back</button>
+    <button mat-raised-button color="primary" (click)="onUpdate()">Save</button>
   </div>
 </form>

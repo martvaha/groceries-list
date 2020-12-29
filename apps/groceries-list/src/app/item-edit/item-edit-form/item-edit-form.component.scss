@@ -5,9 +5,11 @@
   margin: 1rem;
   max-width: 35rem;
 
+  // Add margin to every form element
   & > * {
     margin-bottom: 0.5rem;
   }
+
   mat-checkbox {
     margin-bottom: 1rem;
   }

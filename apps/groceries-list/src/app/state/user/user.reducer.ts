@@ -1,11 +1,5 @@
 import { User } from '../../auth/auth.service';
-import {
-  createReducer,
-  on,
-  Action,
-  createFeatureSelector,
-  createSelector,
-} from '@ngrx/store';
+import { createReducer, on, Action, createFeatureSelector, createSelector } from '@ngrx/store';
 import * as UserActions from './user.actions';
 
 export interface UserState {
@@ -27,7 +21,4 @@ export function reducer(state: UserState | undefined, action: Action) {
 
 export const selectUserState = createFeatureSelector<UserState>('user');
 
-export const selectUser = createSelector(
-  selectUserState,
-  (state: UserState) => state.user
-);
+export const selectUser = createSelector(selectUserState, (state: UserState) => state.user);

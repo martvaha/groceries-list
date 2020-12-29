@@ -58,8 +58,6 @@ button.app__fab {
   z-index: 1;
 }
 
-@include angular-material-theme($theme);
-
 html,
 body {
   height: 100%;
@@ -67,4 +65,10 @@ body {
 body {
   margin: 0;
   font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+@include angular-material-theme($theme);
+
+.app-dark {
+  @include angular-material-color($dark-theme);
 }

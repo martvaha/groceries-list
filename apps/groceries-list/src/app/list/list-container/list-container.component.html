@@ -6,11 +6,28 @@
       type="text"
       formControlName="inputControl"
       required
-      placeholder="Lisa nimekirja"
+      placeholder="Add list"
       [errorStateMatcher]="inputValid"
     />
   </mat-form-field>
-  <button mat-raised-button type="submit" color="primary" [disabled]="!inputForm.valid">Lisa</button>
+  <button mat-raised-button type="submit" color="primary" [disabled]="!inputForm.valid">Add</button>
+  <ng-container *ngIf="inactiveItems$ | async; let inactiveItems">
+    <button
+      class="extra-actions-button"
+      *ngIf="inactiveItems && inactiveItems.length <= 40"
+      mat-icon-button
+      [matMenuTriggerFor]="menu"
+      aria-label="Extra actions"
+    >
+      <mat-icon>more_vert</mat-icon>
+    </button>
+
+    <mat-menu #menu="matMenu">
+      <ng-template matMenuContent>
+        <button mat-menu-item (click)="markAllActive(inactiveItems)">Mark all active</button>
+      </ng-template>
+    </mat-menu>
+  </ng-container>
 </form>
 <mat-divider></mat-divider>
 <mat-list [hidden]="!inputControl.value?.length" class="lists-container__search-items">

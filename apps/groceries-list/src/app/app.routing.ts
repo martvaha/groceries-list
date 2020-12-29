@@ -29,6 +29,11 @@ const routes: Routes = [
         loadChildren: () => import('./list/list.module').then((m) => m.ListModule),
       },
       {
+        path: 'profile',
+        ...canActivate(() => redirectUnauthorizedTo(['home', 'login'])),
+        loadChildren: () => import('./profile/profile.module').then((m) => m.ProfileModule),
+      },
+      {
         path: 'edit',
         ...canActivate(() => redirectUnauthorizedTo(['home', 'login'])),
         loadChildren: () => import('./list-edit/list-edit.module').then((m) => m.ListEditModule),

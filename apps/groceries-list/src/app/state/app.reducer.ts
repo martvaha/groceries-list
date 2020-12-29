@@ -13,13 +13,15 @@ import { OTHERS_GROUP_ID } from '../shared/const';
 import { sentryReducer } from '../shared/sentry';
 import { Storage } from './utils';
 import { GroupWithItems, Item } from '../shared/models';
+import { ConfigState, reducer as configReducer } from './config/config.reducer';
 
 export interface State {
-  list: ListState;
-  user: UserState;
-  router: RouterState;
+  config: ConfigState;
   group: GroupListState;
   item: ItemListState;
+  list: ListState;
+  router: RouterState;
+  user: UserState;
 }
 
 export function clearStateReducer(reducer: ActionReducer<any>): ActionReducer<any> {
@@ -33,16 +35,17 @@ export function clearStateReducer(reducer: ActionReducer<any>): ActionReducer<an
 }
 
 export const reducers: ActionReducerMap<State> = {
-  list: listReducer,
-  user: userReducer,
-  router: routerReducer,
+  config: configReducer,
   group: groupReducer,
   item: itemReducer,
+  list: listReducer,
+  router: routerReducer,
+  user: userReducer,
 };
 
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
   return localStorageSync({
-    keys: [{ list: ['entities', 'ids', 'activeId'] }, 'group', 'item'],
+    keys: [{ list: ['entities', 'ids', 'activeId'] }, 'group', 'item', 'config'],
     rehydrate: true,
     removeOnUndefined: true,
     storage: new Storage(),
@@ -74,7 +77,7 @@ export const selectGroupedItems = createSelector(selectAllGroups, selectActiveIt
   } else {
     groupsWithItems.push({
       id: 'others',
-      name: 'Muu',
+      name: 'Other',
       items: unknownGroup,
       modified: new Date(0),
       active: !!unknownGroup.length,

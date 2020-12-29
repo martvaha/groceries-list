@@ -26,7 +26,7 @@ export class ListsContainerComponent implements OnInit {
 
   addList() {
     const dialog = this.dialogService.input({
-      data: { placeholder: 'Nimekirja pealkiri', title: 'Nimekirja lisamine' },
+      data: { title: 'Add list', placeholder: 'List title' },
     });
     dialog.afterClosed().subscribe((name) => {
       if (!name) return;
@@ -38,8 +38,8 @@ export class ListsContainerComponent implements OnInit {
   deleteList(list: List) {
     const dialogRef = this.dialogService.confirm({
       data: {
-        title: 'Nimekirja kustutamine',
-        message: `Kas oled kindel, et soovid nimekirja "${list.name}" kusutatad?`,
+        title: 'Remove list',
+        message: `Are you sure you want to remove "${list.name}"?`,
       },
     });
     dialogRef.afterClosed().subscribe((resp) => {

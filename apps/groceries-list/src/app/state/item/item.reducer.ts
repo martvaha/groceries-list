@@ -110,6 +110,7 @@ export const selectActiveListItemState = createSelector(selectItemState, selectA
 );
 
 export const selectAllItems = createSelector(selectActiveListItemState, selectAll);
+export const selectAllInactiveItems = createSelector(selectAllItems, (items) => items.filter((item) => !item.active));
 
 export const selectItemEntities = createSelector(selectActiveListItemState, selectEntities);
 

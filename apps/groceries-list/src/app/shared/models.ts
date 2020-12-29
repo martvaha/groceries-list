@@ -4,6 +4,7 @@ export interface List {
   name: string;
   acl: string[];
   groupsOrder: string[];
+  shared: boolean;
 }
 
 export interface Group {

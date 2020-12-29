@@ -1,0 +1,12 @@
+<label id="theme-select">Theme</label>
+
+<mat-radio-group
+  aria-labelledby="theme-select"
+  class="theme"
+  [formControl]="themeControl"
+  (change)="onThemeChange($event)"
+>
+  <mat-radio-button value="system"> System ({{ systemTheme$ | async }}) </mat-radio-button>
+  <mat-radio-button value="light"> Light </mat-radio-button>
+  <mat-radio-button value="dark"> Dark </mat-radio-button>
+</mat-radio-group>

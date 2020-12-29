@@ -22,11 +22,12 @@ import { highlight, takeValue } from '../../shared/utils';
 import { selectOrderedGroupedItems, State } from '../../state/app.reducer';
 import { getGroups } from '../../state/group/group.actions';
 import { getItems, setGroupId } from '../../state/item/item.actions';
-import { selectAllItems } from '../../state/item/item.reducer';
+import { selectAllInactiveItems, selectAllItems } from '../../state/item/item.reducer';
 import { upsertGroupsOrder } from '../../state/list/list.actions';
 import { selectActiveListId, selectListStateLoading } from '../../state/list/list.reducer';
 import { ListService } from '../list.service';
 import { SearchService } from '../../shared/search.service';
+import { DialogService } from '../../shared/dialog-service/dialog.service';
 
 export interface FuseMatch {
   indices: [number, number][];
@@ -55,7 +56,8 @@ export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit 
   filteredItems$!: Observable<Item[] | undefined>;
   inputControl!: FormControl;
   inputForm!: FormGroup;
-  items!: Observable<Item[]>;
+  items$!: Observable<Item[]>;
+  inactiveItems$!: Observable<Item[]>;
   dragDelay = 300;
   draggingGroupId!: string | null;
   @ViewChildren('searchItem') searchItems!: QueryList<any>;
@@ -77,7 +79,8 @@ export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit 
     private listService: ListService,
     private snackBar: MatSnackBar,
     private store: Store<State>,
-    private search: SearchService
+    private search: SearchService,
+    private dialog: DialogService
   ) {}
 
   ngAfterViewInit(): void {
@@ -86,11 +89,11 @@ export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit 
   }
 
   ngOnInit() {
-    console.log('6084', 'list-container');
     this.loading$ = this.store.select(selectListStateLoading);
     this.store.dispatch(getGroups());
     this.store.dispatch(getItems());
-    this.items = this.store.select(selectAllItems);
+    this.items$ = this.store.select(selectAllItems);
+    this.inactiveItems$ = this.store.select(selectAllInactiveItems);
     this.groupsWithItems$ = this.store.select(selectOrderedGroupedItems);
 
     this.inputControl = new FormControl('', [Validators.required]);
@@ -105,7 +108,7 @@ export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit 
       map((input: string | { name: string }) => (typeof input === 'string' ? input : input.name))
     );
 
-    const unselected$ = this.items.pipe(
+    const unselected$ = this.items$.pipe(
       map((items) => items.filter((item) => !item.active)),
       map((items) => {
         this.search.setCollection(items, this.searchOptions);
@@ -146,7 +149,7 @@ export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit 
     const { valid, value } = this.inputControl;
     if (valid && typeof value === 'string') {
       const trimmedValue = value.trim();
-      this.listId.pipe(withLatestFrom(this.items), take(1)).subscribe(([listId, items]) => {
+      this.listId.pipe(withLatestFrom(this.items$), take(1)).subscribe(([listId, items]) => {
         const existingValue = items.find((item) => item.name === trimmedValue);
         existingValue
           ? this.listService.markItemDone(listId, existingValue)
@@ -190,6 +193,30 @@ export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit 
           this.listService.markItemTodo(listId, item);
         }
       });
+    });
+  }
+
+  /**
+   * TODO: Not good solution!
+   * Currently only available if there are less than 40 inactive items.
+   * Should be refactored as function so parallel updates are not affected
+   * by users network connection etc.
+   * @param inactiveItems All inactive items
+   */
+  markAllActive(inactiveItems: Item[]) {
+    if (!inactiveItems.length) {
+      this.snackBar.open('No inactive items left!', 'OK');
+      return;
+    }
+
+    const dialogRef = this.dialog.confirm({
+      data: { title: 'Mark all active', message: 'Are you sure you want to reactivate all items?' },
+    });
+
+    dialogRef.afterClosed().subscribe((response) => {
+      if (!response) return;
+      const listId = takeValue(this.listId);
+      Promise.all(inactiveItems.map((item) => this.listService.markItemTodo(listId, item)));
     });
   }
 

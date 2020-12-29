@@ -1,0 +1,78 @@
+import { OverlayContainer } from '@angular/cdk/overlay';
+import { DOCUMENT } from '@angular/common';
+import { Inject, Injectable } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { BehaviorSubject, combineLatest } from 'rxjs';
+import { delay, map } from 'rxjs/operators';
+import { State } from '../state/app.reducer';
+import { AppTheme, selectTheme } from '../state/config/config.reducer';
+import * as configActions from '../state/config/config.actions';
+
+@Injectable({
+  providedIn: 'root',
+})
+export class ThemeService {
+  private darkClass = 'app-dark';
+  private systemThemeSubject = new BehaviorSubject<AppTheme>('light');
+  private activeThemeSubject = new BehaviorSubject<AppTheme>('light');
+
+  systemThemeValueChanges() {
+    return this.systemThemeSubject.asObservable();
+  }
+
+  activeThemeValueChanges() {
+    return this.activeThemeSubject.asObservable();
+  }
+
+  selectedThemeValueChanges() {
+    return this.store.select(selectTheme);
+  }
+
+  constructor(
+    private store: Store<State>,
+    private overlayContainer: OverlayContainer,
+    @Inject(DOCUMENT) private document: Document
+  ) {
+    this.init();
+  }
+
+  setTheme(theme: AppTheme) {
+    this.store.dispatch(configActions.setTheme({ theme }));
+  }
+
+  private init() {
+    // If matchMedia is not defined 'system' theme will always be light
+    if (window.matchMedia || false) this.initSystemThemeListener();
+
+    combineLatest([this.store.select(selectTheme), this.systemThemeSubject.asObservable()])
+      .pipe(
+        delay(0),
+        map(([theme, systemTheme]) => (theme === 'system' ? systemTheme : theme))
+      )
+      .subscribe((theme) => {
+        console.log('4388', theme);
+        this.activeThemeSubject.next(theme);
+        const overlayClassList = this.overlayContainer.getContainerElement().classList;
+        const bodyClassList = this.document.body.classList;
+        if (theme === 'dark') {
+          overlayClassList.add(this.darkClass);
+          bodyClassList.add(this.darkClass);
+        } else {
+          overlayClassList.remove(this.darkClass);
+          bodyClassList.remove(this.darkClass);
+        }
+      });
+  }
+
+  private initSystemThemeListener() {
+    const matcher = '(prefers-color-scheme: dark)';
+    const matchTransform = (isDark: boolean) => (isDark ? 'dark' : 'light');
+
+    // Change event only fires on changes, get initial value here
+    this.systemThemeSubject.next(matchTransform(window.matchMedia(matcher).matches));
+
+    window
+      .matchMedia(matcher)
+      .addEventListener('change', (event) => this.systemThemeSubject.next(matchTransform(event.matches)));
+  }
+}

@@ -23,17 +23,18 @@ export interface ConfirmDialogData {
     <mat-dialog-content> {{ data.message }} </mat-dialog-content>
     <mat-dialog-actions align="end">
       <button mat-raised-button mat-dialog-close>
-        {{ data.cancelLabel || 'Tühista' }}
+        {{ data.cancelLabel || 'Cancel' }}
       </button>
       <button
         mat-raised-button
         [color]="data.confirmColor || 'warn'"
         (click)="dialogRef.close(true)"
       >
-        {{ data.confirmLabel || 'Jah' }}
+        {{ data.confirmLabel || 'Yes' }}
       </button>
     </mat-dialog-actions>
   `,
+  changeDetection: ChangeDetectionStrategy.OnPush
 
 })
 export class ConfirmDialogComponent {
