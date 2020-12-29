@@ -1,4 +1,6 @@
 @import '~@angular/material/theming';
+@import './list-container.theme';
+@import '../../../theme.scss';
 
 :host {
   display: flex;
@@ -49,12 +51,9 @@
 
 .dragged {
   @include mat-elevation(2);
-  background: #fff;
 }
 
 .cdk-drag-preview {
-  background: #fff;
-
   &.list-container__group {
     .mat-subheader {
       &:first-child {
@@ -63,7 +62,6 @@
       display: flex;
       box-sizing: border-box;
       padding: 16px;
-      color: rgba(0, 0, 0, 0.54);
       align-items: center;
       font-family: Roboto, 'Helvetica Neue', sans-serif;
       font-size: 14px;
@@ -122,4 +120,12 @@
   bottom: 0;
   left: 0;
   right: 0;
+}
+
+::ng-deep {
+  @include list-container-theme($theme);
+
+  .app-dark {
+    @include list-container-theme($dark-theme);
+  }
 }
