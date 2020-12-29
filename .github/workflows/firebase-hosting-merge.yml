@@ -7,13 +7,14 @@ on:
     branches:
       - master
 jobs:
-  build_and_deploy:
+  build_and_deploy_test:
     runs-on: ubuntu-latest
     environment: test
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/cache@v2
+      - name: Cache node modules
+        uses: actions/cache@v2
         with:
           path: '**/node_modules'
           key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
@@ -27,8 +28,8 @@ jobs:
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
-          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_COM_GROCERIES_LIST }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT_GROCERIES_LIST }}'
           channelId: live
-          projectId: test
+          projectId: '${{ secrets.PROJECT_ID }}'
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels
