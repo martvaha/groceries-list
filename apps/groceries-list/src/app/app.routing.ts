@@ -53,6 +53,10 @@ const routes: Routes = [
         ...canActivate(() => redirectUnauthorizedTo(['home', 'login'])),
         loadChildren: () => import('./list-invite/list-invite.module').then((m) => m.ListInviteModule),
       },
+      {
+        path: 'legal',
+        loadChildren: () => import('./legal/legal.module').then((m) => m.LegalModule),
+      },
     ],
   },
 ];
