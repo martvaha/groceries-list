@@ -19,6 +19,13 @@
           "com-groceries-list"
         ]
       }
+    },
+    "groceries-list-production": {
+      "hosting": {
+        "groceries-list": [
+          "groceries-list-production"
+        ]
+      }
     }
   }
 }
