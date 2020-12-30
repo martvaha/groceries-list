@@ -69,6 +69,7 @@ export class AuthService {
    * @param providerData
    */
   private updateProfileFromProvider(user: firebase.User, providerData: firebase.UserInfo) {
+    console.log('providerData', providerData, user);
     const { displayName, photoURL, email } = providerData;
     if (user.photoURL !== photoURL || user.displayName !== displayName) {
       user.updateProfile({
