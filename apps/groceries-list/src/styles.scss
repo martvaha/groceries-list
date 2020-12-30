@@ -47,7 +47,7 @@ body {
 .app-dark {
   @include angular-material-color($dark-theme);
 
-  a:not(.mat-*) {
+  a:not(.mat-tab-link):not(.mat-list-item):not(.mat-line):not(.mat-icon-button):not(.mat-menu-item) {
     color: #7c4dff;
     &:visited {
       color: #8e37bb;
