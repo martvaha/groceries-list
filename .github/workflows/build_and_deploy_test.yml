@@ -5,7 +5,7 @@ name: Deploy to Firebase Hosting on push
 on:
   push:
     branches:
-      - master
+      - test
 jobs:
   build_and_deploy_test:
     runs-on: ubuntu-latest
@@ -23,7 +23,7 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build app
-        run: yarn nx run groceries-list:app-shell:test
+        run: yarn nx run groceries-list:app-shell:${{ secrets.PROJECT_ID }}
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
