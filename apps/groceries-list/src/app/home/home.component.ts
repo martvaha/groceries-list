@@ -40,7 +40,11 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.mobileQuery = this.media.matchMedia('(max-width: 600px)');
-    this.mobileQuery.addEventListener('change', this.mediaListener);
+    if (typeof this.mobileQuery.addEventListener === 'function') {
+      this.mobileQuery.addEventListener('change', this.mediaListener);
+    } else if (typeof this.mobileQuery.addListener === 'function') {
+      this.mobileQuery.addListener(this.mediaListener);
+    }
     this.opened = this.shouldSidenavBeOpen();
     this.user$ = this.store.select(selectUser);
     this.store.dispatch(loadLists());
@@ -61,7 +65,9 @@ export class HomeComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    this.mobileQuery.removeEventListener('change', this.mediaListener);
+    if (typeof this.mobileQuery.removeEventListener === 'function') {
+      this.mobileQuery.removeEventListener('change', this.mediaListener);
+    }
     delete (this as any).mobileQuery;
   }
 }

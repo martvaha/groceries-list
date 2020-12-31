@@ -42,7 +42,7 @@ export class ThemeService {
 
   private init() {
     // If matchMedia is not defined 'system' theme will always be light
-    if (window.matchMedia || false) this.initSystemThemeListener();
+    if (typeof window.matchMedia === 'function') this.initSystemThemeListener();
 
     combineLatest([this.store.select(selectTheme), this.systemThemeSubject.asObservable()])
       .pipe(
@@ -65,14 +65,16 @@ export class ThemeService {
   }
 
   private initSystemThemeListener() {
-    const matcher = '(prefers-color-scheme: dark)';
     const matchTransform = (isDark: boolean) => (isDark ? 'dark' : 'light');
+    const matcher = window.matchMedia('(prefers-color-scheme: dark)');
 
     // Change event only fires on changes, get initial value here
-    this.systemThemeSubject.next(matchTransform(window.matchMedia(matcher).matches));
+    this.systemThemeSubject.next(matchTransform(matcher.matches));
 
-    window
-      .matchMedia(matcher)
-      .addEventListener('change', (event) => this.systemThemeSubject.next(matchTransform(event.matches)));
+    if (typeof matcher.addEventListener === 'function') {
+      matcher.addEventListener('change', (event) => this.systemThemeSubject.next(matchTransform(event.matches)));
+    } else if (typeof matcher.addListener === 'function') {
+      matcher.addListener((event) => this.systemThemeSubject.next(matchTransform(event.matches)));
+    }
   }
 }
