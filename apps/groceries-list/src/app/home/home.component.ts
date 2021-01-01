@@ -35,7 +35,7 @@ export class HomeComponent implements OnInit, OnDestroy {
     private sanitizer: DomSanitizer,
     private titleService: TitleService
   ) {
-    this.icons.addSvgIcon('flogo', this.sanitizer.bypassSecurityTrustResourceUrl('../assets/flogo.svg'));
+    this.icons.addSvgIcon('flogo', this.sanitizer.bypassSecurityTrustResourceUrl('/assets/flogo.svg'));
   }
 
   ngOnInit() {

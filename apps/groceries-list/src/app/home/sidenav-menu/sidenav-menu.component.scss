@@ -1,6 +1,7 @@
 :host {
   display: flex;
   flex: 1;
+  height: 100%;
 }
 
 .sidenav__menu {
@@ -8,4 +9,9 @@
   display: flex;
   flex: 1;
   flex-direction: column;
+}
+
+.version {
+  margin-top: auto;
+  padding: 0.5rem 1rem;
 }

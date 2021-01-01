@@ -1,4 +1,5 @@
 <mat-nav-list class="sidenav__menu">
   <a mat-list-item [routerLink]="['/home/lists']" (click)="closeSidenavOnMobile()">Home</a>
   <a mat-list-item routerLink="/home/login" *ngIf="!user" (click)="closeSidenavOnMobile()">Login</a>
+  <span class="version mat-hint"><span i18n>Version</span>: {{ version }}</span>
 </mat-nav-list>

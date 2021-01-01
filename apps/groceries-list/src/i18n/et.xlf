@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+  <file source-language="en" target-language="et" datatype="plaintext" original="ng2.template">
+    <body>
+      <trans-unit id="8fe73a4787b8068b2ba61f54ab7e0f9af2ea1fc9" datatype="html">
+        <source>Version</source>
+        <target>Versioon</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/home/sidenav-menu/sidenav-menu.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cd66df58159e6441b77e8fc4a14bd65c655d3176" datatype="html">
+        <source>Welcome to Groceries List!</source>
+        <target>Tere tulemast Ostunimekirja!</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/auth/auth.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="55afc08fd727598bb1158e9fb6b9f2fe2470a755" datatype="html">
+        <source>Groceries List helps you keep track of what needs to be bought from the store.</source>
+        <target>Ostunimekiri aitab sul meeles pidada, mida poest osta.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/auth/auth.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6249f5374dbb2d74fc388e144ac1e25fd6a87ed4" datatype="html">
+        <source>Log in with Facebook and create your first shared list today!</source>
+        <target>Logi sisse Facebook&apos;iga ja loo oma esimene jagatud nimekiri juba täna!</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/auth/auth.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+    </body>
+  </file>
+</xliff>
