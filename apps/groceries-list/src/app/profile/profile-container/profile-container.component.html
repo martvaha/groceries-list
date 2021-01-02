@@ -10,3 +10,22 @@
   <mat-radio-button value="light"> Light </mat-radio-button>
   <mat-radio-button value="dark"> Dark </mat-radio-button>
 </mat-radio-group>
+
+<label id="language-select">Language</label>
+
+<mat-radio-group
+  aria-labelledby="language-select"
+  class="language"
+  [formControl]="languageControl"
+  (change)="onLanguageChange($event)"
+>
+  <mat-radio-button value="system"><span i18n>Default</span></mat-radio-button>
+  <mat-radio-button value="en">
+    <span class="language-label"
+      ><mat-icon svgIcon="en">test</mat-icon><span i18n>English</span></span
+    ></mat-radio-button
+  >
+  <mat-radio-button value="et">
+    <span class="language-label"><mat-icon svgIcon="et"></mat-icon><span i18n>Estonian</span></span></mat-radio-button
+  >
+</mat-radio-group>

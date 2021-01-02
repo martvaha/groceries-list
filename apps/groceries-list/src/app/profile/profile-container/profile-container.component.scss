@@ -2,12 +2,27 @@
   margin: 1rem;
 }
 
-.theme {
+.theme,
+.language {
   display: flex;
   flex-direction: column;
   margin: 0.5rem 0;
 
   .mat-radio-button {
     margin: 0.25rem;
+  }
+}
+
+#language-select {
+  display: block;
+  margin-top: 1rem;
+}
+
+.language-label {
+  display: flex;
+  align-items: center;
+
+  & > span {
+    padding-left: 0.25rem;
   }
 }

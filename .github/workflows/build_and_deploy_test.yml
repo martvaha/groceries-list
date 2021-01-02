@@ -27,6 +27,9 @@ jobs:
       - name: Build app
         run: yarn nx run groceries-list:app-shell:$PROJECT_ID
 
+      - name: Convert build to match firebase i18n
+        run: yarn nx run groceries-list:convert-i18n
+
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
           repoToken: '${{ secrets.GITHUB_TOKEN }}'
