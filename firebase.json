@@ -22,6 +22,9 @@
           ]
         }
       ],
+      "i18n": {
+        "root": "/i18n"
+      },
       "rewrites": [
         {
           "source": "**",

@@ -104,6 +104,17 @@
           },
           "outputs": ["{options.outputPath}"]
         },
+        "convert-i18n": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              {
+                "command": "ts-node tools/scripts/create-firebase-hosting-dir-structure.ts"
+              }
+            ],
+            "parallel": false
+          }
+        },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {

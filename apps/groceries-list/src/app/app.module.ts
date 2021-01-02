@@ -29,6 +29,8 @@ import { StoreRouterConnectingModule, RouterState } from '@ngrx/router-store';
 import { GroupEffects } from './state/group/group.effects';
 import { ItemEffects } from './state/item/item.effects';
 import { sentryInstrumentation } from './shared/sentry';
+import { ConfigEffects } from './state/config/config.effects';
+import { CookieService } from 'ngx-cookie-service';
 // import { AppShellComponent } from './app-shell/app-shell.component';
 
 @NgModule({
@@ -60,13 +62,7 @@ import { sentryInstrumentation } from './shared/sentry';
         strictActionImmutability: true,
       },
     }),
-    EffectsModule.forRoot([
-      AppEffects,
-      ListEffects,
-      UserEffects,
-      GroupEffects,
-      ItemEffects,
-    ]),
+    EffectsModule.forRoot([AppEffects, ConfigEffects, ListEffects, UserEffects, GroupEffects, ItemEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production,
@@ -82,6 +78,7 @@ import { sentryInstrumentation } from './shared/sentry';
   providers: [
     AuthGuard,
     MediaMatcher,
+    CookieService,
     ...sentryInstrumentation,
     // { provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig },
   ],

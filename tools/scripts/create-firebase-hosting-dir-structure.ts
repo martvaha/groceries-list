@@ -1,24 +1,27 @@
 import * as fs from 'fs-extra';
 import * as path from 'path';
+import { exit } from 'process';
 const config = require('../../angular.json');
 
-const hostRoot = 'public';
 const baseDir = path.join(__dirname, '..', '..', 'dist', 'apps', 'groceries-list', 'browser');
 
 // Read source locale from config
 let sourceLocale = config.projects['groceries-list'].i18n.sourceLocale;
 sourceLocale = typeof sourceLocale === 'string' ? sourceLocale : sourceLocale.code;
 
-// Move source locale to public folder
-if (fs.pathExistsSync(path.join(baseDir, sourceLocale))) {
-  fs.moveSync(path.join(baseDir, sourceLocale), path.join(baseDir, hostRoot));
+if (!fs.pathExistsSync(path.join(baseDir, sourceLocale))) {
+  console.log(`Source locale not found. Either already converted or build is missing.`);
+  exit(0);
 }
 
 const locales = fs
   .readdirSync(baseDir, { withFileTypes: true })
-  .filter((dirent) => dirent.isDirectory() && dirent.name !== hostRoot)
+  .filter((dirent) => dirent.isDirectory())
   .map((dirent) => dirent.name);
 
 for (const locale of locales) {
-  fs.moveSync(path.join(baseDir, locale), path.join(baseDir, hostRoot, 'i18n', locale));
+  fs.moveSync(path.join(baseDir, locale), path.join(baseDir, 'i18n', locale));
 }
+
+// Move source locale to root path
+fs.moveSync(path.join(baseDir, 'i18n', sourceLocale), path.join(baseDir));

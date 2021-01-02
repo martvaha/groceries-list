@@ -1,17 +1,27 @@
 import { Injectable } from '@angular/core';
-import { Actions } from '@ngrx/effects';
-import { AuthService } from '../../auth/auth.service';
-import { DialogService } from '../../shared/dialog-service/dialog.service';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { map } from 'rxjs/operators';
+import { setLanguage } from './config.actions';
+import { CookieService } from 'ngx-cookie-service';
 
+const FIREBASE_LANGUAGE_OVERRIDE = 'firebase-language-override';
 @Injectable()
-export class UserEffects {
-  constructor(private actions$: Actions, private auth: AuthService, private dialogService: DialogService) {}
+export class ConfigEffects {
+  constructor(private actions$: Actions, private cookies: CookieService) {}
 
-  /**
-   * getUser effect is run after effect init. This is necessary to
-   * bootstrap sync between firebase auth and Store.
-   */
-  // ngrxOnInitEffects(): Action {
-
-  // }
+  setLanguage$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(setLanguage),
+        map(({ language }) => {
+          if (language === 'system') {
+            this.cookies.delete(FIREBASE_LANGUAGE_OVERRIDE);
+          } else {
+            this.cookies.set(FIREBASE_LANGUAGE_OVERRIDE, language);
+          }
+          document.location.reload();
+        })
+      ),
+    { dispatch: false }
+  );
 }
