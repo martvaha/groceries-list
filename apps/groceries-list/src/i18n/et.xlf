@@ -34,6 +34,30 @@
           <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="ff7cee38a2259526c519f878e71b964f41db4348" datatype="html">
+        <source>Default</source>
+        <target>Vaikimisi</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/profile/profile-container/profile-container.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a0843de0a64adcc7ee6a946408b6876cd8abdcae" datatype="html">
+        <source>English</source>
+        <target>Inglise</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/profile/profile-container/profile-container.component.html</context>
+          <context context-type="linenumber">25</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3fc5c27932d5667b2d5041ed0dcce5ec4afae49e" datatype="html">
+        <source>Estonian</source>
+        <target>Eesti</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/profile/profile-container/profile-container.component.html</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
     </body>
   </file>
 </xliff>

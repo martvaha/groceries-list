@@ -5,7 +5,7 @@
       [matMenuTriggerFor]="menu"
       class="user-avatar__image"
       [ngStyle]="{
-        'background-image': 'url(' + (user?.photoURL ? user!.photoURL : '/assets/avatar.svg') + ')'
+        'background-image': 'url(' + (user?.photoURL ? user!.photoURL : 'assets/avatar.svg') + ')'
       }"
     ></button>
     <mat-menu #menu="matMenu">

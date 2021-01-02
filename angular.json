@@ -12,11 +12,10 @@
       "sourceRoot": "apps/groceries-list/src",
       "prefix": "groceries-list",
       "i18n": {
-        "sourceLocale": { "code": "en", "baseHref": "" },
+        "sourceLocale": { "code": "en" },
         "locales": {
           "et": {
-            "translation": "apps/groceries-list/src/i18n/et.xlf",
-            "baseHref": ""
+            "translation": "apps/groceries-list/src/i18n/et.xlf"
           }
         }
       },

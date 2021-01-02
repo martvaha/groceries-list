@@ -25,4 +25,4 @@ for (const locale of locales) {
 
 // Move source locale to root path
 fs.copySync(path.join(baseDir, 'i18n', sourceLocale), baseDir);
-fs.rmdirSync(path.join(baseDir, 'i18n', sourceLocale), { recursive: true });
+// fs.rmdirSync(path.join(baseDir, 'i18n', sourceLocale), { recursive: true });
