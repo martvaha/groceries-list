@@ -50,7 +50,7 @@ export class AppEffects {
           this.updates.available.pipe(
             switchMap(() =>
               this.snack
-                .open('New version available', 'Update')
+                .open($localize`New version available`, $localize`Update`)
                 .afterDismissed()
                 .pipe(tap(() => this.updates.activateUpdate().then(() => document.location.reload())))
             )

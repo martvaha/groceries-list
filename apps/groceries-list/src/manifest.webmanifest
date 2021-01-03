@@ -4,8 +4,8 @@
   "theme_color": "#03a9f4",
   "background_color": "#03a9f4",
   "display": "standalone",
-  "scope": "/",
-  "start_url": "/",
+  "scope": "./",
+  "start_url": "./",
   "icons": [
     {
       "src": "assets/icon-48x48.png",
@@ -40,6 +40,11 @@
     {
       "src": "assets/icon-432x432.png",
       "sizes": "432x432",
+      "type": "image/png"
+    },
+    {
+      "src": "assets/icon-512x512.png",
+      "sizes": "512x512",
       "type": "image/png"
     }
   ]
