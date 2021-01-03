@@ -8,8 +8,8 @@
 // Be sure that you only ever include this mixin once!
 @include mat-core();
 
-
 @import './theme.scss';
+// @import './app/shared/themes/app.theme';
 
 html,
 body {
@@ -53,4 +53,13 @@ body {
       color: #8e37bb;
     }
   }
+}
+
+body.app-dark {
+  $config: mat-get-color-config($dark-theme);
+  $foreground: map-get($config, 'foreground');
+  $background: map-get($config, 'background');
+
+  color: mat-color($foreground, 'text');
+  background-color: mat-color($background, 'background');
 }

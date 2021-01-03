@@ -12,7 +12,7 @@
       </trans-unit>
       <trans-unit id="92eee6be6de0b11c924e3ab27db30257159c0a7c" datatype="html">
         <source>Home</source>
-        <target>Kodu</target>
+        <target>Avaleht</target>
         <note priority="1" from="description">Button back to home page</note>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/home/sidenav-menu/sidenav-menu.component.html</context>
@@ -78,7 +78,7 @@
       </trans-unit>
       <trans-unit id="5d22c795daf43877a5f708dca2bccd549eb0471d" datatype="html">
         <source>Sign out</source>
-        <target>Välju</target>
+        <target>Logi välja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/user/user-avatar/user-avatar.component.html</context>
           <context context-type="linenumber">15</context>
@@ -90,14 +90,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/user/user-avatar/user-avatar.component.html</context>
           <context context-type="linenumber">16</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="4e98abf1fc4c286a595bd8c6eefd574002850343" datatype="html">
-        <source>Add list</source>
-        <target>Lisa nimekiri</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">apps/groceries-list/src/app/list/list-container/list-container.component.html</context>
-          <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f6755cff4957d5c3c89bafce5651f1b6fa2b1fd9" datatype="html">
@@ -120,12 +112,12 @@
         <source>Name</source>
         <target>Nimi</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">apps/groceries-list/src/app/item-edit/item-edit-form/item-edit-form.component.html</context>
-          <context context-type="linenumber">3</context>
-        </context-group>
-        <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/list-edit/list-edit.component.html</context>
           <context context-type="linenumber">4</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/item-edit/item-edit-form/item-edit-form.component.html</context>
+          <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4f8b2bb476981727ab34ed40fde1218361f92c45" datatype="html">
@@ -148,12 +140,12 @@
         <source>Group</source>
         <target>Grupp</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">apps/groceries-list/src/app/item-edit/item-edit-form/item-edit-form.component.html</context>
-          <context context-type="linenumber">12</context>
-        </context-group>
-        <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/list-edit/list-edit.component.html</context>
           <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/item-edit/item-edit-form/item-edit-form.component.html</context>
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cda31dbd724cf5f4fa7a4274d9120651490c8a8c" datatype="html">
@@ -448,7 +440,7 @@
       </trans-unit>
       <trans-unit id="101464185703047305" datatype="html">
         <source><x id="PH" equiv-text="item.name"/> done!</source>
-        <target><x id="PH" equiv-text="item.name"/> ostetud!</target>
+        <target><x id="PH" equiv-text="item.name"/> märgitud!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/list/list-container/list-container.component.ts</context>
           <context context-type="linenumber">188</context>
@@ -460,6 +452,22 @@
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/list/list-container/list-container.component.ts</context>
           <context context-type="linenumber">188</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9d6d65c15675fead1445f19149ceec9f705c979d" datatype="html">
+        <source> System (<x id="ICU" equiv-text="{ systemTheme , select, light {light} dark {dark} other {{{systemTheme}}} }"/>) </source>
+        <target> Süsteemi väärtus (<x id="ICU" equiv-text="{ systemTheme , select, light {hele} dark {tume} other {{{systemTheme}}} }"/>) </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/profile/profile-container/profile-container.component.html</context>
+          <context context-type="linenumber">11,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="dabf05decf78f6e3dce931ffaa6aba8a2ae9a2ba" datatype="html">
+        <source>Add to list ...</source>
+        <target>Lisa nimekirja ...</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/list/list-container/list-container.component.html</context>
+          <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
     </body>

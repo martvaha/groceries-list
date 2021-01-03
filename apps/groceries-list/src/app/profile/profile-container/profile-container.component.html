@@ -7,7 +7,7 @@
   (change)="onThemeChange($event)"
 >
   <mat-radio-button value="system">
-    <ng-container *ngIf="systemTheme$ | async; let systemTheme">
+    <ng-container *ngIf="systemTheme$ | async; let systemTheme" i18n>
       System ({ systemTheme , select, light {light} dark {dark} other {{{systemTheme}}} })
     </ng-container>
   </mat-radio-button>
