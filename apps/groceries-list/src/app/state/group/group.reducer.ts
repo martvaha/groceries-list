@@ -5,7 +5,7 @@ import { upsertGroupSuccess } from './group.actions';
 import { selectActiveListId } from '../list/list.reducer';
 import { maxModified, sortByName } from '../utils';
 
-export type GroupState = EntityState<Group>
+export type GroupState = EntityState<Group>;
 export interface GroupListState {
   [id: string]: GroupState;
 }

@@ -120,12 +120,12 @@
         <source>Name</source>
         <target>Nimi</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">apps/groceries-list/src/app/item-edit/item-edit-form/item-edit-form.component.html</context>
-          <context context-type="linenumber">3</context>
-        </context-group>
-        <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/list-edit/list-edit.component.html</context>
           <context context-type="linenumber">4</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/item-edit/item-edit-form/item-edit-form.component.html</context>
+          <context context-type="linenumber">3</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4f8b2bb476981727ab34ed40fde1218361f92c45" datatype="html">
@@ -148,12 +148,12 @@
         <source>Group</source>
         <target>Grupp</target>
         <context-group purpose="location">
-          <context context-type="sourcefile">apps/groceries-list/src/app/item-edit/item-edit-form/item-edit-form.component.html</context>
-          <context context-type="linenumber">12</context>
-        </context-group>
-        <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/list-edit/list-edit.component.html</context>
           <context context-type="linenumber">5</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/item-edit/item-edit-form/item-edit-form.component.html</context>
+          <context context-type="linenumber">12</context>
         </context-group>
       </trans-unit>
       <trans-unit id="cda31dbd724cf5f4fa7a4274d9120651490c8a8c" datatype="html">
@@ -202,30 +202,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/profile/profile-container/profile-container.component.html</context>
           <context context-type="linenumber">18</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="ff7cee38a2259526c519f878e71b964f41db4348" datatype="html">
-        <source>Default</source>
-        <target>Vaikimisi</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">apps/groceries-list/src/app/profile/profile-container/profile-container.component.html</context>
-          <context context-type="linenumber">26</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="a0843de0a64adcc7ee6a946408b6876cd8abdcae" datatype="html">
-        <source>English</source>
-        <target>Inglise</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">apps/groceries-list/src/app/profile/profile-container/profile-container.component.html</context>
-          <context context-type="linenumber">28</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="3fc5c27932d5667b2d5041ed0dcce5ec4afae49e" datatype="html">
-        <source>Estonian</source>
-        <target>Eesti</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">apps/groceries-list/src/app/profile/profile-container/profile-container.component.html</context>
-          <context context-type="linenumber">31</context>
         </context-group>
       </trans-unit>
       <trans-unit id="f19a0716e65ed644f04af65e0b3338cf13975649" datatype="html">
@@ -436,6 +412,22 @@
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/lists-container/lists-container.component.ts</context>
           <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="aafdc3b7d98d29ed127ddd815ae282b1a93a9eac" datatype="html">
+        <source> English</source>
+        <target> Inglise</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/profile/profile-container/profile-container.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f6f9705f303540ff90874835468efba285a32157" datatype="html">
+        <source> Estonian</source>
+        <target> Eesti</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/profile/profile-container/profile-container.component.html</context>
+          <context context-type="linenumber">25</context>
         </context-group>
       </trans-unit>
     </body>

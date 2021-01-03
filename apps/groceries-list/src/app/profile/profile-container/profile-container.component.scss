@@ -15,14 +15,14 @@
 
 #language-select {
   display: block;
-  margin-top: 1rem;
+  margin: 1rem 0 0.5rem;
 }
 
-.language-label {
+.language-control {
   display: flex;
-  align-items: center;
+  flex-direction: column;
 
-  & > span {
-    padding-left: 0.25rem;
+  button {
+    margin: 0.25rem 0
   }
 }

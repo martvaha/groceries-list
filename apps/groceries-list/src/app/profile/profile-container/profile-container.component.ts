@@ -9,7 +9,7 @@ import { take } from 'rxjs/operators';
 import { ThemeService } from '../../shared/theme.service';
 import { State } from '../../state/app.reducer';
 import { setLanguage } from '../../state/config/config.actions';
-import { AppTheme, selectLanguage } from '../../state/config/config.reducer';
+import { AppLanguage, AppTheme, selectLanguage } from '../../state/config/config.reducer';
 
 @Component({
   selector: 'app-profile-container',
@@ -50,7 +50,7 @@ export class ProfileContainerComponent implements OnInit {
     this.theme.setTheme(event.value);
   }
 
-  onLanguageChange(event: MatRadioChange) {
-    this.store.dispatch(setLanguage({ language: event.value }));
+  onLanguageChange(language: AppLanguage) {
+    this.store.dispatch(setLanguage({ language }));
   }
 }

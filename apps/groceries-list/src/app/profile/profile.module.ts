@@ -5,9 +5,10 @@ import { ProfileRoutingModule } from './profile.routing';
 import { MatRadioModule } from '@angular/material/radio';
 import { ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [ProfileContainerComponent],
-  imports: [CommonModule, ProfileRoutingModule, MatIconModule, MatRadioModule, ReactiveFormsModule],
+  imports: [CommonModule, ProfileRoutingModule, MatIconModule, MatRadioModule, MatButtonModule, ReactiveFormsModule],
 })
 export class ProfileModule {}
