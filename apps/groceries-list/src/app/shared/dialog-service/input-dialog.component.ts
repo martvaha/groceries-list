@@ -32,6 +32,6 @@ export class InputDialogComponent {
   constructor(public dialogRef: MatDialogRef<InputDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: any) {
     this.title = data.title;
     this.placeholder = data.placeholder;
-    this.actionLabel = data.actionLabel || 'Ok';
+    this.actionLabel = data.actionLabel || $localize`:confirm|:OK`;
   }
 }

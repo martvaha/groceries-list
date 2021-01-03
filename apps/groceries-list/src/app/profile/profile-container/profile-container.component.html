@@ -1,4 +1,4 @@
-<label id="theme-select">Theme</label>
+<label id="theme-select" i18n>Theme</label>
 
 <mat-radio-group
   aria-labelledby="theme-select"
@@ -6,12 +6,16 @@
   [formControl]="themeControl"
   (change)="onThemeChange($event)"
 >
-  <mat-radio-button value="system"> System ({{ systemTheme$ | async }}) </mat-radio-button>
-  <mat-radio-button value="light"> Light </mat-radio-button>
-  <mat-radio-button value="dark"> Dark </mat-radio-button>
+  <mat-radio-button value="system">
+    <ng-container *ngIf="systemTheme$ | async; let systemTheme">
+      System ({ systemTheme , select, light {light} dark {dark} other {{{systemTheme}}} })
+    </ng-container>
+  </mat-radio-button>
+  <mat-radio-button value="light" i18n> Light </mat-radio-button>
+  <mat-radio-button value="dark" i18n> Dark </mat-radio-button>
 </mat-radio-group>
 
-<label id="language-select">Language</label>
+<label id="language-select" i18n>Language</label>
 
 <mat-radio-group
   aria-labelledby="language-select"

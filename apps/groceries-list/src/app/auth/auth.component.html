@@ -1,8 +1,8 @@
 <div class="container">
-  <h1 i18n>Welcome to Groceries List!</h1>
+  <h1 i18n>Welcome to {{ appName }}!</h1>
   <img style="height: 120px; width: 120px" src="assets/icon-144x144.png" />
   <div class="welcome">
-    <h2 i18n>Groceries List helps you keep track of what needs to be bought from the store.</h2>
+    <h2 i18n>{{ appName }} helps you keep track of what needs to be bought from the store.</h2>
     <h3 i18n>Log in with Facebook and create your first shared list today!</h3>
     <button class="facebook" color="primary" mat-raised-button (click)="logIn()">
       <mat-icon svgIcon="flogo"></mat-icon>Log in with Facebook

@@ -205,12 +205,12 @@ export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit 
    */
   markAllActive(inactiveItems: Item[]) {
     if (!inactiveItems.length) {
-      this.snackBar.open('No inactive items left!', 'OK');
+      this.snackBar.open($localize`No inactive items left!`, $localize`:confirm|:OK`);
       return;
     }
 
     const dialogRef = this.dialog.confirm({
-      data: { title: 'Mark all active', message: 'Are you sure you want to reactivate all items?' },
+      data: { title: $localize`Mark all active`, message: $localize`Are you sure you want to reactivate all items?` },
     });
 
     dialogRef.afterClosed().subscribe((response) => {

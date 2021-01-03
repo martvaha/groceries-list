@@ -89,7 +89,7 @@ export class ListEffects {
       ofType(ListActions.removeListFail),
       switchMap(({ error, list }) => {
         const dialogRef = this.dialogService.confirm({
-          data: { title: error.name, message: error.message, confirmLabel: 'Värskenda lehte', confirmColor: 'accent' },
+          data: { title: error.name, message: error.message, confirmLabel: $localize`Refresh`, confirmColor: 'accent' },
         });
 
         return dialogRef.afterClosed().pipe(

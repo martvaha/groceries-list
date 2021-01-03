@@ -99,20 +99,12 @@
               ],
               "serviceWorker": true,
               "ngswConfigPath": "apps/groceries-list/ngsw-config.json"
+            },
+            "et": {
+              "localize": ["et"]
             }
           },
           "outputs": ["{options.outputPath}"]
-        },
-        "convert-i18n": {
-          "builder": "@nrwl/workspace:run-commands",
-          "options": {
-            "commands": [
-              {
-                "command": "ts-node tools/scripts/create-firebase-hosting-dir-structure.ts"
-              }
-            ],
-            "parallel": false
-          }
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
@@ -123,6 +115,9 @@
           "configurations": {
             "production": {
               "browserTarget": "groceries-list:build:production"
+            },
+            "et": {
+              "browserTarget": "groceries-list:build:et"
             }
           }
         },

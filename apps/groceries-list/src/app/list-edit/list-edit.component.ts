@@ -18,23 +18,15 @@ import { takeValue } from '../shared/utils';
   selector: 'app-list-edit',
   styleUrls: ['./list-edit.component.scss'],
   templateUrl: './list-edit.component.html',
-
 })
 export class ListEditComponent implements OnInit {
   private listId!: Observable<string>;
   public items$!: Observable<Item[]>;
   public groups$!: Observable<Group[]>;
-  constructor(
-    private route: ActivatedRoute,
-    private store: Store<State>,
-    private db: AngularFirestore,
-    private dialogService: DialogService
-  ) {}
+  constructor(private route: ActivatedRoute, private store: Store<State>, private dialogService: DialogService) {}
 
   ngOnInit() {
-    this.listId = this.route.paramMap.pipe(
-      map((params: ParamMap) => params.get('listId') as string)
-    );
+    this.listId = this.route.paramMap.pipe(map((params: ParamMap) => params.get('listId') as string));
 
     this.store.dispatch(getGroups());
     this.store.dispatch(getItems());
@@ -46,8 +38,8 @@ export class ListEditComponent implements OnInit {
   deleteList(item: Item) {
     const dialogRef = this.dialogService.confirm({
       data: {
-        title: 'Kustutamine',
-        message: `Kas oled kindel, et soovid "${item.name}" kusutatad?`,
+        title: $localize`Delete list`,
+        message: $localize`Are you sure you want to delete list "${item.name}"?`,
       },
     });
     dialogRef.afterClosed().subscribe((resp) => {

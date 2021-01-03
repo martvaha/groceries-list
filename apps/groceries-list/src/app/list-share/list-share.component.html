@@ -9,6 +9,7 @@
         type="email"
         (paste)="onPaste($event)"
         placeholder="Share with..."
+        i18n-placeholder
         [formControl]="emailControl"
         matChipInputAddOnBlur="true"
         [matChipInputFor]="chipList"
@@ -18,6 +19,6 @@
     </mat-chip-list>
   </mat-form-field>
   <div>
-    <button class="list-share__share-button" mat-raised-button (click)="share()">Share</button>
+    <button class="list-share__share-button" mat-raised-button (click)="share()" i18n>Share</button>
   </div>
 </div>

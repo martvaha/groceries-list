@@ -1,5 +1,9 @@
 <mat-nav-list class="sidenav__menu">
-  <a mat-list-item [routerLink]="['/home/lists']" (click)="closeSidenavOnMobile()">Home</a>
-  <a mat-list-item routerLink="/home/login" *ngIf="!user" (click)="closeSidenavOnMobile()">Login</a>
+  <a mat-list-item [routerLink]="['/home/lists']" (click)="closeSidenavOnMobile()" i18n="Button back to home page"
+    >Home</a
+  >
+  <a mat-list-item routerLink="/home/login" *ngIf="!user" (click)="closeSidenavOnMobile()" i18n="Sidenav log in link"
+    >Log in</a
+  >
   <span class="version mat-hint"><span i18n>Version</span>: {{ version }}</span>
 </mat-nav-list>
