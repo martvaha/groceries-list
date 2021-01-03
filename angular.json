@@ -12,11 +12,10 @@
       "sourceRoot": "apps/groceries-list/src",
       "prefix": "groceries-list",
       "i18n": {
-        "sourceLocale": { "code": "en", "baseHref": "" },
+        "sourceLocale": { "code": "en" },
         "locales": {
           "et": {
-            "translation": "apps/groceries-list/src/i18n/et.xlf",
-            "baseHref": ""
+            "translation": "apps/groceries-list/src/i18n/et.xlf"
           }
         }
       },
@@ -78,7 +77,7 @@
                   "with": "apps/groceries-list/src/environments/environment.test.ts"
                 }
               ],
-              "localize": false,
+              "localize": true,
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
@@ -100,6 +99,9 @@
               ],
               "serviceWorker": true,
               "ngswConfigPath": "apps/groceries-list/ngsw-config.json"
+            },
+            "et": {
+              "localize": ["et"]
             }
           },
           "outputs": ["{options.outputPath}"]
@@ -124,6 +126,9 @@
           "configurations": {
             "production": {
               "browserTarget": "groceries-list:build:production"
+            },
+            "et": {
+              "browserTarget": "groceries-list:build:et"
             }
           }
         },
@@ -178,7 +183,7 @@
                 }
               ],
               "optimization": true,
-              "localize": false
+              "localize": true
             }
           }
         },

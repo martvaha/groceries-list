@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class TitleService {
-  defaultTitle = 'Groceries List';
+  defaultTitle = environment.appName;
   private titleSubject = new BehaviorSubject(this.defaultTitle);
   title$ = this.titleSubject.asObservable();
 

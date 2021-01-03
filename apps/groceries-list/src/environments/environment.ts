@@ -6,6 +6,7 @@ import { VERSION } from './version';
 
 export const environment = {
   version: VERSION,
+  appName: $localize`:app name|:Groceries List (dev)`,
   production: false,
   debug: true,
   firebase: {

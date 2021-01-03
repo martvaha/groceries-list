@@ -10,16 +10,16 @@
       <ng-template matMenuContent>
         <button mat-menu-item class="mat-hint" [routerLink]="['/home/edit', list.id]">
           <mat-icon>edit</mat-icon>
-          <span>Edit</span>
+          <span i18n>Edit</span>
         </button>
         <button mat-menu-item color="accent" [routerLink]="['/home/share', list.id]">
           <mat-icon>share</mat-icon>
 
-          <span>Share</span>
+          <span i18n>Share</span>
         </button>
         <button mat-menu-item color="warn" (click)="deleteList(list)">
           <mat-icon>delete</mat-icon>
-          <span>Delete</span>
+          <span i18n>Delete</span>
         </button>
       </ng-template>
     </mat-menu>

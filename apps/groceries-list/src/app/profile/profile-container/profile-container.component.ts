@@ -27,8 +27,8 @@ export class ProfileContainerComponent implements OnInit {
     private icons: MatIconRegistry,
     private sanitizer: DomSanitizer
   ) {
-    this.icons.addSvgIcon('en', this.sanitizer.bypassSecurityTrustResourceUrl('/assets/flags/en.svg'));
-    this.icons.addSvgIcon('et', this.sanitizer.bypassSecurityTrustResourceUrl('/assets/flags/et.svg'));
+    this.icons.addSvgIcon('en', this.sanitizer.bypassSecurityTrustResourceUrl('assets/flags/en.svg'));
+    this.icons.addSvgIcon('et', this.sanitizer.bypassSecurityTrustResourceUrl('assets/flags/et.svg'));
   }
 
   ngOnInit(): void {

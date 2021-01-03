@@ -4,15 +4,14 @@ import { Group } from '../../shared/models';
 import { upsertGroupSuccess } from './group.actions';
 import { selectActiveListId } from '../list/list.reducer';
 import { maxModified, sortByName } from '../utils';
-import { tap } from 'rxjs/operators';
 
-export interface GroupState extends EntityState<Group> {}
+export type GroupState = EntityState<Group>
 export interface GroupListState {
   [id: string]: GroupState;
 }
 
 export const adapter: EntityAdapter<Group> = createEntityAdapter<Group>({
-  sortComparer: sortByName
+  sortComparer: sortByName,
 });
 
 export const initialGroupState: GroupState = adapter.getInitialState();
@@ -56,19 +55,14 @@ const { selectIds, selectEntities, selectAll, selectTotal } = adapter.getSelecto
 
 export const selectGroupState = createFeatureSelector<GroupListState>('group');
 
-export const selectActiveListGroupState = createSelector(
-  selectGroupState,
-  selectActiveListId,
-  (state, listId) => get(state, listId)
+export const selectActiveListGroupState = createSelector(selectGroupState, selectActiveListId, (state, listId) =>
+  get(state, listId)
 );
 
-export const selectAllGroups = createSelector(
-  selectActiveListGroupState,
-  data => {
-    console.log('slectAllGroups', data);
-    return selectAll(data);
-  }
-);
+export const selectAllGroups = createSelector(selectActiveListGroupState, (data) => {
+  console.log('slectAllGroups', data);
+  return selectAll(data);
+});
 
 // export const selectActiveListId = createSelector(
 //   selectListState,
@@ -84,7 +78,4 @@ export const selectAllGroups = createSelector(
 //   selectLoading
 // );
 
-export const selectGroupMaxModified = createSelector(
-  selectAllGroups,
-  maxModified
-);
+export const selectGroupMaxModified = createSelector(selectAllGroups, maxModified);

@@ -23,12 +23,24 @@
         }
       ],
       "i18n": {
+<<<<<<< HEAD
         "root": "/i18n"
+=======
+        "root": "/"
+>>>>>>> test
       },
       "rewrites": [
         {
+          "source": "/et/**",
+          "destination": "/et/index.html"
+        },
+        {
+          "source": "/en/**",
+          "destination": "/en/index.html"
+        },
+        {
           "source": "**",
-          "destination": "/index.html"
+          "destination": "/en/index.html"
         }
       ]
     }

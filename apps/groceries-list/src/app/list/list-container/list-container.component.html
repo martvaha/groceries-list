@@ -7,10 +7,11 @@
       formControlName="inputControl"
       required
       placeholder="Add list"
+      i18n-placeholder
       [errorStateMatcher]="inputValid"
     />
   </mat-form-field>
-  <button mat-raised-button type="submit" color="primary" [disabled]="!inputForm.valid">Add</button>
+  <button mat-raised-button type="submit" color="primary" [disabled]="!inputForm.valid" i18n>Add</button>
   <ng-container *ngIf="inactiveItems$ | async; let inactiveItems">
     <button
       class="extra-actions-button"
@@ -24,7 +25,7 @@
 
     <mat-menu #menu="matMenu">
       <ng-template matMenuContent>
-        <button mat-menu-item (click)="markAllActive(inactiveItems)">Mark all active</button>
+        <button mat-menu-item (click)="markAllActive(inactiveItems)" i18n>Mark all active</button>
       </ng-template>
     </mat-menu>
   </ng-container>

@@ -2,36 +2,440 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en" target-language="et" datatype="plaintext" original="ng2.template">
     <body>
-      <trans-unit id="8fe73a4787b8068b2ba61f54ab7e0f9af2ea1fc9" datatype="html">
-        <source>Version</source>
-        <target>Versioon</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">apps/groceries-list/src/app/home/sidenav-menu/sidenav-menu.component.html</context>
-          <context context-type="linenumber">4</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="cd66df58159e6441b77e8fc4a14bd65c655d3176" datatype="html">
-        <source>Welcome to Groceries List!</source>
-        <target>Tere tulemast Ostunimekirja!</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">apps/groceries-list/src/app/auth/auth.component.html</context>
-          <context context-type="linenumber">2</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="55afc08fd727598bb1158e9fb6b9f2fe2470a755" datatype="html">
-        <source>Groceries List helps you keep track of what needs to be bought from the store.</source>
-        <target>Ostunimekiri aitab sul meeles pidada, mida poest osta.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">apps/groceries-list/src/app/auth/auth.component.html</context>
-          <context context-type="linenumber">5</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="6249f5374dbb2d74fc388e144ac1e25fd6a87ed4" datatype="html">
         <source>Log in with Facebook and create your first shared list today!</source>
         <target>Logi sisse Facebook&apos;iga ja loo oma esimene jagatud nimekiri juba täna!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/auth/auth.component.html</context>
           <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="92eee6be6de0b11c924e3ab27db30257159c0a7c" datatype="html">
+        <source>Home</source>
+        <target>Kodu</target>
+        <note priority="1" from="description">Button back to home page</note>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/home/sidenav-menu/sidenav-menu.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8fe73a4787b8068b2ba61f54ab7e0f9af2ea1fc9" datatype="html">
+        <source>Version</source>
+        <target>Versioon</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/home/sidenav-menu/sidenav-menu.component.html</context>
+          <context context-type="linenumber">8</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="28f86ffd419b869711aa13f5e5ff54be6d70731c" datatype="html">
+        <source>Edit</source>
+        <target>Muuda</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/lists-container/lists-container.component.html</context>
+          <context context-type="linenumber">13</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="0bd8b27f60a1f098a53e06328426d818e3508ff9" datatype="html">
+        <source>Share</source>
+        <target>Jaga</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/lists-container/lists-container.component.html</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/list-share/list-share.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="826b25211922a1b46436589233cb6f1a163d89b7" datatype="html">
+        <source>Delete</source>
+        <target>Kustuta</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/lists-container/lists-container.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8693603235657020323" datatype="html">
+        <source>Other</source>
+        <target>Muu</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/state/app.reducer.ts</context>
+          <context context-type="linenumber">80</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f093d9574ab746b231504bd2cbb65f04bd7b00db" datatype="html">
+        <source>Log in</source>
+        <target>Sisene</target>
+        <note priority="1" from="description">Sidenav log in link</note>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/home/sidenav-menu/sidenav-menu.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/user/user-avatar/user-avatar.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5d22c795daf43877a5f708dca2bccd549eb0471d" datatype="html">
+        <source>Sign out</source>
+        <target>Välju</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/user/user-avatar/user-avatar.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="994363f08f9fbfa3b3994ff7b35c6904fdff18d8" datatype="html">
+        <source>Profile</source>
+        <target>Profiil</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/user/user-avatar/user-avatar.component.html</context>
+          <context context-type="linenumber">16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4e98abf1fc4c286a595bd8c6eefd574002850343" datatype="html">
+        <source>Add list</source>
+        <target>Lisa nimekiri</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/list/list-container/list-container.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f6755cff4957d5c3c89bafce5651f1b6fa2b1fd9" datatype="html">
+        <source>Add</source>
+        <target>Lisa</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/list/list-container/list-container.component.html</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cd6c8ec77116c38cabf6fd42b7998ce7e536908d" datatype="html">
+        <source>Mark all active</source>
+        <target>Märgi kõik aktiivseks</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/list/list-container/list-container.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cff1428d10d59d14e45edec3c735a27b5482db59" datatype="html">
+        <source>Name</source>
+        <target>Nimi</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/item-edit/item-edit-form/item-edit-form.component.html</context>
+          <context context-type="linenumber">3</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/list-edit/list-edit.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4f8b2bb476981727ab34ed40fde1218361f92c45" datatype="html">
+        <source>Details</source>
+        <target>Detailid</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/item-edit/item-edit-form/item-edit-form.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="b36e1450940b7f6028d8587568c7d669b53f7a06" datatype="html">
+        <source>Active</source>
+        <target>Aktiivne</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/item-edit/item-edit-form/item-edit-form.component.html</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4c90059afafb7e160384d9f512797c95bb95c6dc" datatype="html">
+        <source>Group</source>
+        <target>Grupp</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/item-edit/item-edit-form/item-edit-form.component.html</context>
+          <context context-type="linenumber">12</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/list-edit/list-edit.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cda31dbd724cf5f4fa7a4274d9120651490c8a8c" datatype="html">
+        <source>Back</source>
+        <target>Tagasi</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/item-edit/item-edit-form/item-edit-form.component.html</context>
+          <context context-type="linenumber">21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="52c9a103b812f258bcddc3d90a6e3f46871d25fe" datatype="html">
+        <source>Save</source>
+        <target>Salvesta</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/item-edit/item-edit-form/item-edit-form.component.html</context>
+          <context context-type="linenumber">22</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="27a56aad79d8b61269ed303f11664cc78bcc2522" datatype="html">
+        <source>Theme</source>
+        <target>Toon</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/profile/profile-container/profile-container.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="eecaae4033d3d4b2a97559168a2fc660906eb991" datatype="html">
+        <source> Light </source>
+        <target> Hele </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/profile/profile-container/profile-container.component.html</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="81164dc3852b599e895318eaf4c357b6aebe68c1" datatype="html">
+        <source> Dark </source>
+        <target> Tume </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/profile/profile-container/profile-container.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="fe46ccaae902ce974e2441abe752399288298619" datatype="html">
+        <source>Language</source>
+        <target>Keel</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/profile/profile-container/profile-container.component.html</context>
+          <context context-type="linenumber">18</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="ff7cee38a2259526c519f878e71b964f41db4348" datatype="html">
+        <source>Default</source>
+        <target>Vaikimisi</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/profile/profile-container/profile-container.component.html</context>
+          <context context-type="linenumber">26</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="a0843de0a64adcc7ee6a946408b6876cd8abdcae" datatype="html">
+        <source>English</source>
+        <target>Inglise</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/profile/profile-container/profile-container.component.html</context>
+          <context context-type="linenumber">28</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3fc5c27932d5667b2d5041ed0dcce5ec4afae49e" datatype="html">
+        <source>Estonian</source>
+        <target>Eesti</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/profile/profile-container/profile-container.component.html</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f19a0716e65ed644f04af65e0b3338cf13975649" datatype="html">
+        <source>{VAR_SELECT, select, light {light} dark {dark} other {<x id="INTERPOLATION"/>}}</source>
+        <target>{VAR_SELECT, select, light {hele} dark {tume} other {<x id="INTERPOLATION"/>}}</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/profile/profile-container/profile-container.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2790683085302894410" datatype="html">
+        <source>Groceries List (dev)</source>
+        <target>Groceries List (dev)</target>
+        <note priority="1" from="meaning">app name</note>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/environments/environment.ts</context>
+          <context context-type="linenumber">9</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7588456452293364762" datatype="html">
+        <source>Add list</source>
+        <target>Lisa nimekiri</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/lists-container/lists-container.component.ts</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4579086914485575998" datatype="html">
+        <source>List title</source>
+        <target>Nimekirja pealkiri</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/lists-container/lists-container.component.ts</context>
+          <context context-type="linenumber">29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="835429425898769652" datatype="html">
+        <source>Are you sure you want to remove &quot;<x id="PH" equiv-text="list.name"/>&quot;?</source>
+        <target>Oled sa kindel, et soovid nimekirja &quot;<x id="PH" equiv-text="list.name"/>&quot; kustutada?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/lists-container/lists-container.component.ts</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1102717806459547726" datatype="html">
+        <source>Refresh</source>
+        <target>Värskenda</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/state/list/list.effects.ts</context>
+          <context context-type="linenumber">92</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="c5485c3656b3938ff38a3ad42ab2949333831d1b" datatype="html">
+        <source>Welcome to <x id="INTERPOLATION" equiv-text="{{ appName }}"/>!</source>
+        <target>Tere tulemast <x id="INTERPOLATION" equiv-text="{{ appName }}"/> rakendusse!</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/auth/auth.component.html</context>
+          <context context-type="linenumber">2</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="5c6816ca9b3225f0e65c42ac4a35b1095561c333" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ appName }}"/> helps you keep track of what needs to be bought from the store.</source>
+        <target><x id="INTERPOLATION" equiv-text="{{ appName }}"/> aitab sul koostada poe ostunimekirju.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/auth/auth.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2159130950882492111" datatype="html">
+        <source>Cancel</source>
+        <target>Tühista</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/shared/dialog-service/confirm-dialog.component.ts</context>
+          <context context-type="linenumber">36</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2807800733729323332" datatype="html">
+        <source>Yes</source>
+        <target>Jah</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/shared/dialog-service/confirm-dialog.component.ts</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7527376280758274603" datatype="html">
+        <source>OK</source>
+        <target>OK</target>
+        <note priority="1" from="meaning">confirm</note>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/shared/dialog-service/info-dialog.component.ts</context>
+          <context context-type="linenumber">31</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/shared/dialog-service/input-dialog.component.ts</context>
+          <context context-type="linenumber">35</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/list/list-container/list-container.component.ts</context>
+          <context context-type="linenumber">208</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6226598164345611680" datatype="html">
+        <source>No inactive items left!</source>
+        <target>Inaktiivseid kirjeid pole!</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/list/list-container/list-container.component.ts</context>
+          <context context-type="linenumber">208</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6207077211313887742" datatype="html">
+        <source>Mark all active</source>
+        <target>Märgi kõik aktiivseks</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/list/list-container/list-container.component.ts</context>
+          <context context-type="linenumber">213</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8695898183365099870" datatype="html">
+        <source>Are you sure you want to reactivate all items?</source>
+        <target>Oled sa kindel, et soovid kõik kirjed aktiivseks märkida?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/list/list-container/list-container.component.ts</context>
+          <context context-type="linenumber">213</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="f1ffa445c22300a14b41a3523ea3cd1527f6edd3" datatype="html">
+        <source>Share with...</source>
+        <target>Jaga...</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/list-share/list-share.component.html</context>
+          <context context-type="linenumber">11</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="6377139538537882652" datatype="html">
+        <source>Delete list</source>
+        <target>Kustuta nimekiri</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/list-edit/list-edit.component.ts</context>
+          <context context-type="linenumber">41</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="9061841445701611634" datatype="html">
+        <source>Are you sure you want to delete list &quot;<x id="PH" equiv-text="item.name"/>&quot;?</source>
+        <target>Oled sa kindel, et soovid nimekirja &quot;<x id="PH" equiv-text="list.name"/>&quot; kustutada?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/list-edit/list-edit.component.ts</context>
+          <context context-type="linenumber">42</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="cc1c212f7bc3607745668338a4098bf13e90000a" datatype="html">
+        <source>Pick group</source>
+        <target>Vali grupp</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/list-edit/list-edit.component.html</context>
+          <context context-type="linenumber">14</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3249513483374643425" datatype="html">
+        <source>Add</source>
+        <target>Lisa</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/item-edit/item-edit.component.ts</context>
+          <context context-type="linenumber">60</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2765038467790743178" datatype="html">
+        <source>Add group</source>
+        <target>Lisa grupp</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/item-edit/item-edit.component.ts</context>
+          <context context-type="linenumber">61</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2041629809382689328" datatype="html">
+        <source>Group name</source>
+        <target>Grupi nimi</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/item-edit/item-edit.component.ts</context>
+          <context context-type="linenumber">62</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="841c915d1fb9a748967a084711a394ca93d509fa" datatype="html">
+        <source>How to delete data?</source>
+        <target>Kuidas kusutada andmed</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/legal/delete-data/delete-data.component.html</context>
+          <context context-type="linenumber">1</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3b89bc900e55b023b1570a01b8c8b6359f6a4ed1" datatype="html">
+        <source> If you wish do delete all data associated with your user account send an email with the request to </source>
+        <target> Kui soovid kustutada kogu kontoga seotud info, kirjuta oma soovist </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/legal/delete-data/delete-data.component.html</context>
+          <context context-type="linenumber">4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="2db1cdaea6a93e52bb9ecfa3807a12add0ed69e2" datatype="html">
+        <source>info.grocerieslist@gmail.com</source>
+        <target>info.grocerieslist@gmail.com</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/legal/delete-data/delete-data.component.html</context>
+          <context context-type="linenumber">5</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7451598458505373839" datatype="html">
+        <source>Remove list</source>
+        <target>Kustuta nimekiri</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/lists-container/lists-container.component.ts</context>
+          <context context-type="linenumber">41</context>
         </context-group>
       </trans-unit>
     </body>
