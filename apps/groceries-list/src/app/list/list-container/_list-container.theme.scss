@@ -1,37 +1,38 @@
-@import '~@angular/material/theming';
+@use 'sass:map';
+@use '~@angular/material' as mat;
 
-@mixin list-container-color($config-or-theme) {
+@mixin color($theme) {
   // Extract the color configuration in case a theme has been passed.
   // This allows consumers to either pass a theme object or a color configuration.
-  $config: mat-get-color-config($config-or-theme);
+  $config: mat.get-color-config($theme);
   // Extract the palettes you need from the theme definition.
-  $foreground: map-get($config, 'foreground');
-  $background: map-get($config, 'background');
+  $foreground: map.get($config, 'foreground');
+  $background: map.get($config, 'background');
 
   .dragged {
-    background: mat-color($background, 'background');
+    background: mat.get-color-from-palette($background, 'background');
   }
 
   .cdk-drag-preview {
-    background: mat-color($background, 'background');
-    color: mat-color($foreground, 'text');
+    background: mat.get-color-from-palette($background, 'background');
+    color: mat.get-color-from-palette($foreground, 'text');
 
     &.list-container__group {
       .mat-subheader {
-        color: mat-color($foreground, 'secondary-text');
+        color: mat.get-color-from-palette($foreground, 'secondary-text');
       }
     }
   }
 }
 
-@mixin list-container-theme($theme) {
+@mixin theme($theme) {
   // Extracts the color and typography configurations from the theme.
-  $color: mat-get-color-config($theme);
-  $typography: mat-get-typography-config($theme);
+  $color: mat.get-color-config($theme);
+  // $typography: mat.get-typography-config($theme);
 
   // Do not generate styles if configurations for individual theming
   // systems have been explicitly set to `null`.
   @if $color != null {
-    @include list-container-color($color);
+    @include color($color);
   }
 }

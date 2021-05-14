@@ -1,5 +1,5 @@
-@import '~@angular/material/theming';
-@import './list-container.theme';
+@use '~@angular/material' as mat;
+@use './list-container.theme' as list-container;
 @import '../../../theme.scss';
 
 :host {
@@ -50,7 +50,7 @@
 }
 
 .dragged {
-  @include mat-elevation(2);
+  @include mat.elevation(2);
 }
 
 .cdk-drag-preview {
@@ -123,9 +123,9 @@
 }
 
 ::ng-deep {
-  @include list-container-theme($theme);
+  @include list-container.theme($theme);
 
   .app-dark {
-    @include list-container-theme($dark-theme);
+    @include list-container.theme($dark-theme);
   }
 }
