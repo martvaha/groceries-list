@@ -5,11 +5,12 @@ import { HomeComponent } from './home/home.component';
 import { AuthComponent } from './auth/auth.component';
 import { ListsContainerComponent } from './lists-container/lists-container.component';
 import { canActivate, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
-// import { AppShellComponent } from './app-shell/app-shell.component';
+import { AppShellComponent } from './app-shell/app-shell.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
-  // { path: 'shell', component: AppShellComponent },
+  // This routes only purpose is to make AppShell more easily testable
+  { path: 'shell', component: AppShellComponent },
   {
     path: 'home',
     component: HomeComponent,

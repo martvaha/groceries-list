@@ -12,7 +12,9 @@
       "sourceRoot": "apps/groceries-list/src",
       "prefix": "groceries-list",
       "i18n": {
-        "sourceLocale": { "code": "en" },
+        "sourceLocale": {
+          "code": "en"
+        },
         "locales": {
           "et": {
             "translation": "apps/groceries-list/src/i18n/et.xlf"
@@ -102,9 +104,11 @@
             },
             "et": {
               "localize": ["et"]
-            }
+            },
+            "development": {}
           },
-          "outputs": ["{options.outputPath}"]
+          "outputs": ["{options.outputPath}"],
+          "defaultConfiguration": "production"
         },
         "convert-i18n": {
           "builder": "@nrwl/workspace:run-commands",
@@ -120,7 +124,6 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "groceries-list:build",
             "proxyConfig": "apps/groceries-list/proxy.conf.json"
           },
           "configurations": {
@@ -129,8 +132,12 @@
             },
             "et": {
               "browserTarget": "groceries-list:build:et"
+            },
+            "development": {
+              "browserTarget": "groceries-list:build:development"
             }
-          }
+          },
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
@@ -184,14 +191,18 @@
               ],
               "optimization": true,
               "localize": true
+            },
+            "development": {
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false
             }
-          }
+          },
+          "defaultConfiguration": "production"
         },
         "app-shell": {
           "builder": "@angular-devkit/build-angular:app-shell",
           "options": {
-            "browserTarget": "groceries-list:build",
-            "serverTarget": "groceries-list:server",
             "route": "shell"
           },
           "configurations": {
@@ -202,6 +213,10 @@
             "test": {
               "browserTarget": "groceries-list:build:test",
               "serverTarget": "groceries-list:server:test"
+            },
+            "development": {
+              "serverTarget": "groceries-list:server:development",
+              "browserTarget": "groceries-list:build:development"
             }
           }
         },

@@ -8,11 +8,13 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { AppComponent } from './app.component';
+import { AppShellModule } from './app-shell/app-shell.module';
 
 const routes: Routes = [{ path: 'shell', component: AppShellComponent }];
 
 @NgModule({
   imports: [
+    AppShellModule,
     AppModule,
     ServerModule,
     MatToolbarModule,
@@ -21,6 +23,5 @@ const routes: Routes = [{ path: 'shell', component: AppShellComponent }];
     RouterModule.forRoot(routes),
   ],
   bootstrap: [AppComponent],
-  declarations: [AppShellComponent],
 })
 export class AppServerModule {}

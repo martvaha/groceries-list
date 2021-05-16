@@ -1,12 +1,13 @@
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
-@import '~@angular/material/theming';
 // Plus imports for other components in your app.
 
 // Include the common styles for Angular Material. We include this here so that you only
 // have to load a single css file for Angular Material in your app.
 // Be sure that you only ever include this mixin once!
-@include mat-core();
+@use 'sass:map';
+@use '~@angular/material' as mat;
+@include mat.core();
 
 @import './theme.scss';
 // @import './app/shared/themes/app.theme';
@@ -42,10 +43,10 @@ body {
   font-family: Roboto, 'Helvetica Neue', sans-serif;
 }
 
-@include angular-material-theme($theme);
+@include mat.all-component-themes($theme);
 
 .app-dark {
-  @include angular-material-color($dark-theme);
+  @include mat.all-component-colors($dark-theme);
 
   a:not(.mat-tab-link):not(.mat-list-item):not(.mat-line):not(.mat-icon-button):not(.mat-menu-item) {
     color: #7c4dff;
@@ -56,10 +57,10 @@ body {
 }
 
 body.app-dark {
-  $config: mat-get-color-config($dark-theme);
-  $foreground: map-get($config, 'foreground');
-  $background: map-get($config, 'background');
+  $config: mat.get-color-config($dark-theme);
+  $foreground: map.get($config, 'foreground');
+  $background: map.get($config, 'background');
 
-  color: mat-color($foreground, 'text');
-  background-color: mat-color($background, 'background');
+  color: mat.get-color-from-palette($foreground, 'text');
+  background-color: mat.get-color-from-palette($background, 'background');
 }

@@ -1,18 +1,24 @@
-@import '~@angular/material/theming';
+@use '~@angular/material' as mat;
 @import './palette.scss';
 
 $facebook-color: #3a5ca9;
 
 // Define your application's custom theme.
-$primary: mat-palette($app-blue);
-$accent: mat-palette($app-deeppurple, 500, 300, 600);
-$theme: mat-light-theme($primary, $accent);
-
+$primary: mat.define-palette($app-blue);
+$accent: mat.define-palette($app-deeppurple, 500, 300, 600);
+$theme: mat.define-light-theme(
+  (
+    color: (
+      primary: $primary,
+      accent: $accent,
+    ),
+  )
+);
 
 // Define an alternate dark theme.
-$dark-primary: mat-palette($app-blue);
-$dark-accent: mat-palette($app-deeppurple, 500, 300, 600);
-$dark-theme: mat-dark-theme(
+$dark-primary: mat.define-palette($app-blue);
+$dark-accent: mat.define-palette($app-deeppurple, 500, 300, 600);
+$dark-theme: mat.define-dark-theme(
   (
     color: (
       primary: $dark-primary,
