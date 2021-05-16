@@ -11,7 +11,7 @@ export class SearchService {
 
   constructor(private ngZone: NgZone) {
     if (typeof Worker !== 'undefined') {
-      this.worker = new Worker('./search.worker', { type: 'module' });
+      this.worker = new Worker(new URL('./search.worker', import.meta.url));
     }
   }
 

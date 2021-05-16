@@ -30,17 +30,10 @@ import { GroupEffects } from './state/group/group.effects';
 import { ItemEffects } from './state/item/item.effects';
 import { sentryInstrumentation } from './shared/sentry';
 import { ConfigEffects } from './state/config/config.effects';
-// import { AppShellComponent } from './app-shell/app-shell.component';
+import { AppShellModule } from './app-shell/app-shell.module';
 
 @NgModule({
-  declarations: [
-    AppComponent,
-    HomeComponent,
-    SidenavMenuComponent,
-    ListsContainerComponent,
-    UserAvatarComponent,
-    // AppShellComponent
-  ],
+  declarations: [AppComponent, HomeComponent, SidenavMenuComponent, ListsContainerComponent, UserAvatarComponent],
   imports: [
     BrowserModule.withServerTransition({ appId: 'groceries-list' }),
     ServiceWorkerModule.register('ngsw-worker.js', {
@@ -48,6 +41,7 @@ import { ConfigEffects } from './state/config/config.effects';
     }),
     BrowserAnimationsModule,
     AppRoutingModule,
+    AppShellModule,
     RouterModule,
     SharedModule,
     HttpClientModule,
@@ -68,9 +62,6 @@ import { ConfigEffects } from './state/config/config.effects';
     }),
     StoreRouterConnectingModule.forRoot({
       routerState: RouterState.Minimal,
-    }),
-    ServiceWorkerModule.register('ngsw-worker.js', {
-      enabled: environment.production,
     }),
     HammerModule,
   ],

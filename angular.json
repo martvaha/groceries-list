@@ -192,7 +192,11 @@
               "optimization": true,
               "localize": true
             },
-            "development": {}
+            "development": {
+              "optimization": false,
+              "sourceMap": true,
+              "extractLicenses": false
+            }
           },
           "defaultConfiguration": "production"
         },
@@ -214,8 +218,7 @@
               "serverTarget": "groceries-list:server:development",
               "browserTarget": "groceries-list:build:development"
             }
-          },
-          "defaultConfiguration": "production"
+          }
         },
         "deploy": {
           "builder": "@angular/fire:deploy",

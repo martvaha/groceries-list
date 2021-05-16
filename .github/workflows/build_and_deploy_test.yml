@@ -25,7 +25,8 @@ jobs:
         run: yarn install --frozen-lockfile
 
       - name: Build app
-        run: yarn nx run groceries-list:app-shell:$PROJECT_ID
+        # switch back to groceries-list:app-shell:$PROJECT_ID once app shell build is fixed
+        run: yarn nx run groceries-list:build:$PROJECT_ID
 
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:

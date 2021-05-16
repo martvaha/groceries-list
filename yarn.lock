@@ -295,14 +295,14 @@
   resolved "https://registry.yarnpkg.com/@angular/language-service/-/language-service-12.0.0.tgz#b404961f60d944ea013833b282c144b3228f439d"
   integrity sha512-LDS1+dOdXUEf0kiqcYnOfXBIs2HAD6vJ5HWb58kq6z/8AHRMvvHiwSV26UlIbnnD+CBnTu36xmbCyZtIJluhqw==
 
-"@angular/localize@^11.0.5":
-  version "11.0.5"
-  resolved "https://registry.yarnpkg.com/@angular/localize/-/localize-11.0.5.tgz#e770d4ec1b2094822fdb0524516dca6bf39dfd05"
-  integrity sha512-tvzgRa/t0xCouCPFMurqZImLeWIISUjVEzkcny9P7xaaz0Cw7kSyulc0e8HXf+8oijSJ624YOYUzr7mkPoIfew==
+"@angular/localize@^12.0.0":
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/@angular/localize/-/localize-12.0.0.tgz#dbe60215fe54ccc3e32d915bf9e4d742988cf3db"
+  integrity sha512-vJ/xeIhF4odmSgf2XAAIb57AmUgS1DiprQeeG5aY1lZ9ZMBDC1BkeONseQDBg0d9HkT9KdqElDBuSMGfQfzEkw==
   dependencies:
     "@babel/core" "7.8.3"
-    glob "7.1.2"
-    yargs "^16.1.1"
+    glob "7.1.7"
+    yargs "^16.2.0"
 
 "@angular/material@^12.0.0":
   version "12.0.0"
@@ -325,13 +325,13 @@
   dependencies:
     tslib "^2.1.0"
 
-"@angular/platform-server@^11.0.2":
-  version "11.0.2"
-  resolved "https://registry.yarnpkg.com/@angular/platform-server/-/platform-server-11.0.2.tgz#b9cf77c434fbaef5871c961a2def31c561bd473a"
-  integrity sha512-wC+JP0izKJMDQG+u7HXFYyKni7T65ELC6JknL4dODDHx+XylkFPXGI+EffffnVgJssheVDGrwe32Fh0Yjus0Lw==
+"@angular/platform-server@^12.0.0":
+  version "12.0.0"
+  resolved "https://registry.yarnpkg.com/@angular/platform-server/-/platform-server-12.0.0.tgz#581e694166edfeebcf3f3ab69528cff394749ae1"
+  integrity sha512-8q87lUVglqGLVa6ttR0SkSUK3p2+1z8wAoAxg9iLbqXo8c9JJ9Qdo8/rNThcqROHq6X5Q2p7T45GpDipNq2VkQ==
   dependencies:
     domino "^2.1.2"
-    tslib "^2.0.0"
+    tslib "^2.1.0"
     xhr2 "^0.2.0"
 
 "@angular/router@12.0.0":
@@ -8397,18 +8397,6 @@ glob-to-regexp@^0.4.1:
   resolved "https://registry.yarnpkg.com/glob-to-regexp/-/glob-to-regexp-0.4.1.tgz#c75297087c851b9a578bd217dd59a92f59fe546e"
   integrity sha512-lkX1HJXwyMcprw/5YUZc2s7DrpAiHB21/V+E1rHUrVNokkvB6bqMzT0VfV6/86ZNabt1k14YOIaT7nDvOX3Iiw==
 
-glob@7.1.2:
-  version "7.1.2"
-  resolved "https://registry.yarnpkg.com/glob/-/glob-7.1.2.tgz#c19c9df9a028702d678612384a6552404c636d15"
-  integrity sha512-MJTUg1kjuLeQCJ+ccE4Vpa6kKVXkPYJ2mOCQyUuKLcLQsdrMCpBPUi8qVE6+YuaJkozeA9NusTAw3hLr8Xe5EQ==
-  dependencies:
-    fs.realpath "^1.0.0"
-    inflight "^1.0.4"
-    inherits "2"
-    minimatch "^3.0.4"
-    once "^1.3.0"
-    path-is-absolute "^1.0.0"
-
 glob@7.1.4:
   version "7.1.4"
   resolved "https://registry.yarnpkg.com/glob/-/glob-7.1.4.tgz#aa608a2f6c577ad357e1ae5a5c26d9a8d1969255"
@@ -16295,7 +16283,7 @@ yargs@^16.1.0:
     y18n "^5.0.5"
     yargs-parser "^20.2.2"
 
-yargs@^16.1.1, yargs@^16.2.0:
+yargs@^16.2.0:
   version "16.2.0"
   resolved "https://registry.yarnpkg.com/yargs/-/yargs-16.2.0.tgz#1c82bf0f6b6a66eafce7ef30e376f49a12477f66"
   integrity sha512-D1mvvtDG0L5ft/jGWkLpG1+m0eQxOfaBvTNELraWj22wSVUMWxZUvYgJYcKh6jGGIkJFhH4IZPQhR4TKpc8mBw==
