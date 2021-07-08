@@ -7,6 +7,7 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { AngularFireAnalyticsModule, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
 
 import { environment } from '../environments/environment';
 import { SharedModule } from './shared/shared.module';
@@ -46,6 +47,7 @@ import { AppShellModule } from './app-shell/app-shell.module';
     SharedModule,
     HttpClientModule,
     AngularFireModule.initializeApp(environment.firebase, 'groceries-list'),
+    AngularFireAnalyticsModule,
     AngularFireAuthModule,
     AngularFirestoreModule,
     StoreModule.forRoot(reducers, {
@@ -68,6 +70,8 @@ import { AppShellModule } from './app-shell/app-shell.module';
   providers: [
     AuthGuard,
     MediaMatcher,
+    UserTrackingService,
+    ScreenTrackingService,
     ...sentryInstrumentation,
     // { provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig },
   ],

@@ -4,11 +4,12 @@ import { map, tap, mergeMap, exhaustMap, catchError } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { State } from '../app.reducer';
 import * as firebase from 'firebase/app';
-import { combineLatest, empty, EMPTY, of } from 'rxjs';
+import { combineLatest, EMPTY, of } from 'rxjs';
 import { selectActiveListId } from '../list/list.reducer';
 import { deleteItemSuccess, getItemsFail, getItemsNothingChanged, upsertItemListSuccess } from './item.actions';
 import { Item } from '../../shared/models';
 import { selectItemMaxModified } from './item.reducer';
+import { captureException } from '../../shared/sentry';
 
 @Injectable({
   providedIn: 'root',
@@ -64,6 +65,7 @@ export class ItemService {
               }
             }),
             catchError((error: firebase.default.FirebaseError) => {
+              captureException(error);
               return of(getItemsFail({ error }));
             })
           );
@@ -71,31 +73,16 @@ export class ItemService {
     );
   }
 
-  // addList(list: List) {
-  //   const user = takeValue(this.auth.user);
-  //   if (!user) {
-  //     throw new Error('Unexpected error while creating new list');
-  //   }
-  //   const finalList = {
-  //     ...list,
-  //     acl: { [user.uid]: true },
-  //     modified: firebase.default.firestore.FieldValue.serverTimestamp()
-  //   };
-  //   return this.db.collection('lists').add(finalList);
-  // }
-
-  // removeList(list: List) {
-  //   console.log(list);
-  //   return this.db.doc('lists/' + list.id).delete();
-  // }
-
   updateItem(item: Item, listId: string) {
     console.log(item);
     const { id, ...others } = item;
-    return this.db.doc(`/lists/${listId}/items/${id}`).update({
-      ...others,
-      modified: firebase.default.firestore.FieldValue.serverTimestamp(),
-    });
+    return this.db
+      .doc(`/lists/${listId}/items/${id}`)
+      .update({
+        ...others,
+        modified: firebase.default.firestore.FieldValue.serverTimestamp(),
+      })
+      .catch((reason) => captureException(reason));
   }
 
   deleteItem(item: Item, listId: string) {
