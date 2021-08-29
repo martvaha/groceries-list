@@ -2,12 +2,13 @@ import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
 import { createReducer, Action, on, createFeatureSelector, createSelector } from '@ngrx/store';
 import { List } from '../../shared/models';
 import * as ListActions from './list.actions';
-import { maxModified, sortByName } from '../utils';
+import { lastUpdated, sortByName } from '../utils';
 import { State } from '../app.reducer';
 
 export interface ListState extends EntityState<List> {
   activeId: string | null;
   loading: boolean;
+  lastUpdated: Date | null;
 }
 
 export const adapter: EntityAdapter<List> = createEntityAdapter<List>({
@@ -17,26 +18,25 @@ export const adapter: EntityAdapter<List> = createEntityAdapter<List>({
 export const initialState: ListState = adapter.getInitialState({
   activeId: null,
   loading: false,
+  lastUpdated: null,
 });
 
 const listReducer = createReducer(
   initialState,
   on(ListActions.loadLists, ListActions.addList, ListActions.removeList, (state) => ({ ...state, loading: true })),
-  on(ListActions.upsertListSuccess, (state, { list }) => {
-    return adapter.upsertOne(list, { ...state, loading: false });
+  on(ListActions.upsertListSuccess, (state, { lists }) => {
+    return adapter.upsertMany(lists, { ...state, loading: false, lastUpdated: new Date(Date.now()) });
   }),
-  // on(ListActions.addList, (state, { list }) => {
-  //   return adapter.upsertOne(list, state);
-  // }),
-  // on(ListActions.addList, (state, { list }) => {
-  //   return adapter.upsertOne(list, state);
-  // }),
+
   on(ListActions.upsertGroupsOrder, (state, { groupsOrder, id }) => {
     return adapter.updateOne({ id, changes: { groupsOrder } }, state);
   }),
   on(ListActions.setActive, (state, { id }) => ({ ...state, activeId: id })),
-  on(ListActions.removeListSuccess, (state, { list }) => {
-    return adapter.removeOne(list.id, { ...state, loading: false });
+  on(ListActions.removeListSuccess, (state, { lists }) => {
+    return adapter.removeMany(
+      lists.map((list) => list.id),
+      { ...state, loading: false, lastUpdated: new Date(Date.now()) }
+    );
   }),
   on(ListActions.loadListsNothingChanged, ListActions.addListSuccess, ListActions.removeListFail, (state) => ({
     ...state,
@@ -64,7 +64,7 @@ export const selectListEntities = createSelector(selectListState, selectEntities
 
 export const selectListStateLoading = createSelector(selectListState, selectLoading);
 
-export const selectListMaxModified = createSelector(selectAllLists, maxModified);
+export const selectListLastUpdated = createSelector(selectListState, lastUpdated);
 
 export const selectActiveList = createSelector(selectListEntities, selectActiveListId, (entities, activeId) =>
   activeId ? entities[activeId] : null

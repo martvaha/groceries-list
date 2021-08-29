@@ -2,13 +2,6 @@
 <xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
   <file source-language="en" datatype="plaintext" original="ng2.template">
     <body>
-      <trans-unit id="3894950702316166331" datatype="html">
-        <source>Loading...</source>
-        <context-group purpose="location">
-          <context context-type="sourcefile">apps/groceries-list/src/app/app-shell/app-shell.component.html</context>
-          <context context-type="linenumber">7</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="4248521319677765272" datatype="html">
         <source>Welcome to <x id="INTERPOLATION" equiv-text="{{ appName }}"/>!</source>
         <context-group purpose="location">
@@ -23,11 +16,33 @@
           <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="5086556452035705780" datatype="html">
-        <source>Log in with Facebook and create your first shared list today!</source>
+      <trans-unit id="13430864174871695" datatype="html">
+        <source>Log in with Facebook or Google and create your first shared list today!</source>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/auth/auth.component.html</context>
           <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8128711590976174878" datatype="html">
+        <source>Account already exists</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/auth/auth.service.ts</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/auth/auth.service.ts</context>
+          <context context-type="linenumber">133</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="938029953718271849" datatype="html">
+        <source>Account with email <x id="PH" equiv-text="error.email"/> already exists. Try logging in with <x id="PH_1" equiv-text="otherProvider"/> instead.</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/auth/auth.service.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/auth/auth.service.ts</context>
+          <context context-type="linenumber">134</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2821179408673282599" datatype="html">
@@ -50,11 +65,11 @@
         </context-group>
         <note priority="1" from="description">Sidenav log in link</note>
       </trans-unit>
-      <trans-unit id="2724055831234181057" datatype="html">
-        <source>Version</source>
+      <trans-unit id="8439955599488894226" datatype="html">
+        <source>Privacy Policy</source>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/home/sidenav-menu/sidenav-menu.component.html</context>
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8953033926734869941" datatype="html">
@@ -408,11 +423,11 @@
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2790683085302894410" datatype="html">
-        <source>Groceries List (dev)</source>
+      <trans-unit id="3593094895224210173" datatype="html">
+        <source>Groceries List</source>
         <context-group purpose="location">
-          <context context-type="sourcefile">apps/groceries-list/src/environments/environment.ts</context>
-          <context context-type="linenumber">9</context>
+          <context context-type="sourcefile">apps/groceries-list/src/environments/environment.prod.ts</context>
+          <context context-type="linenumber">5</context>
         </context-group>
         <note priority="1" from="meaning">app name</note>
       </trans-unit>

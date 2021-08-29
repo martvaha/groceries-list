@@ -26,7 +26,7 @@ export class UserEffects implements OnInitEffects {
     () =>
       this.actions$.pipe(
         ofType(login),
-        switchMap(({ redirect }) => this.auth.signInWithFacebook(redirect))
+        switchMap(({ provider, redirect }) => this.auth.signInWithProvider(provider, redirect))
       ),
     { dispatch: false }
   );

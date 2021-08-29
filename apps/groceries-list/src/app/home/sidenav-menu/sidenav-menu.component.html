@@ -5,5 +5,10 @@
   <a mat-list-item routerLink="/home/login" *ngIf="!user" (click)="closeSidenavOnMobile()" i18n="Sidenav log in link"
     >Log in</a
   >
-  <span class="version mat-hint"><span i18n>Version</span>: {{ version }}</span>
+  <div class="info-container">
+    <span class="legal mat-hint"
+      ><a i18n [routerLink]="['/home', 'legal', 'privacy']" target="_blank">Privacy Policy</a></span
+    >
+    <span class="version mat-hint">{{ version }}</span>
+  </div>
 </mat-nav-list>

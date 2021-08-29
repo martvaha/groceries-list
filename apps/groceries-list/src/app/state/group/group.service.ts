@@ -10,7 +10,7 @@ import { State } from '../app.reducer';
 import { combineLatest, EMPTY } from 'rxjs';
 import { selectActiveListId } from '../list/list.reducer';
 import { getGroupsNothingChanged, upsertGroupSuccess } from './group.actions';
-import { selectGroupMaxModified } from './group.reducer';
+import { selectGroupLastUpdated } from './group.reducer';
 import slugify from 'slugify';
 import * as firebase from 'firebase/app';
 
@@ -23,7 +23,7 @@ export class GroupService2 {
   getGroups() {
     return combineLatest([
       this.store.select(selectActiveListId),
-      this.store.select(selectGroupMaxModified),
+      this.store.select(selectGroupLastUpdated),
     ]).pipe(
       // tap((c) => console.log('groups', c)),
       exhaustMap(([listId, maxModified]) => {

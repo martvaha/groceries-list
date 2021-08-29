@@ -45,7 +45,7 @@ export const reducers: ActionReducerMap<State> = {
 
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
   return localStorageSync({
-    keys: [{ list: ['entities', 'ids', 'activeId'] }, 'group', 'item', 'config'],
+    keys: [{ list: ['entities', 'ids', 'activeId', 'lastUpdated'] }, 'group', 'item', 'config'],
     rehydrate: true,
     removeOnUndefined: true,
     storage: new Storage(),

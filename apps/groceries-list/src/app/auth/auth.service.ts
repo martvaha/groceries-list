@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { captureException } from '../shared/sentry';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { isPlatformServer } from '@angular/common';
+import { DialogService } from '../shared/dialog-service/dialog.service';
 
 export interface User {
   uid: string;
@@ -21,19 +22,40 @@ export class AuthService {
   private userSubject = new BehaviorSubject<User | null | undefined>(undefined);
   private test = new BehaviorSubject<User | null | undefined>(undefined);
 
-  constructor(private fireAuth: AngularFireAuth, private router: Router, @Inject(PLATFORM_ID) private platformId: any) {
+  constructor(
+    private fireAuth: AngularFireAuth,
+    private router: Router,
+    private dialog: DialogService,
+    @Inject(PLATFORM_ID) private platformId: any
+  ) {
     if (isPlatformServer(this.platformId)) return;
     this.handleRedirect();
     this.registerAuthStateObserver();
   }
 
-  signInWithFacebook(redirect?: string | string[]) {
+  signInWithProvider(provider: 'facebook' | 'google', redirect?: string | string[]) {
     this.fireAuth.useDeviceLanguage();
-    const provider = new firebase.auth.FacebookAuthProvider();
-    return this.fireAuth.signInWithPopup(provider).then(() => {
-      if (redirect) return this.redirect(redirect);
-      return true;
-    });
+    const providerInstance =
+      provider === 'facebook' ? new firebase.auth.FacebookAuthProvider() : new firebase.auth.GoogleAuthProvider();
+    return this.fireAuth
+      .signInWithPopup(providerInstance)
+      .then(() => {
+        if (redirect) return this.redirect(redirect);
+        return true;
+      })
+      .catch((error: { code: any; message: string; email: string; credential: { providerId: string } }) => {
+        if (error?.code === 'auth/account-exists-with-different-credential') {
+          const otherProvider = error?.credential?.providerId === 'facebook.com' ? 'Google' : 'Facebook';
+          this.dialog.info({
+            data: {
+              title: $localize`Account already exists`,
+              message: $localize`Account with email ${error.email} already exists. Try logging in with ${otherProvider} instead.`,
+            },
+          });
+        } else {
+          captureException(error as unknown as Error);
+        }
+      });
   }
 
   signOut(redirect?: string | string[]) {
@@ -103,8 +125,18 @@ export class AuthService {
         // The signed-in user info.
         const user = result.user;
       })
-      .catch(function (error: { code: any; message: string; email: string; credential: string }) {
-        captureException((error as unknown) as Error);
+      .catch((error: { code: any; message: string; email: string; credential: { providerId: string } }) => {
+        if (error?.code === 'auth/account-exists-with-different-credential') {
+          const otherProvider = error?.credential?.providerId === 'facebook.com' ? 'Google' : 'Facebook';
+          this.dialog.info({
+            data: {
+              title: $localize`Account already exists`,
+              message: $localize`Account with email ${error.email} already exists. Try logging in with ${otherProvider} instead.`,
+            },
+          });
+        } else {
+          captureException(error as unknown as Error);
+        }
       });
   }
 }

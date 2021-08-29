@@ -16,7 +16,7 @@ export class AuthComponent {
 
   constructor(private store: Store<State>) {}
 
-  logIn() {
-    this.store.dispatch(login(this.redirect));
+  logIn(provider: 'google' | 'facebook') {
+    this.store.dispatch(login({ redirect: this.redirect, provider }));
   }
 }

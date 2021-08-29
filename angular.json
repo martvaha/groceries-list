@@ -134,7 +134,9 @@
               "browserTarget": "groceries-list:build:et"
             },
             "development": {
-              "browserTarget": "groceries-list:build:development"
+              "browserTarget": "groceries-list:build:development",
+              "sourceMap": true,
+              "optimization": false
             }
           },
           "defaultConfiguration": "development"

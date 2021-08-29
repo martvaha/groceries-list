@@ -1,5 +1,5 @@
-import { environment } from '../../../environments/environment';
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
+import { environment } from '../../../environments/environment';
 import { User } from '../../auth/auth.service';
 
 @Component({

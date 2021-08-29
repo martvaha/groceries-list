@@ -8,7 +8,7 @@ import { combineLatest, EMPTY, of } from 'rxjs';
 import { selectActiveListId } from '../list/list.reducer';
 import { deleteItemSuccess, getItemsFail, getItemsNothingChanged, upsertItemListSuccess } from './item.actions';
 import { Item } from '../../shared/models';
-import { selectItemMaxModified } from './item.reducer';
+import { selectItemLastUpdated } from './item.reducer';
 import { captureException } from '../../shared/sentry';
 
 @Injectable({
@@ -18,13 +18,13 @@ export class ItemService {
   constructor(private db: AngularFirestore, private store: Store<State>) {}
 
   getItems() {
-    return combineLatest([this.store.select(selectActiveListId), this.store.select(selectItemMaxModified)]).pipe(
+    return combineLatest([this.store.select(selectActiveListId), this.store.select(selectItemLastUpdated)]).pipe(
       tap((c) => console.log('items', c)),
       exhaustMap(([listId, maxModified]) => {
         if (!listId) return EMPTY;
         return this.db
           .collection<Item>(`lists/${listId}/items`, (ref) =>
-            maxModified.getTime() > 0 ? ref.where('modified', '>', maxModified) : ref
+            maxModified?.getTime() ?? 0 > 0 ? ref.where('modified', '>', maxModified) : ref
           )
           .stateChanges()
           .pipe(

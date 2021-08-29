@@ -5,14 +5,14 @@ import { List } from '../../shared/models';
 
 export const loadLists = createAction('[List] load');
 export const loadListsNothingChanged = createAction('[List] load nothing changed');
-export const removeListSuccess = createAction('[List] remove success', props<{ list: List }>());
+export const removeListSuccess = createAction('[List] remove success', props<{ lists: List[] }>());
 export const removeListFail = createAction('[List] remove fail', props<{ error: Error; list: List }>());
 export const removeListFailReload = createAction('[List] remove fail reload', props<{ error: Error; list: List }>());
 export const removeListFailIgnore = createAction('[List] remove fail ignore', props<{ error: Error; list: List }>());
 
 export const addList = createAction('[List] add', props<{ list: List }>());
 export const addListSuccess = createAction('[List] add success');
-export const upsertListSuccess = createAction('[List] upsert success', props<{ list: List }>());
+export const upsertListSuccess = createAction('[List] upsert success', props<{ lists: List[] }>());
 
 export const removeList = createAction('[List] remove', props<{ list: List }>());
 export const reload = createAction('[List] reload');

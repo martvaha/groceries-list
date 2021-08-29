@@ -3,9 +3,13 @@ import { createReducer, Action, on, createFeatureSelector, createSelector } from
 import { Group } from '../../shared/models';
 import { upsertGroupSuccess } from './group.actions';
 import { selectActiveListId } from '../list/list.reducer';
-import { maxModified, sortByName } from '../utils';
+import { lastUpdated, sortByName } from '../utils';
 
-export type GroupState = EntityState<Group>;
+export interface GroupState extends EntityState<Group> {
+  loading: boolean;
+  lastUpdated: Date | null;
+}
+
 export interface GroupListState {
   [id: string]: GroupState;
 }
@@ -14,7 +18,11 @@ export const adapter: EntityAdapter<Group> = createEntityAdapter<Group>({
   sortComparer: sortByName,
 });
 
-export const initialGroupState: GroupState = adapter.getInitialState();
+export const initialGroupState: GroupState = adapter.getInitialState({
+  loading: false,
+  lastUpdated: null,
+});
+
 export const initialState: GroupListState = {};
 
 function get(state: GroupListState, listId: string | null) {
@@ -25,25 +33,11 @@ const listReducer = createReducer(
   initialState,
   // on(upsertGroupSuccess, ListActions.addList, ListActions.removeList, state => ({ ...state, loading: true })),
   on(upsertGroupSuccess, (state, { group, listId }) => {
-    return { ...state, [listId]: adapter.upsertOne(group, get(state, listId)) };
+    return {
+      ...state,
+      [listId]: { ...adapter.upsertOne(group, get(state, listId)), lastUpdated: new Date(Date.now()) },
+    };
   })
-  // on(ListActions.addList, (state, { list }) => {
-  //   return adapter.upsertOne(list, state);
-  // }),
-  // on(ListActions.addList, (state, { list }) => {
-  //   return adapter.upsertOne(list, state);
-  // }),
-  // on(ListActions.setActive, (state, { id }) => ({ ...state, activeId: id })),
-  // on(ListActions.removeListSuccess, (state, { list }) => {
-  //   return adapter.removeOne(list.id, { ...state, loading: false });
-  // }),
-  // on(ListActions.loadListsNothingChanged, ListActions.addListSuccess, ListActions.removeListFail, state => ({
-  //   ...state,
-  //   loading: false
-  // })),
-  // on(ListActions.clearLists, state => {
-  //   return adapter.removeAll({ ...state, loading: false, activeId: null });
-  // })
 );
 
 export function reducer(state: GroupListState | undefined, action: Action) {
@@ -60,22 +54,8 @@ export const selectActiveListGroupState = createSelector(selectGroupState, selec
 );
 
 export const selectAllGroups = createSelector(selectActiveListGroupState, (data) => {
-  console.log('slectAllGroups', data);
+  console.log('selectAllGroups', data);
   return selectAll(data);
 });
 
-// export const selectActiveListId = createSelector(
-//   selectListState,
-//   (state: GroupState) => state.activeId
-// );
-
-// export const selectAllLists = createSelector(
-//   selectListState,
-//   selectAll
-// );
-// export const selectListStateLoading = createSelector(
-//   selectListState,
-//   selectLoading
-// );
-
-export const selectGroupMaxModified = createSelector(selectAllGroups, maxModified);
+export const selectGroupLastUpdated = createSelector(selectActiveListGroupState, lastUpdated);

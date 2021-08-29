@@ -3,7 +3,7 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { switchMap, mergeMap, map, concatMap, withLatestFrom, tap, distinctUntilChanged } from 'rxjs/operators';
 import { ListService } from './list.service';
 import * as ListActions from './list.actions';
-import { of } from 'rxjs';
+import { concat, of } from 'rxjs';
 import { List } from '../../shared/models';
 import { DialogService } from '../../shared/dialog-service/dialog.service';
 import { ROUTER_NAVIGATED, RouterNavigationAction } from '@ngrx/router-store';
@@ -60,7 +60,7 @@ export class ListEffects {
     this.actions$.pipe(
       ofType(ListActions.loadLists),
       switchMap(() => {
-        return this.listService.getLists();
+        return this.listService.getLists().pipe(mergeMap((action) => action));
       })
     )
   );
@@ -78,7 +78,7 @@ export class ListEffects {
       concatMap(({ list }) =>
         this.listService
           .removeList(list)
-          .then(() => ListActions.removeListSuccess({ list }))
+          .then(() => ListActions.removeListSuccess({ lists: [list] }))
           .catch((error) => ListActions.removeListFail({ error, list }))
       )
     )

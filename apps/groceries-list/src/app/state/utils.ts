@@ -1,13 +1,24 @@
-interface ModifiableObject {
-  modified: Date | undefined;
+import { ITEMS_FULL_RELOAD_TIMEOUT } from '../shared/const';
+
+interface UpdateableObject {
+  lastUpdated?: Date | null;
 }
 
-export function maxModified(items: ModifiableObject[] | undefined | null) {
-  if (!items || !items?.length) return new Date(0);
-  return (items || []).reduce((prev, cur) => {
-    const curModified = cur?.modified || new Date(0);
-    return curModified.getTime() > prev.getTime() ? curModified : prev;
-  }, new Date(0));
+/**
+ * lastUpdated is used to determine items collection query modified filter.
+ * Only items modified after lastUpdated will be queried.
+ */
+export function lastUpdated({ lastUpdated }: UpdateableObject) {
+  const neverUpdated = new Date(0);
+
+  if (!lastUpdated) return neverUpdated;
+
+  // If last updated date is older than 30 days return neverModifiedDate to reload all items
+  if (lastUpdated.getTime() <= new Date(Date.now()).getTime() - ITEMS_FULL_RELOAD_TIMEOUT) {
+    return neverUpdated;
+  }
+
+  return lastUpdated;
 }
 
 export interface ObjectWithName {

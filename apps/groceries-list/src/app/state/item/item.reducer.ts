@@ -14,10 +14,11 @@ import {
 } from './item.actions';
 import { selectActiveListId } from '../list/list.reducer';
 import { State } from '../app.reducer';
-import { maxModified, sortByName } from '../utils';
+import { lastUpdated, sortByName } from '../utils';
 
 export interface ItemState extends EntityState<Item> {
   loading: boolean;
+  lastUpdated: Date | null;
 }
 export interface ItemListState {
   [id: string]: ItemState;
@@ -29,6 +30,7 @@ export const adapter: EntityAdapter<Item> = createEntityAdapter<Item>({
 
 export const initialItemState: ItemState = adapter.getInitialState({
   loading: false,
+  lastUpdated: null,
 });
 export const initialState: ItemListState = {};
 
@@ -38,13 +40,13 @@ function get(state: ItemListState, listId: string | null) {
 
 const listReducer = createReducer(
   initialState,
-  // on(upsertGroupSuccess, ListActions.addList, ListActions.removeList, state => ({ ...state, loading: true })),
   on(upsertItemSuccess, deleteItemFail, (state, { item, listId }) => {
     return {
       ...state,
       [listId]: {
         ...adapter.upsertOne(item, get(state, listId)),
         loading: false,
+        lastUpdated: new Date(),
       },
     };
   }),
@@ -54,6 +56,7 @@ const listReducer = createReducer(
       [listId]: {
         ...adapter.upsertMany(items, get(state, listId)),
         loading: false,
+        lastUpdated: new Date(),
       },
     };
   }),
@@ -67,33 +70,16 @@ const listReducer = createReducer(
     return { ...state, [listId]: { ...get(state, listId), loading: true } };
   }),
   on(updateItemSuccess, updateItemFail, (state, { listId }) => {
-    return { ...state, [listId]: { ...get(state, listId), loading: false } };
+    return { ...state, [listId]: { ...get(state, listId), loading: false, lastUpdated: new Date() } };
   }),
   on(deleteItem, (state, { item, listId }) => {
     const updatedList = adapter.removeOne(item.id, get(state, listId));
     return { ...state, [listId]: { ...updatedList, loading: true } };
   }),
   on(deleteItemSuccess, (state, { item, listId }) => {
-    const updatedList = { ...get(state, listId), loading: false };
+    const updatedList = { ...get(state, listId), loading: false, lastUpdated: new Date() };
     return { ...state, [listId]: updatedList };
   })
-  // on(ListActions.addList, (state, { list }) => {
-  //   return adapter.upsertOne(list, state);
-  // }),
-  // on(ListActions.addList, (state, { list }) => {
-  //   return adapter.upsertOne(list, state);
-  // }),
-  // on(ListActions.setActive, (state, { id }) => ({ ...state, activeId: id })),
-  // on(ListActions.removeListSuccess, (state, { list }) => {
-  //   return adapter.removeOne(list.id, { ...state, loading: false });
-  // }),
-  // on(ListActions.loadListsNothingChanged, ListActions.addListSuccess, ListActions.removeListFail, state => ({
-  //   ...state,
-  //   loading: false
-  // })),
-  // on(ListActions.clearLists, state => {
-  //   return adapter.removeAll({ ...state, loading: false, activeId: null });
-  // })
 );
 
 export function reducer(state: ItemListState | undefined, action: Action) {
@@ -130,16 +116,4 @@ export const selectActiveItemsByGroup = createSelector(selectAllActiveItems, (it
 });
 
 export const selectItemLoading = createSelector(selectActiveListItemState, (state: ItemState) => state.loading);
-
-// export const selectActiveListId = createSelector(
-//   selectListState,
-//   (state: GroupState) => state.activeId
-// );
-
-// export const selectAllLists = createSelector(
-//   selectListState,
-//   selectAll
-// );
-// export const selectListStateLoading = createSelector(selectListState, selectLoading);
-
-export const selectItemMaxModified = createSelector(selectAllItems, maxModified);
+export const selectItemLastUpdated = createSelector(selectActiveListItemState, lastUpdated);

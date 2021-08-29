@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentChangeAction } from '@angular/fire/firestore';
-import { Store } from '@ngrx/store';
+import { Action, Store } from '@ngrx/store';
 import firebase from 'firebase/app';
-import { combineLatest, EMPTY } from 'rxjs';
+import { combineLatest, EMPTY, of } from 'rxjs';
 import { debounceTime, distinctUntilChanged, map, mergeMap, startWith, switchMap, tap } from 'rxjs/operators';
 import { AuthService } from '../../auth/auth.service';
 import { List } from '../../shared/models';
+import { captureException } from '../../shared/sentry';
 import { takeValue } from '../../shared/utils';
 import { State } from '../app.reducer';
 import { selectUser } from '../user/user.reducer';
 import { loadListsNothingChanged, removeListSuccess, upsertListSuccess } from './list.actions';
-import { selectListMaxModified } from './list.reducer';
+import { selectListLastUpdated } from './list.reducer';
 
 @Injectable({
   providedIn: 'root',
@@ -23,36 +24,44 @@ export class ListService {
       this.store.select(selectUser),
       // Only update maxModified every 1 seconds to give time for local store update
       this.store
-        .select(selectListMaxModified)
+        .select(selectListLastUpdated)
         .pipe(
           debounceTime(1000),
-          startWith(takeValue(this.store.select(selectListMaxModified))),
+          startWith(takeValue(this.store.select(selectListLastUpdated))),
           distinctUntilChanged()
         ),
     ]).pipe(
-      tap((c) => console.log('get lists input change', c)),
-      switchMap(([user, maxModified]) => {
+      switchMap(([user, lastUpdated]) => {
         if (!user) return EMPTY;
+        console.log('load list query', { uid: user.uid, lastUpdated });
         return this.db
           .collection<List>('lists', (ref) =>
-            ref.where('acl', 'array-contains', user.uid).where('modified', '>', maxModified)
+            ref.where('acl', 'array-contains', user.uid).where('modified', '>', lastUpdated)
           )
           .stateChanges()
           .pipe(
-            tap((c) => console.log('get lists unfiltered', c)),
-            mergeMap((changes) => (changes.length ? changes : [null])),
+            tap((c) => console.log('load list changes', c)),
+            // mergeMap((changes) => (changes.length ? changes : [null])),
             // filter(change => !(change && change.payload.doc.metadata.fromCache)),
-            tap((c) => console.log(c)),
-            map((change) => {
-              if (!change) return loadListsNothingChanged();
-              const list = this.extractList(change);
-              switch (change.type) {
-                case 'added':
-                case 'modified':
-                  return upsertListSuccess({ list });
-                case 'removed':
-                  return removeListSuccess({ list });
+            // tap((c) => console.log(c)),
+            map((changes) => {
+              if (!changes?.length) return [loadListsNothingChanged()];
+              const upserted = [];
+              const removed = [];
+              for (const change of changes) {
+                const list = this.extractList(change);
+                if (change.type === 'added' || change.type === 'modified') {
+                  upserted.push(list);
+                } else if (change.type === 'removed') {
+                  removed.push(list);
+                } else {
+                  captureException(new Error('Unknown list change type'));
+                }
               }
+              const actions: Action[] = [];
+              if (upserted.length) actions.push(upsertListSuccess({ lists: upserted }));
+              if (removed.length) actions.push(removeListSuccess({ lists: removed }));
+              return actions;
             })
           );
       })
