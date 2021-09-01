@@ -1,0 +1,23 @@
+.favorite {
+  color: red;
+  opacity: 0.3;
+
+  .favorite-icon__active {
+    display: initial;
+  }
+
+  .favorite-icon__disable {
+    display: none;
+  }
+
+  &:hover {
+    opacity: 0.7;
+    .favorite-icon__active {
+      display: none;
+    }
+
+    .favorite-icon__disable {
+      display: initial;
+    }
+  }
+}

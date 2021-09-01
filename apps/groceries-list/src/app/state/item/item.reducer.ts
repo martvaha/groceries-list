@@ -69,15 +69,16 @@ const listReducer = createReducer(
   on(updateItem, (state, { listId }) => {
     return { ...state, [listId]: { ...get(state, listId), loading: true } };
   }),
+
   on(updateItemSuccess, updateItemFail, (state, { listId }) => {
-    return { ...state, [listId]: { ...get(state, listId), loading: false, lastUpdated: new Date() } };
+    return { ...state, [listId]: { ...get(state, listId), loading: false } };
   }),
   on(deleteItem, (state, { item, listId }) => {
     const updatedList = adapter.removeOne(item.id, get(state, listId));
     return { ...state, [listId]: { ...updatedList, loading: true } };
   }),
   on(deleteItemSuccess, (state, { item, listId }) => {
-    const updatedList = { ...get(state, listId), loading: false, lastUpdated: new Date() };
+    const updatedList = { ...get(state, listId), loading: false };
     return { ...state, [listId]: updatedList };
   })
 );

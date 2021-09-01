@@ -14,12 +14,14 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { DragDropModule } from '@angular/cdk/drag-drop';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 const modules = [
   MatButtonModule,
   MatCheckboxModule,
   MatProgressSpinnerModule,
   MatToolbarModule,
+  MatTooltipModule,
   MatSidenavModule,
   MatIconModule,
   MatListModule,

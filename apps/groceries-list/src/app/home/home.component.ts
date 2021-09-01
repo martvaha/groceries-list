@@ -12,6 +12,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { loadLists } from '../state/list/list.actions';
 import { MatSidenav } from '@angular/material/sidenav';
 import { TitleService } from '../shared/title.service';
+import { selectAllLists } from '../state/list/list.reducer';
+import { List } from '../shared/models';
 
 @Component({
   selector: 'app-home',
@@ -24,6 +26,7 @@ export class HomeComponent implements OnInit, OnDestroy {
   public opened = true;
   public user$!: Observable<User | null | undefined>;
   public title$!: Observable<string>;
+  public lists$!: Observable<List[]>;
   private mediaListener = () => this.toggleSidenav(this.shouldSidenavBeOpen());
 
   constructor(
@@ -49,6 +52,8 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.user$ = this.store.select(selectUser);
     this.store.dispatch(loadLists());
     this.title$ = this.titleService.title$;
+
+    this.lists$ = this.store.select(selectAllLists);
   }
 
   private shouldSidenavBeOpen() {

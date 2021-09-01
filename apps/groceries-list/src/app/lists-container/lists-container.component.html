@@ -3,6 +3,7 @@
     <mat-icon matListIcon>{{ list.acl && list.acl.length > 1 ? 'folder_shared' : 'folder' }}</mat-icon>
     <a matLine [routerLink]="['/home/list', list.id]">{{ list.name }}</a>
 
+    <app-favorite-button [favorite]="false"></app-favorite-button>
     <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="List actions">
       <mat-icon>more_vert</mat-icon>
     </button>

@@ -10,6 +10,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 
 import { AuthComponent } from '../auth/auth.component';
 import { LongPressDirective } from './long-press.directive';
+import { FavoriteButtonComponent } from './favorite-button/favorite-button.component';
 
 const modules = [CommonModule, MaterialModule, ReactiveFormsModule];
 const components = [
@@ -18,6 +19,7 @@ const components = [
   ConfirmDialogComponent,
   InfoDialogComponent,
   InputDialogComponent,
+  FavoriteButtonComponent,
 ];
 
 @NgModule({

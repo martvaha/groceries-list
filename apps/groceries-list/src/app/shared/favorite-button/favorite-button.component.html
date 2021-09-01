@@ -1,0 +1,10 @@
+<button mat-icon-button class="favorite" [matTooltip]="favorite ? 'Remove favorite' : 'Add favorite'">
+  <ng-container *ngIf="favorite; else notFavoriteTemplate">
+    <mat-icon class="favorite-icon__active">favorite</mat-icon>
+    <mat-icon class="favorite-icon__disable">favorite_border</mat-icon>
+  </ng-container>
+  <ng-template #notFavoriteTemplate>
+    <mat-icon class="favorite-icon__disable">favorite</mat-icon>
+    <mat-icon class="favorite-icon__active">favorite_border</mat-icon>
+  </ng-template>
+</button>

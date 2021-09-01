@@ -5,6 +5,16 @@
   <a mat-list-item routerLink="/home/login" *ngIf="!user" (click)="closeSidenavOnMobile()" i18n="Sidenav log in link"
     >Log in</a
   >
+  <ng-container *ngIf="pinnedLists?.length">
+    <mat-divider> </mat-divider>
+    <div mat-subheader i18n>Favorites</div>
+
+    <mat-list-item *ngFor="let list of pinnedLists">
+      <a #link matLine [routerLink]="['/home/list', list.id]">{{ list.name }}</a>
+      <app-favorite-button [favorite]="true"></app-favorite-button>
+    </mat-list-item>
+  </ng-container>
+
   <div class="info-container">
     <span class="legal mat-hint"
       ><a i18n [routerLink]="['/home', 'legal', 'privacy']" target="_blank">Privacy Policy</a></span

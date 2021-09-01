@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, Output } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { User } from '../../auth/auth.service';
+import { List } from '../../shared/models';
 
 @Component({
   selector: 'app-sidenav-menu',
@@ -10,10 +11,13 @@ import { User } from '../../auth/auth.service';
 })
 export class SidenavMenuComponent {
   @Input() user?: User | null;
+  @Input() pinnedLists?: List[] | null;
   @Output() closeSidenav = new EventEmitter();
   version = environment.version;
 
   closeSidenavOnMobile() {
     this.closeSidenav.emit();
   }
+
+
 }

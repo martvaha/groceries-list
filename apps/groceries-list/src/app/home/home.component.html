@@ -17,6 +17,7 @@
   >
     <app-sidenav-menu
       [user]="user$ | async"
+      [pinnedLists]="lists$ | async"
       (closeSidenav)="nav?.mode === 'over' && toggleSidenav()"
     ></app-sidenav-menu>
   </mat-drawer>
