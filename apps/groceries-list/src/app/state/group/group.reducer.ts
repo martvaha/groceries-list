@@ -1,9 +1,9 @@
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { createReducer, Action, on, createFeatureSelector, createSelector } from '@ngrx/store';
+import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
+import { Action, createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
 import { Group } from '../../shared/models';
-import { upsertGroupSuccess } from './group.actions';
 import { selectActiveListId } from '../list/list.reducer';
 import { lastUpdated, sortByName } from '../utils';
+import { upsertGroupsSuccess } from './group.actions';
 
 export interface GroupState extends EntityState<Group> {
   loading: boolean;
@@ -31,11 +31,10 @@ function get(state: GroupListState, listId: string | null) {
 
 const listReducer = createReducer(
   initialState,
-  // on(upsertGroupSuccess, ListActions.addList, ListActions.removeList, state => ({ ...state, loading: true })),
-  on(upsertGroupSuccess, (state, { group, listId }) => {
+  on(upsertGroupsSuccess, (state, { groups, listId }) => {
     return {
       ...state,
-      [listId]: { ...adapter.upsertOne(group, get(state, listId)), lastUpdated: new Date(Date.now()) },
+      [listId]: { ...adapter.upsertMany(groups, get(state, listId)), lastUpdated: new Date(Date.now()) },
     };
   })
 );

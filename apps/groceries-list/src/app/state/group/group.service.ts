@@ -1,18 +1,15 @@
 import { Injectable } from '@angular/core';
-import {
-  AngularFirestore,
-  DocumentChangeAction,
-} from '@angular/fire/firestore';
-import { map, tap, mergeMap, exhaustMap } from 'rxjs/operators';
-import { Group } from '../../shared/models';
+import { AngularFirestore, DocumentChange } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
-import { State } from '../app.reducer';
-import { combineLatest, EMPTY } from 'rxjs';
-import { selectActiveListId } from '../list/list.reducer';
-import { getGroupsNothingChanged, upsertGroupSuccess } from './group.actions';
-import { selectGroupLastUpdated } from './group.reducer';
-import slugify from 'slugify';
 import * as firebase from 'firebase/app';
+import { combineLatest, EMPTY } from 'rxjs';
+import { exhaustMap, map, mergeMap } from 'rxjs/operators';
+import slugify from 'slugify';
+import { Group } from '../../shared/models';
+import { State } from '../app.reducer';
+import { selectActiveListId } from '../list/list.reducer';
+import { getGroupsNothingChanged, upsertGroupsSuccess } from './group.actions';
+import { selectGroupLastUpdated } from './group.reducer';
 
 @Injectable({
   providedIn: 'root',
@@ -21,54 +18,56 @@ export class GroupService2 {
   constructor(private db: AngularFirestore, private store: Store<State>) {}
 
   getGroups() {
-    return combineLatest([
-      this.store.select(selectActiveListId),
-      this.store.select(selectGroupLastUpdated),
-    ]).pipe(
+    return combineLatest([this.store.select(selectActiveListId), this.store.select(selectGroupLastUpdated)]).pipe(
       // tap((c) => console.log('groups', c)),
       exhaustMap(([listId, maxModified]) => {
         if (!listId) return EMPTY;
         return this.db
           .collection<Group>(`lists/${listId}/groups`, (ref) =>
-            maxModified.getTime() > 0
-              ? ref.where('modified', '>', maxModified)
-              : ref
+            maxModified.getTime() > 0 ? ref.where('modified', '>', maxModified) : ref
           )
           .stateChanges()
           .pipe(
-            // tap((c) => console.log('group stateChanges', c)),
-            mergeMap((changes) => (changes.length ? changes : [null])),
-            // filter(change => !(change && change.payload.doc.metadata.fromCache)),
-            // tap((c) => console.log(c)),
+            mergeMap((changes) => {
+              if (!changes?.length) return [null];
+
+              const groupedChanges: Record<string, DocumentChange<Group>[]> = {
+                added: [],
+                modified: [],
+                removed: [],
+              };
+
+              for (const change of changes) {
+                groupedChanges[change.type].push(change.payload);
+              }
+
+              // Returns list of changes with grouped changes
+              // [{type: 'added', payload: [{}, {},...]}, {type: 'removed', ...}]
+              return Object.keys(groupedChanges)
+                .filter((key) => groupedChanges[key]?.length)
+                .map((key) => ({ type: key, payload: groupedChanges[key] }));
+            }),
             map((change) => {
               if (!change) return getGroupsNothingChanged();
-              const group = this.extractGroup(change);
+              if (!Array.isArray(change.payload)) change.payload = [change.payload];
+
+              console.log('####', change.type, this.extractGroup(change.payload[0]));
               switch (change.type) {
                 case 'added':
                 case 'modified':
-                  return upsertGroupSuccess({ group, listId });
+                  return upsertGroupsSuccess({ listId, groups: change.payload.map((data) => this.extractGroup(data)) });
+
                 case 'removed':
                   console.error('group remove not implemented!');
-                  return upsertGroupSuccess({ group, listId });
+                  return getGroupsNothingChanged();
+                default:
+                  return getGroupsNothingChanged();
               }
             })
           );
       })
     );
   }
-
-  // addList(list: List) {
-  //   const user = takeValue(this.auth.user);
-  //   if (!user) {
-  //     throw new Error('Unexpected error while creating new list');
-  //   }
-  //   const finalList = {
-  //     ...list,
-  //     acl: { [user.uid]: true },
-  //     modified: firebase.default.firestore.FieldValue.serverTimestamp()
-  //   };
-  //   return this.db.collection('lists').add(finalList);
-  // }
 
   addGroup(group: Group, listId: string) {
     const { id, ...others } = group;
@@ -83,11 +82,10 @@ export class GroupService2 {
   //   return this.db.doc('lists/' + list.id).delete();
   // }
 
-  private extractGroup(change: DocumentChangeAction<Group>) {
-    const data = change.payload.doc.data();
-    const id = change.payload.doc.id;
-    const modified =
-      (data.modified && (data.modified as any).toDate()) || new Date(0);
+  private extractGroup(payload: DocumentChange<Group>) {
+    const data = payload.doc.data();
+    const id = payload.doc.id;
+    const modified = (data.modified && (data.modified as any).toDate()) || new Date(0);
     const group = { ...data, id, modified } as Group;
     return group;
   }

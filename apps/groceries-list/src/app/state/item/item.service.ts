@@ -41,7 +41,7 @@ export class ItemService {
                 groupedChanges[change.type].push(change.payload);
               }
 
-              // Returns list of changes with grouped changesš
+              // Returns list of changes with grouped changes
               // [{type: 'added', payload: [{}, {},...]}, {type: 'removed', ...}]
               return Object.keys(groupedChanges)
                 .filter((key) => groupedChanges[key]?.length)
