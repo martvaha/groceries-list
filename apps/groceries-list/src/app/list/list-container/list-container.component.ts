@@ -173,7 +173,9 @@ export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit 
   addItem(item: Item) {
     console.log('add object', item);
     this.listId.pipe(take(1)).subscribe((listId) => {
-      this.listService.markItemTodo(listId, item);
+      // mark description as undefined
+      // TODO: make separate button to edit description before adding item as todo
+      this.listService.markItemTodo(listId, { ...item, description: null });
     });
     this.inputControl.reset('', { emitEvent: true });
   }

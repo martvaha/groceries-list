@@ -18,7 +18,7 @@ export interface Item {
   active: boolean;
   groupId: string;
   displayName?: string;
-  description?: string;
+  description: string | null;
   modified: Date;
 }
 
