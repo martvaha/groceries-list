@@ -12,8 +12,9 @@
     ></button>
     <mat-menu #menu="matMenu">
       <ng-template matMenuContent>
-        <button mat-menu-item (click)="logout()" i18n>Sign out</button>
         <a mat-menu-item [routerLink]="['/home', 'profile']" i18n>Profile</a>
+        <button mat-menu-item (click)="checkForUpdate()" i18n>Check for update</button>
+        <button mat-menu-item (click)="logout()" i18n>Sign out</button>
       </ng-template>
     </mat-menu>
   </ng-template>

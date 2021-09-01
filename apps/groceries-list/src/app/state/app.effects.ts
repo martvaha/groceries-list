@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { Actions, ofType, createEffect } from '@ngrx/effects';
-import { logout } from './user/user.actions';
-import { exhaustMap, switchMap, take, tap } from 'rxjs/operators';
-import { clearState, initAppEffects } from './app.actions';
-import { Action, Store } from '@ngrx/store';
-import { selectActiveListId } from './list/list.reducer';
-import { Router } from '@angular/router';
-import { State } from './app.reducer';
-import { SwUpdate } from '@angular/service-worker';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { SwUpdate } from '@angular/service-worker';
+import { Actions, createEffect, ofType } from '@ngrx/effects';
+import { Action, Store } from '@ngrx/store';
+import { exhaustMap, map, switchMap, take, tap } from 'rxjs/operators';
+import { checkForUpdate, clearState, initAppEffects } from './app.actions';
+import { State } from './app.reducer';
+import { selectActiveListId } from './list/list.reducer';
+import { logout } from './user/user.actions';
 
 @Injectable()
 export class AppEffects {
@@ -25,6 +25,28 @@ export class AppEffects {
       ofType(logout),
       exhaustMap(() => [clearState()])
     )
+  );
+
+  checkForUpdates$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(checkForUpdate),
+        map(() => {
+          if (!this.updates.isEnabled) {
+            const snackRef = this.snack.open(
+              $localize`Browser does not support background updates. Just reload the page to get the latest version.`,
+              $localize`Reload`,
+              { duration: 5000 }
+            );
+            snackRef.afterDismissed().subscribe(({ dismissedByAction }) => {
+              if (dismissedByAction) document.location.reload();
+            });
+          } else {
+            this.updates.checkForUpdate();
+          }
+        })
+      ),
+    { dispatch: false }
   );
 
   restoreActiveList$ = createEffect(

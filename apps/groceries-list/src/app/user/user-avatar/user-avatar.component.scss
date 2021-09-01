@@ -11,6 +11,7 @@ $avatar-size: 50px;
 }
 
 .user-avatar__image {
+  cursor: pointer;
   flex-shrink: 0;
   width: $avatar-size;
   height: $avatar-size;

@@ -11,7 +11,7 @@
   <mat-drawer
     #nav
     class="home__sidenav"
-    [opened]="opened"
+    [(opened)]="opened"
     [mode]="mobileQuery?.matches ? 'over' : 'side'"
     role="navigation"
   >

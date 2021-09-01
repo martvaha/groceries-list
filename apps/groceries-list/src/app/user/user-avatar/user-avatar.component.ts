@@ -1,13 +1,14 @@
-import { Component, ChangeDetectionStrategy, Input, EventEmitter, Output, OnInit } from '@angular/core';
-import { User } from '../../auth/auth.service';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Store } from '@ngrx/store';
-import { State } from '../../state/app.reducer';
-import { logout, login } from '../../state/user/user.actions';
-import { ThemeService } from '../../shared/theme.service';
-import { AppTheme } from '../../state/config/config.reducer';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
-import { FormControl } from '@angular/forms';
+import { User } from '../../auth/auth.service';
+import { ThemeService } from '../../shared/theme.service';
+import { checkForUpdate } from '../../state/app.actions';
+import { State } from '../../state/app.reducer';
+import { AppTheme } from '../../state/config/config.reducer';
+import { login, logout } from '../../state/user/user.actions';
 
 @Component({
   selector: 'app-user-avatar',
@@ -40,5 +41,9 @@ export class UserAvatarComponent implements OnInit {
 
   logout() {
     this.store.dispatch(logout());
+  }
+
+  checkForUpdate() {
+    this.store.dispatch(checkForUpdate());
   }
 }

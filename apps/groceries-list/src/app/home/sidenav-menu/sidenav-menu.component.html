@@ -10,7 +10,7 @@
     <div mat-subheader i18n>Favorites</div>
 
     <mat-list-item *ngFor="let list of pinnedLists">
-      <a #link matLine [routerLink]="['/home/list', list.id]">{{ list.name }}</a>
+      <a #link matLine [routerLink]="['/home/list', list.id]" (click)="closeSidenavOnMobile()">{{ list.name }}</a>
       <app-favorite-button [favorite]="true"></app-favorite-button>
     </mat-list-item>
   </ng-container>
