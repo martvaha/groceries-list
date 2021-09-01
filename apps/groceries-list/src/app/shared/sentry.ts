@@ -11,9 +11,7 @@ const SENTRY_MAX_SIZE = 90000;
 
 let sentryInit = false;
 
-export function sentryReducer(
-  reducer: ActionReducer<State, any>
-): ActionReducer<State, any> {
+export function sentryReducer(reducer: ActionReducer<State, any>): ActionReducer<State, any> {
   return function (state, action): State {
     let nextState: State | null = null;
     try {
@@ -41,15 +39,11 @@ if (environment.sentry.dsn) {
     beforeSend: (d) => {
       if (!d?.breadcrumbs) return d;
       const data = cloneDeep(d);
-      const ngrxBreadcrumbs = (data.breadcrumbs as Sentry.Breadcrumb[]).filter(
-        (crumb) => crumb.category === 'ngrx'
-      );
+      const ngrxBreadcrumbs = (data.breadcrumbs as Sentry.Breadcrumb[]).filter((crumb) => crumb.category === 'ngrx');
       console.log(ngrxBreadcrumbs);
       for (let i = ngrxBreadcrumbs.length - 1; i > 0; i--) {
-        const prevState: unknown | undefined =
-          ngrxBreadcrumbs[i - 1]?.data?.nextState;
-        const nextState: unknown | undefined =
-          ngrxBreadcrumbs[i]?.data?.nextState;
+        const prevState: unknown | undefined = ngrxBreadcrumbs[i - 1]?.data?.nextState;
+        const nextState: unknown | undefined = ngrxBreadcrumbs[i]?.data?.nextState;
         let stateDiff;
         if (prevState === undefined && nextState !== undefined) {
           stateDiff = 'initialized';
@@ -75,9 +69,7 @@ if (environment.sentry.dsn) {
         }
       }
       for (let i = 0; i < ngrxBreadcrumbs.length; i++) {
-        if (
-          ngrxBreadcrumbs[i]?.message?.substr(0, 18) === '@ngrx/router-store'
-        ) {
+        if (ngrxBreadcrumbs[i]?.message?.substr(0, 18) === '@ngrx/router-store') {
           delete ngrxBreadcrumbs[i].data;
         }
       }
@@ -87,9 +79,7 @@ if (environment.sentry.dsn) {
         if (oversize <= 0) {
           break;
         }
-        const dataSize = lengthInUtf8Bytes(
-          JSON.stringify(ngrxBreadcrumbs[i].data)
-        );
+        const dataSize = lengthInUtf8Bytes(JSON.stringify(ngrxBreadcrumbs[i].data));
         delete ngrxBreadcrumbs[i].data;
         oversize = oversize - dataSize;
       }

@@ -1,18 +1,18 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { switchMap, mergeMap, map, concatMap, withLatestFrom, tap, distinctUntilChanged } from 'rxjs/operators';
-import { ListService } from './list.service';
-import * as ListActions from './list.actions';
-import { concat, of } from 'rxjs';
-import { List } from '../../shared/models';
-import { DialogService } from '../../shared/dialog-service/dialog.service';
-import { ROUTER_NAVIGATED, RouterNavigationAction } from '@ngrx/router-store';
-import { selectRouteParams } from '../router/reducer';
-import { Params } from '@angular/router';
+import { ROUTER_NAVIGATED } from '@ngrx/router-store';
 import { Store } from '@ngrx/store';
-import { State } from '../app.reducer';
-import { selectActiveList } from './list.reducer';
+import { concatMap, distinctUntilChanged, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { DialogService } from '../../shared/dialog-service/dialog.service';
+import { List } from '../../shared/models';
 import { TitleService } from '../../shared/title.service';
+import { State } from '../app.reducer';
+import { getGroups } from '../group/group.actions';
+import { getItems } from '../item/item.actions';
+import { selectRouteParams } from '../router/reducer';
+import * as ListActions from './list.actions';
+import { selectActiveList } from './list.reducer';
+import { ListService } from './list.service';
 
 @Injectable()
 export class ListEffects {
@@ -54,6 +54,13 @@ export class ListEffects {
         switchMap(({ groupsOrder, id }) => this.listService.updateList({ groupsOrder, id } as List))
       ),
     { dispatch: false }
+  );
+
+  setActive$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(ListActions.setActive),
+      switchMap(() => [getGroups(), getItems()])
+    )
   );
 
   load$ = createEffect(() =>

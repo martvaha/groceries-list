@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { switchMap, mergeMap, map, concatMap, tap, withLatestFrom } from 'rxjs/operators';
-import * as GroupActions from './group.actions';
-import { ROUTER_NAVIGATED } from '@ngrx/router-store';
 import { Store } from '@ngrx/store';
+import { concatMap, switchMap } from 'rxjs/operators';
 import { State } from '../app.reducer';
-import { selectRouteParams } from '../router/reducer';
+import { setActive } from '../list/list.actions';
+import * as GroupActions from './group.actions';
 import { GroupService2 } from './group.service';
 
 @Injectable()

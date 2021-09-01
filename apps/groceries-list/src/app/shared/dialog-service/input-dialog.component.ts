@@ -12,7 +12,7 @@ export interface InputDialogConfig extends MatDialogConfig {
 @Component({
   template: `
     <h1 *ngIf="title" mat-dialog-title>{{ title }}</h1>
-    <mat-dialog-content>
+    <mat-dialog-content (keydown.enter)="dialogRef.close(input.value)">
       <mat-form-field floatLabel="auto">
         <input matInput #input type="text" required [placeholder]="placeholder" />
       </mat-form-field>

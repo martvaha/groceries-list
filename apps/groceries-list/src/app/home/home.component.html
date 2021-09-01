@@ -4,7 +4,7 @@
   </button>
   <h1 class="home__heading">{{ title$ | async }}</h1>
   <span class="space"></span>
-  <app-user-avatar [user]="user$ | async" (reload)="reload()"></app-user-avatar>
+  <app-user-avatar [user]="user$ | async"></app-user-avatar>
 </mat-toolbar>
 
 <mat-drawer-container class="home__sidenav-container">

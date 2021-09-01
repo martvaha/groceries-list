@@ -17,17 +17,16 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { combineLatest, from, Observable, of, Subject } from 'rxjs';
 import { debounceTime, delay, map, startWith, switchMap, take, withLatestFrom } from 'rxjs/operators';
+import { DialogService } from '../../shared/dialog-service/dialog.service';
 import { GroupWithItems, Item } from '../../shared/models';
+import { SearchService } from '../../shared/search.service';
 import { highlight, takeValue } from '../../shared/utils';
 import { selectOrderedGroupedItems, State } from '../../state/app.reducer';
-import { getGroups } from '../../state/group/group.actions';
-import { getItems, setGroupId } from '../../state/item/item.actions';
+import { setGroupId } from '../../state/item/item.actions';
 import { selectAllInactiveItems, selectAllItems } from '../../state/item/item.reducer';
 import { upsertGroupsOrder } from '../../state/list/list.actions';
 import { selectActiveListId, selectListStateLoading } from '../../state/list/list.reducer';
 import { ListService } from '../list.service';
-import { SearchService } from '../../shared/search.service';
-import { DialogService } from '../../shared/dialog-service/dialog.service';
 
 export interface FuseMatch {
   indices: [number, number][];
@@ -90,8 +89,6 @@ export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit 
 
   ngOnInit() {
     this.loading$ = this.store.select(selectListStateLoading);
-    this.store.dispatch(getGroups());
-    this.store.dispatch(getItems());
     this.items$ = this.store.select(selectAllItems);
     this.inactiveItems$ = this.store.select(selectAllInactiveItems);
     this.groupsWithItems$ = this.store.select(selectOrderedGroupedItems);
@@ -124,7 +121,7 @@ export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit 
             map((matches) =>
               matches?.map((match) => ({
                 ...match.item,
-                displayName: highlight(match.item.name, (match?.matches?.[0]?.indices as unknown) as number[][]),
+                displayName: highlight(match.item.name, match?.matches?.[0]?.indices as unknown as number[][]),
               }))
             )
           );
@@ -228,7 +225,7 @@ export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit 
     if (event.previousIndex === event.currentIndex) return;
     const listId = takeValue(this.store.select(selectActiveListId));
     if (!listId) return;
-    const item = (event.item.data as unknown) as Item;
+    const item = event.item.data as unknown as Item;
     const groupId = event.container.id;
     this.store.dispatch(setGroupId({ item, groupId, listId }));
   }

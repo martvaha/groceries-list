@@ -65,10 +65,6 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.changeDetectorRef.detectChanges();
   }
 
-  reload() {
-    this.store.dispatch(clearState());
-  }
-
   ngOnDestroy() {
     if (typeof this.mobileQuery.removeEventListener === 'function') {
       this.mobileQuery.removeEventListener('change', this.mediaListener);

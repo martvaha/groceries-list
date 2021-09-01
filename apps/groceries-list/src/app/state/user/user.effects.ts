@@ -31,11 +31,13 @@ export class UserEffects implements OnInitEffects {
     { dispatch: false }
   );
 
-  logout$ = createEffect(() =>
-    this.actions$.pipe(
-      ofType(logout),
-      switchMap(() => this.auth.signOut(['/home/login']).then(() => clearState()))
-    )
+  logout$ = createEffect(
+    () =>
+      this.actions$.pipe(
+        ofType(logout),
+        switchMap(() => this.auth.signOut(['/home/login']))
+      ),
+    { dispatch: false }
   );
 
   /**
