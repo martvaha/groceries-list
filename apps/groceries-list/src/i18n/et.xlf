@@ -10,15 +10,6 @@
           <context context-type="linenumber">80</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="2790683085302894410" datatype="html">
-        <source>Groceries List (dev)</source>
-        <target>Groceries List (dev)</target>
-        <note priority="1" from="meaning">app name</note>
-        <context-group purpose="location">
-          <context context-type="sourcefile">apps/groceries-list/src/environments/environment.ts</context>
-          <context context-type="linenumber">9</context>
-        </context-group>
-      </trans-unit>
       <trans-unit id="7588456452293364762" datatype="html">
         <source>Add list</source>
         <target>Lisa nimekiri</target>
@@ -48,7 +39,7 @@
         <target>Värskenda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/state/list/list.effects.ts</context>
-          <context context-type="linenumber">92</context>
+          <context context-type="linenumber">99</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2159130950882492111" datatype="html">
@@ -73,7 +64,7 @@
         <note priority="1" from="meaning">confirm</note>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/list/list-container/list-container.component.ts</context>
-          <context context-type="linenumber">208</context>
+          <context context-type="linenumber">207</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/shared/dialog-service/info-dialog.component.ts</context>
@@ -89,7 +80,7 @@
         <target>Inaktiivseid kirjeid pole!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/list/list-container/list-container.component.ts</context>
-          <context context-type="linenumber">208</context>
+          <context context-type="linenumber">207</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6207077211313887742" datatype="html">
@@ -101,7 +92,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/list/list-container/list-container.component.ts</context>
-          <context context-type="linenumber">213</context>
+          <context context-type="linenumber">212</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8695898183365099870" datatype="html">
@@ -109,7 +100,7 @@
         <target>Oled sa kindel, et soovid kõik kirjed aktiivseks märkida?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/list/list-container/list-container.component.ts</context>
-          <context context-type="linenumber">213</context>
+          <context context-type="linenumber">212</context>
         </context-group>
       </trans-unit>
       <trans-unit id="6377139538537882652" datatype="html">
@@ -169,7 +160,7 @@
         <target>Uus versioon on saadaval</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/state/app.effects.ts</context>
-          <context context-type="linenumber">53</context>
+          <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4021752662928002901" datatype="html">
@@ -177,7 +168,7 @@
         <target>Uuenda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/state/app.effects.ts</context>
-          <context context-type="linenumber">53</context>
+          <context context-type="linenumber">75</context>
         </context-group>
       </trans-unit>
       <trans-unit id="101464185703047305" datatype="html">
@@ -185,7 +176,7 @@
         <target><x id="PH" equiv-text="item.name"/> märgitud!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/list/list-container/list-container.component.ts</context>
-          <context context-type="linenumber">188</context>
+          <context context-type="linenumber">187</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7828808805120058354" datatype="html">
@@ -193,7 +184,7 @@
         <target>Võta tagasi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/list/list-container/list-container.component.ts</context>
-          <context context-type="linenumber">188</context>
+          <context context-type="linenumber">187</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4248521319677765272" datatype="html">
@@ -210,14 +201,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/auth/auth.component.html</context>
           <context context-type="linenumber">5</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="5086556452035705780" datatype="html">
-        <source>Log in with Facebook and create your first shared list today!</source>
-        <target>Logi sisse Facebook&apos;iga ja loo oma esimene jagatud nimekiri juba täna!</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">apps/groceries-list/src/app/auth/auth.component.html</context>
-          <context context-type="linenumber">6</context>
         </context-group>
       </trans-unit>
       <trans-unit id="2821179408673282599" datatype="html">
@@ -240,14 +223,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/user/user-avatar/user-avatar.component.html</context>
           <context context-type="linenumber">3</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="2724055831234181057" datatype="html">
-        <source>Version</source>
-        <target>Versioon</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">apps/groceries-list/src/app/home/sidenav-menu/sidenav-menu.component.html</context>
-          <context context-type="linenumber">8</context>
         </context-group>
       </trans-unit>
       <trans-unit id="8953033926734869941" datatype="html">
@@ -355,7 +330,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/lists-container/lists-container.component.html</context>
-          <context context-type="linenumber">18</context>
+          <context context-type="linenumber">19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7310731650939351693" datatype="html">
@@ -371,7 +346,7 @@
         <target>Muuda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/lists-container/lists-container.component.html</context>
-          <context context-type="linenumber">13</context>
+          <context context-type="linenumber">14</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7022070615528435141" datatype="html">
@@ -379,7 +354,7 @@
         <target>Kustuta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/lists-container/lists-container.component.html</context>
-          <context context-type="linenumber">22</context>
+          <context context-type="linenumber">23</context>
         </context-group>
       </trans-unit>
       <trans-unit id="7103588127254721505" datatype="html">
@@ -451,7 +426,7 @@
         <target>Logi välja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/user/user-avatar/user-avatar.component.html</context>
-          <context context-type="linenumber">15</context>
+          <context context-type="linenumber">17</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4915431133669985304" datatype="html">
@@ -459,15 +434,88 @@
         <target>Profiil</target>
         <context-group purpose="location">
           <context context-type="sourcefile">apps/groceries-list/src/app/user/user-avatar/user-avatar.component.html</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="13430864174871695" datatype="html">
+        <source>Log in with Facebook or Google and create your first shared list today!</source>
+        <target>Logi sisse Facebooki või Google kaudu ja loo oma esimene jagatud nimekiri!</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/auth/auth.component.html</context>
+          <context context-type="linenumber">6</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8128711590976174878" datatype="html">
+        <source>Account already exists</source>
+        <target>Konto juba eksisteerib</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/auth/auth.service.ts</context>
+          <context context-type="linenumber">51</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/auth/auth.service.ts</context>
+          <context context-type="linenumber">133</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="938029953718271849" datatype="html">
+        <source>Account with email <x id="PH" equiv-text="error.email"/> already exists. Try logging in with <x id="PH_1" equiv-text="otherProvider"/> instead.</source>
+        <target>Konto emailiga <x id="PH" equiv-text="error.email"/> juba eksisteerib. Proovi uuesti <x id="PH_1" equiv-text="otherProvider"/> kontoga.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/auth/auth.service.ts</context>
+          <context context-type="linenumber">52</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/auth/auth.service.ts</context>
+          <context context-type="linenumber">134</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="4085930761302974863" datatype="html">
+        <source>Favorites</source>
+        <target>Lemmikud</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/home/sidenav-menu/sidenav-menu.component.html</context>
+          <context context-type="linenumber">10</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="8439955599488894226" datatype="html">
+        <source>Privacy Policy</source>
+        <target>Privaatsus</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/home/sidenav-menu/sidenav-menu.component.html</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="3512268312911674868" datatype="html">
+        <source>Browser does not support background updates. Just reload the page to get the latest version.</source>
+        <target>Veebilehitseja ei toeta taustauuendusi. Lihtsalt värskenda lehte, et saada uusim versioon.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/state/app.effects.ts</context>
+          <context context-type="linenumber">37</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="7967484035994732534" datatype="html">
+        <source>Reload</source>
+        <target>Värskenda</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/state/app.effects.ts</context>
+          <context context-type="linenumber">38</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="1846284367092058185" datatype="html">
+        <source>Check for update</source>
+        <target>Kontrolli uuendusi</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">apps/groceries-list/src/app/user/user-avatar/user-avatar.component.html</context>
           <context context-type="linenumber">16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="3894950702316166331" datatype="html">
-        <source>Loading...</source>
-        <target>Laadin...</target>
+      <trans-unit id="3593094895224210173" datatype="html">
+        <source>Groceries List</source>
+        <target>Groceries List</target>
+        <note priority="1" from="meaning">app name</note>
         <context-group purpose="location">
-          <context context-type="sourcefile">apps/groceries-list/src/app/app-shell/app-shell.component.html</context>
-          <context context-type="linenumber">7</context>
+          <context context-type="sourcefile">apps/groceries-list/src/environments/environment.prod.ts</context>
+          <context context-type="linenumber">5</context>
         </context-group>
       </trans-unit>
     </body>
