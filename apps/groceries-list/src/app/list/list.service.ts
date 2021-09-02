@@ -28,6 +28,6 @@ export class ListService {
   private markItem(listId: string, item: Item, active: boolean) {
     const path = 'lists/' + listId + '/items/' + item.id;
     const modified = firebase.firestore.FieldValue.serverTimestamp();
-    return this.db.doc(path).update({ active, modified, description: item.description });
+    return this.db.doc(path).update({ active, modified, description: item.description && null });
   }
 }
