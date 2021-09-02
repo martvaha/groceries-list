@@ -1,9 +1,11 @@
-import { Injectable } from '@angular/core';
+import { isPlatformServer } from '@angular/common';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
+import { EMPTY } from 'rxjs';
 import { exhaustMap, map, switchMap, take, tap } from 'rxjs/operators';
 import { checkForUpdate, clearState, initAppEffects } from './app.actions';
 import { State } from './app.reducer';
@@ -17,7 +19,8 @@ export class AppEffects {
     private store: Store<State>,
     private router: Router,
     private updates: SwUpdate,
-    private snack: MatSnackBar
+    private snack: MatSnackBar,
+    @Inject(PLATFORM_ID) private platformId: any
   ) {}
 
   clear$ = createEffect(() =>
@@ -49,18 +52,29 @@ export class AppEffects {
     { dispatch: false }
   );
 
+  // Restores activeList if active ID is present in localstore and path is root ("/")
+  // This is used to restore previously active list after PWA is closed and reopened.
   restoreActiveList$ = createEffect(
     () =>
-      this.actions$.pipe(
-        ofType(initAppEffects),
-        switchMap(() =>
-          this.store.select(selectActiveListId).pipe(
-            take(1),
-            tap((activeListId) => console.log(activeListId)),
-            tap((activeListId) => activeListId && this.router.navigate(['home', 'list', activeListId]))
-          )
-        )
-      ),
+      isPlatformServer(this.platformId)
+        ? EMPTY
+        : this.actions$.pipe(
+            ofType(initAppEffects),
+            switchMap(() =>
+              this.store.select(selectActiveListId).pipe(
+                take(1),
+                tap((activeListId) =>
+                  console.log('restoreActiveList$', { activeListId, pathname: document.location.pathname })
+                ),
+                tap(
+                  (activeListId) =>
+                    activeListId &&
+                    document.location.pathname === '/' &&
+                    this.router.navigate(['home', 'list', activeListId])
+                )
+              )
+            )
+          ),
     { dispatch: false }
   );
 
@@ -84,5 +98,9 @@ export class AppEffects {
 
   ngrxOnInitEffects(): Action {
     return initAppEffects();
+  }
+
+  private shouldRestoreActiveList(pathname: string) {
+    return pathname === '/';
   }
 }

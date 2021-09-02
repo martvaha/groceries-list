@@ -3,7 +3,6 @@ import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Store } from '@ngrx/store';
 import { concatMap, switchMap } from 'rxjs/operators';
 import { State } from '../app.reducer';
-import { setActive } from '../list/list.actions';
 import * as GroupActions from './group.actions';
 import { GroupService2 } from './group.service';
 

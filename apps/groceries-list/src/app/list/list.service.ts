@@ -18,6 +18,7 @@ export class ListService {
   }
 
   markItemDone(listId: string, item: Item) {
+    console.log('5787', listId, item);
     return this.markItem(listId, item, false);
   }
 
@@ -27,7 +28,12 @@ export class ListService {
 
   private markItem(listId: string, item: Item, active: boolean) {
     const path = 'lists/' + listId + '/items/' + item.id;
-    const modified = firebase.firestore.FieldValue.serverTimestamp();
-    return this.db.doc(path).update({ active, modified, description: item.description && null });
+    const updateDto: Partial<Item> = {
+      active,
+      modified: firebase.firestore.FieldValue.serverTimestamp() as any,
+      description: item.description && null,
+    };
+
+    return this.db.doc(path).update(updateDto);
   }
 }
