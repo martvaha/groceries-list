@@ -31,9 +31,9 @@ export class ListService {
     const updateDto: Partial<Item> = {
       active,
       modified: firebase.firestore.FieldValue.serverTimestamp() as any,
-      description: item.description && null,
+      description: item?.description ?? null,
     };
-
+    console.log(updateDto);
     return this.db.doc(path).update(updateDto);
   }
 }

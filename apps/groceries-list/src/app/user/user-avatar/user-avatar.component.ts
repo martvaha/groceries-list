@@ -36,7 +36,7 @@ export class UserAvatarComponent implements OnInit {
   }
 
   login() {
-    this.store.dispatch(login({ provider: 'facebook', redirect: ['home'] }));
+    this.store.dispatch(login({ provider: 'google', redirect: ['home'] }));
   }
 
   logout() {
