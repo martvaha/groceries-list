@@ -1,14 +1,13 @@
 import { NgModule } from '@angular/core';
-import { ServerModule } from '@angular/platform-server';
-
-import { AppModule } from './app.module';
-import { Routes, RouterModule } from '@angular/router';
-import { AppShellComponent } from './app-shell/app-shell.component';
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { AppComponent } from './app.component';
+import { MatIconModule } from '@angular/material/icon';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { ServerModule } from '@angular/platform-server';
+import { RouterModule, Routes } from '@angular/router';
+import { AppShellComponent } from './app-shell/app-shell.component';
 import { AppShellModule } from './app-shell/app-shell.module';
+import { AppComponent } from './app.component';
+import { AppModule } from './app.module';
 
 const routes: Routes = [{ path: 'shell', component: AppShellComponent }];
 

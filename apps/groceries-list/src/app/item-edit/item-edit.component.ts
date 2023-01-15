@@ -1,18 +1,18 @@
+import { Location } from '@angular/common';
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { map, filter } from 'rxjs/operators';
-import { Observable, combineLatest } from 'rxjs';
-import { Item, Group } from '../shared/models';
-import { DialogService } from '../shared/dialog-service/dialog.service';
-import { takeValue, minLoadingTime } from '../shared/utils';
 import { Store } from '@ngrx/store';
+import { combineLatest, Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+import { DialogService } from '../shared/dialog-service/dialog.service';
+import { Group, Item } from '../shared/models';
+import { minLoadingTime, takeValue } from '../shared/utils';
 import { State } from '../state/app.reducer';
-import { selectAllGroups } from '../state/group/group.reducer';
-import { selectActiveListId } from '../state/list/list.reducer';
 import { addGroup, getGroups } from '../state/group/group.actions';
+import { selectAllGroups } from '../state/group/group.reducer';
 import { getItems, updateItem } from '../state/item/item.actions';
 import { selectItemEntities, selectItemLoading } from '../state/item/item.reducer';
-import { Location } from '@angular/common';
+import { selectActiveListId } from '../state/list/list.reducer';
 
 @Component({
   selector: 'app-item-edit',

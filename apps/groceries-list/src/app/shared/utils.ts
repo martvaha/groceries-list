@@ -1,5 +1,5 @@
-import { Observable, of, combineLatest, timer, OperatorFunction } from 'rxjs';
-import { take, switchMap, map } from 'rxjs/operators';
+import { combineLatest, Observable, of, OperatorFunction, timer } from 'rxjs';
+import { map, switchMap, take } from 'rxjs/operators';
 import { MIN_LOADING_DURATION } from './const';
 
 export const highlight = function (text: string, indices: number[][]) {

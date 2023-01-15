@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { DialogService } from '../shared/dialog-service/dialog.service';
 import { List } from '../shared/models';
-import { Store } from '@ngrx/store';
-import { State, selectLoading } from '../state/app.reducer';
+import { selectLoading, State } from '../state/app.reducer';
 import { addList, removeList } from '../state/list/list.actions';
 import { selectAllLists } from '../state/list/list.reducer';
 

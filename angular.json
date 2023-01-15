@@ -1,6 +1,123 @@
 {
   "version": 1,
   "projects": {
+    "api-interfaces": {
+      "root": "libs/api-interfaces",
+      "sourceRoot": "libs/api-interfaces/src",
+      "projectType": "library",
+      "schematics": {},
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api-interfaces/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "libs/api-interfaces/jest.config.js",
+            "passWithNoTests": true,
+            "tsConfig": "libs/api-interfaces/tsconfig.spec.json"
+          },
+          "outputs": ["coverage/libs/api-interfaces"]
+        }
+      }
+    },
+    "functions": {
+      "root": "apps/functions",
+      "sourceRoot": "apps/functions/src",
+      "projectType": "application",
+      "prefix": "api",
+      "schematics": {},
+      "architect": {
+        "build-node": {
+          "builder": "@nrwl/node:build",
+          "options": {
+            "outputPath": "dist/apps/functions",
+            "main": "apps/functions/src/main.ts",
+            "tsConfig": "apps/functions/tsconfig.app.json",
+            "assets": [
+              "apps/functions/src/assets",
+              {
+                "glob": ".runtimeconfig.json",
+                "input": ".",
+                "output": "."
+              }
+            ]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/functions/src/environments/environment.ts",
+                  "with": "apps/functions/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          },
+          "outputs": ["{options.outputPath}"]
+        },
+        "build": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              {
+                "command": "nx run functions:build-node"
+              },
+              {
+                "command": "ts-node tools/scripts/build-firebase-functions-package-json.ts"
+              }
+            ],
+            "parallel": false
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "firebase emulators:start --only functions --inspect-functions"
+          }
+        },
+        "deploy-functions": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "command": "firebase deploy --only functions"
+          }
+        },
+        "deploy": {
+          "builder": "@nrwl/workspace:run-commands",
+          "options": {
+            "commands": [
+              {
+                "command": "nx run functions:build"
+              },
+              {
+                "command": "nx run functions:deploy-functions"
+              }
+            ],
+            "parallel": false
+          }
+        },
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["apps/functions/**/*.ts"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "options": {
+            "jestConfig": "apps/functions/jest.config.js",
+            "passWithNoTests": true,
+            "tsConfig": "apps/functions/tsconfig.spec.json"
+          },
+          "outputs": ["coverage/apps/functions"]
+        }
+      }
+    },
     "groceries-list": {
       "projectType": "application",
       "schematics": {
@@ -134,9 +251,7 @@
               "browserTarget": "groceries-list:build:et"
             },
             "development": {
-              "browserTarget": "groceries-list:build:development",
-              "sourceMap": true,
-              "optimization": false
+              "browserTarget": "groceries-list:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -253,147 +368,6 @@
           }
         }
       }
-    },
-    "api-interfaces": {
-      "root": "libs/api-interfaces",
-      "sourceRoot": "libs/api-interfaces/src",
-      "projectType": "library",
-      "schematics": {},
-      "architect": {
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["libs/api-interfaces/**/*.ts"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "libs/api-interfaces/jest.config.js",
-            "passWithNoTests": true,
-            "tsConfig": "libs/api-interfaces/tsconfig.spec.json"
-          },
-          "outputs": ["coverage/libs/api-interfaces"]
-        }
-      }
-    },
-    "functions": {
-      "root": "apps/functions",
-      "sourceRoot": "apps/functions/src",
-      "projectType": "application",
-      "prefix": "api",
-      "schematics": {},
-      "architect": {
-        "build-node": {
-          "builder": "@nrwl/node:build",
-          "options": {
-            "outputPath": "dist/apps/functions",
-            "main": "apps/functions/src/main.ts",
-            "tsConfig": "apps/functions/tsconfig.app.json",
-            "assets": [
-              "apps/functions/src/assets",
-              {
-                "glob": ".runtimeconfig.json",
-                "input": ".",
-                "output": "."
-              }
-            ]
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "extractLicenses": true,
-              "inspect": false,
-              "fileReplacements": [
-                {
-                  "replace": "apps/functions/src/environments/environment.ts",
-                  "with": "apps/functions/src/environments/environment.prod.ts"
-                }
-              ]
-            }
-          },
-          "outputs": ["{options.outputPath}"]
-        },
-        "build": {
-          "builder": "@nrwl/workspace:run-commands",
-          "options": {
-            "commands": [
-              {
-                "command": "nx run functions:build-node"
-              },
-              {
-                "command": "ts-node tools/scripts/build-firebase-functions-package-json.ts"
-              }
-            ],
-            "parallel": false
-          }
-        },
-        "serve": {
-          "builder": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "firebase emulators:start --only functions --inspect-functions"
-          }
-        },
-        "deploy-functions": {
-          "builder": "@nrwl/workspace:run-commands",
-          "options": {
-            "command": "firebase deploy --only functions"
-          }
-        },
-        "deploy": {
-          "builder": "@nrwl/workspace:run-commands",
-          "options": {
-            "commands": [
-              {
-                "command": "nx run functions:build"
-              },
-              {
-                "command": "nx run functions:deploy-functions"
-              }
-            ],
-            "parallel": false
-          }
-        },
-        "lint": {
-          "builder": "@nrwl/linter:eslint",
-          "options": {
-            "lintFilePatterns": ["apps/functions/**/*.ts"]
-          }
-        },
-        "test": {
-          "builder": "@nrwl/jest:jest",
-          "options": {
-            "jestConfig": "apps/functions/jest.config.js",
-            "passWithNoTests": true,
-            "tsConfig": "apps/functions/tsconfig.spec.json"
-          },
-          "outputs": ["coverage/apps/functions"]
-        }
-      }
     }
-  },
-  "cli": {
-    "defaultCollection": "@nrwl/angular"
-  },
-  "schematics": {
-    "@nrwl/angular": {
-      "application": {
-        "linter": "eslint"
-      },
-      "library": {
-        "linter": "eslint"
-      },
-      "storybook-configuration": {
-        "linter": "eslint"
-      }
-    },
-    "@nrwl/angular:application": {
-      "unitTestRunner": "jest",
-      "e2eTestRunner": "cypress"
-    },
-    "@nrwl/angular:library": {
-      "unitTestRunner": "jest"
-    }
-  },
-  "defaultProject": "groceries-list"
+  }
 }

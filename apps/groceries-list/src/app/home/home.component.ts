@@ -1,19 +1,18 @@
-import { Component, OnInit, OnDestroy, ChangeDetectorRef, ViewChild } from '@angular/core';
 import { MediaMatcher } from '@angular/cdk/layout';
-import { User } from '../auth/auth.service';
-import { Observable } from 'rxjs';
-import { LoadingService } from '../shared/loading-service';
-import { Store } from '@ngrx/store';
-import { State } from '../state/app.reducer';
-import { selectUser } from '../state/user/user.reducer';
-import { clearState } from '../state/app.actions';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
-import { loadLists } from '../state/list/list.actions';
 import { MatSidenav } from '@angular/material/sidenav';
-import { TitleService } from '../shared/title.service';
-import { selectAllLists } from '../state/list/list.reducer';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { User } from '../auth/auth.service';
+import { LoadingService } from '../shared/loading-service';
 import { List } from '../shared/models';
+import { TitleService } from '../shared/title.service';
+import { State } from '../state/app.reducer';
+import { loadLists } from '../state/list/list.actions';
+import { selectAllLists } from '../state/list/list.reducer';
+import { selectUser } from '../state/user/user.reducer';
 
 @Component({
   selector: 'app-home',

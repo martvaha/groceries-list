@@ -1,6 +1,5 @@
+import { Update } from '@ngrx/entity';
 import { createAction, props } from '@ngrx/store';
-import { Update, Predicate, EntityMap } from '@ngrx/entity';
-
 import { List } from '../../shared/models';
 
 export const loadLists = createAction('[List] load');

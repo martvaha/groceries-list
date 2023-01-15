@@ -1,12 +1,12 @@
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { BehaviorSubject, of } from 'rxjs';
-import { AngularFireAuth } from '@angular/fire/auth';
-import firebase from 'firebase/app';
-import { Router } from '@angular/router';
-import { captureException } from '../shared/sentry';
-import { distinctUntilChanged } from 'rxjs/operators';
 import { isPlatformServer } from '@angular/common';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { Router } from '@angular/router';
+import firebase from 'firebase/app';
+import { BehaviorSubject } from 'rxjs';
+import { distinctUntilChanged } from 'rxjs/operators';
 import { DialogService } from '../shared/dialog-service/dialog.service';
+import { captureException } from '../shared/sentry';
 
 export interface User {
   uid: string;

@@ -1,8 +1,8 @@
+import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { map } from 'rxjs/operators';
 import { setLanguage } from './config.actions';
-import { DOCUMENT } from '@angular/common';
 
 const LANGUAGES = new Set(['en', 'et']);
 @Injectable()

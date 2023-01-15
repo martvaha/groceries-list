@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { RouterModule, Routes } from '@angular/router';
 import { DeleteDataComponent } from './delete-data/delete-data.component';
 import { PrivacyPolicyComponent } from './privacy-policy/privacy-policy.component';
 

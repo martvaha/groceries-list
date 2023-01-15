@@ -1,19 +1,19 @@
-import { ActionReducerMap, createSelector, MetaReducer, ActionReducer, Action } from '@ngrx/store';
-import { environment } from '../../environments/environment';
-import { ListState, reducer as listReducer, selectListStateLoading, selectGroupsOrder } from './list/list.reducer';
-import { localStorageSync } from 'ngrx-store-localstorage';
-import { clearState } from './app.actions';
-import { reducer as userReducer, UserState } from './user/user.reducer';
-import { RouterState } from './router/reducer';
+import { Dictionary } from '@ngrx/entity';
 import { routerReducer } from '@ngrx/router-store';
+import { Action, ActionReducer, ActionReducerMap, createSelector, MetaReducer } from '@ngrx/store';
+import { localStorageSync } from 'ngrx-store-localstorage';
+import { environment } from '../../environments/environment';
+import { OTHERS_GROUP_ID } from '../shared/const';
+import { GroupWithItems, Item } from '../shared/models';
+import { sentryReducer } from '../shared/sentry';
+import { clearState } from './app.actions';
+import { ConfigState, reducer as configReducer } from './config/config.reducer';
 import { GroupListState, reducer as groupReducer, selectAllGroups } from './group/group.reducer';
 import { ItemListState, reducer as itemReducer, selectActiveItemsByGroup } from './item/item.reducer';
-import { Dictionary } from '@ngrx/entity';
-import { OTHERS_GROUP_ID } from '../shared/const';
-import { sentryReducer } from '../shared/sentry';
+import { ListState, reducer as listReducer, selectGroupsOrder, selectListStateLoading } from './list/list.reducer';
+import { RouterState } from './router/reducer';
+import { reducer as userReducer, UserState } from './user/user.reducer';
 import { Storage } from './utils';
-import { GroupWithItems, Item } from '../shared/models';
-import { ConfigState, reducer as configReducer } from './config/config.reducer';
 
 export interface State {
   config: ConfigState;

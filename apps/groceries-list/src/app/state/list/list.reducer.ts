@@ -1,9 +1,8 @@
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { createReducer, Action, on, createFeatureSelector, createSelector } from '@ngrx/store';
+import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
+import { Action, createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
 import { List } from '../../shared/models';
-import * as ListActions from './list.actions';
 import { lastUpdated, sortByName } from '../utils';
-import { State } from '../app.reducer';
+import * as ListActions from './list.actions';
 
 export interface ListState extends EntityState<List> {
   activeId: string | null;
@@ -55,7 +54,7 @@ export const selectLoading = (state: ListState) => state.loading;
 
 const { selectEntities, selectAll } = adapter.getSelectors();
 
-export const selectListState = createFeatureSelector<State, ListState>('list');
+export const selectListState = createFeatureSelector<ListState>('list');
 
 export const selectActiveListId = createSelector(selectListState, (state: ListState) => state.activeId);
 

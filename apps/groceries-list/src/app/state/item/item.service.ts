@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, DocumentChange } from '@angular/fire/firestore';
-import { map, tap, mergeMap, exhaustMap, catchError } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import { State } from '../app.reducer';
 import * as firebase from 'firebase/app';
 import { combineLatest, EMPTY, of } from 'rxjs';
+import { catchError, exhaustMap, map, mergeMap, tap } from 'rxjs/operators';
+import { Item } from '../../shared/models';
+import { captureException } from '../../shared/sentry';
+import { State } from '../app.reducer';
 import { selectActiveListId } from '../list/list.reducer';
 import { deleteItemSuccess, getItemsFail, getItemsNothingChanged, upsertItemListSuccess } from './item.actions';
-import { Item } from '../../shared/models';
 import { selectItemLastUpdated } from './item.reducer';
-import { captureException } from '../../shared/sentry';
 
 @Injectable({
   providedIn: 'root',

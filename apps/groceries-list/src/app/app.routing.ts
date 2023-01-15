@@ -1,11 +1,10 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-
-import { HomeComponent } from './home/home.component';
-import { AuthComponent } from './auth/auth.component';
-import { ListsContainerComponent } from './lists-container/lists-container.component';
 import { canActivate, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
+import { RouterModule, Routes } from '@angular/router';
 import { AppShellComponent } from './app-shell/app-shell.component';
+import { AuthComponent } from './auth/auth.component';
+import { HomeComponent } from './home/home.component';
+import { ListsContainerComponent } from './lists-container/lists-container.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },

@@ -1,20 +1,19 @@
-import { EntityState, EntityAdapter, createEntityAdapter } from '@ngrx/entity';
-import { createReducer, Action, on, createFeatureSelector, createSelector } from '@ngrx/store';
+import { createEntityAdapter, EntityAdapter, EntityState } from '@ngrx/entity';
+import { Action, createFeatureSelector, createReducer, createSelector, on } from '@ngrx/store';
 import { Item } from '../../shared/models';
+import { selectActiveListId } from '../list/list.reducer';
+import { lastUpdated, sortByName } from '../utils';
 import {
-  upsertItemSuccess,
+  deleteItem,
+  deleteItemFail,
+  deleteItemSuccess,
   setGroupId,
   updateItem,
-  deleteItem,
-  deleteItemSuccess,
-  deleteItemFail,
-  upsertItemListSuccess,
-  updateItemSuccess,
   updateItemFail,
+  updateItemSuccess,
+  upsertItemListSuccess,
+  upsertItemSuccess,
 } from './item.actions';
-import { selectActiveListId } from '../list/list.reducer';
-import { State } from '../app.reducer';
-import { lastUpdated, sortByName } from '../utils';
 
 export interface ItemState extends EntityState<Item> {
   loading: boolean;
@@ -90,7 +89,7 @@ export function reducer(state: ItemListState | undefined, action: Action) {
 // export const selectLoading = (state: GroupState) => state.loading;
 const { selectEntities, selectAll } = adapter.getSelectors();
 
-export const selectItemState = createFeatureSelector<State, ItemListState>('item');
+export const selectItemState = createFeatureSelector<ItemListState>('item');
 
 export const selectActiveListItemState = createSelector(selectItemState, selectActiveListId, (state, listId) =>
   get(state, listId)

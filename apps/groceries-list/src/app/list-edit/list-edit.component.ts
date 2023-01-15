@@ -1,18 +1,17 @@
-import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
-import { map } from 'rxjs/operators';
-import { ActivatedRoute, ParamMap } from '@angular/router';
-import { Observable } from 'rxjs';
-import { AngularFirestore } from '@angular/fire/firestore';
-import { DialogService } from '../shared/dialog-service/dialog.service';
-import { State } from '../state/app.reducer';
-import { Store } from '@ngrx/store';
-import { getGroups } from '../state/group/group.actions';
-import { getItems, deleteItem, updateItem } from '../state/item/item.actions';
-import { selectAllItems } from '../state/item/item.reducer';
-import { Item, Group } from '../shared/models';
-import { selectAllGroups } from '../state/group/group.reducer';
+import { Component, OnInit } from '@angular/core';
 import { MatSelectChange } from '@angular/material/select';
+import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { DialogService } from '../shared/dialog-service/dialog.service';
+import { Group, Item } from '../shared/models';
 import { takeValue } from '../shared/utils';
+import { State } from '../state/app.reducer';
+import { getGroups } from '../state/group/group.actions';
+import { selectAllGroups } from '../state/group/group.reducer';
+import { deleteItem, getItems, updateItem } from '../state/item/item.actions';
+import { selectAllItems } from '../state/item/item.reducer';
 
 @Component({
   selector: 'app-list-edit',

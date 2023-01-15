@@ -18,6 +18,4 @@ export class SidenavMenuComponent {
   closeSidenavOnMobile() {
     this.closeSidenav.emit();
   }
-
-
 }

@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, Inject, Input } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { Component, Inject } from '@angular/core';
+import { MatDialogConfig, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 export interface InfoDialogConfig extends MatDialogConfig {
   data: {

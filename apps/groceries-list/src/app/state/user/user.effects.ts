@@ -3,7 +3,6 @@ import { Actions, createEffect, ofType, OnInitEffects } from '@ngrx/effects';
 import { Action } from '@ngrx/store';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { AuthService } from '../../auth/auth.service';
-import { clearState } from '../app.actions';
 import { getUser, getUserSuccess, login, logout } from './user.actions';
 
 @Injectable()

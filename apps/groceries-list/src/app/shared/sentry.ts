@@ -1,10 +1,9 @@
-import * as Sentry from '@sentry/browser';
 import { ErrorHandler } from '@angular/core';
-
-import { environment } from '../../environments/environment';
-import { cloneDeep } from 'lodash-es';
-import { DiffPatcher } from 'jsondiffpatch';
 import { ActionReducer } from '@ngrx/store';
+import * as Sentry from '@sentry/browser';
+import { DiffPatcher } from 'jsondiffpatch';
+import { cloneDeep } from 'lodash-es';
+import { environment } from '../../environments/environment';
 import { State } from '../state/app.reducer';
 
 const SENTRY_MAX_SIZE = 90000;
