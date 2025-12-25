@@ -5,9 +5,12 @@
 /tmp
 /out-tsc
 .angular
+.nx
+
 
 # dependencies
 /node_modules
+.pnpm-store
 
 # IDEs and editors
 /.idea
