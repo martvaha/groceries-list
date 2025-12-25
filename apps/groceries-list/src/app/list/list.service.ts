@@ -1,19 +1,23 @@
-import { Injectable } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-import firebase from 'firebase/app';
+import { Injectable, inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
+import { Firestore, collection, addDoc, doc, updateDoc, serverTimestamp } from '@angular/fire/firestore';
 import { Item } from '../shared/models';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ListService {
-  constructor(private db: AngularFirestore) {}
+  private firestore: Firestore = inject(Firestore);
+  private injector = inject(EnvironmentInjector);
+
+  constructor() {}
 
   addNewItem(listId: string, name: string) {
-    return this.db.collection('lists/' + listId + '/items').add({
-      name: name.trim(),
-      active: true,
-      modified: firebase.firestore.FieldValue.serverTimestamp(),
+    return runInInjectionContext(this.injector, () => {
+      return addDoc(collection(this.firestore, 'lists/' + listId + '/items'), {
+        name: name.trim(),
+        active: true,
+        modified: serverTimestamp(),
+      });
     });
   }
 
@@ -28,12 +32,15 @@ export class ListService {
 
   private markItem(listId: string, item: Item, active: boolean) {
     const path = 'lists/' + listId + '/items/' + item.id;
-    const updateDto: Partial<Item> = {
-      active,
-      modified: firebase.firestore.FieldValue.serverTimestamp() as any,
-      description: item?.description ?? null,
-    };
-    console.log(updateDto);
-    return this.db.doc(path).update(updateDto);
+    return runInInjectionContext(this.injector, () => {
+      const itemDoc = doc(this.firestore, path);
+      const updateDto: any = {
+        active,
+        modified: serverTimestamp(),
+        description: item?.description ?? null,
+      };
+      console.log(updateDto);
+      return updateDoc(itemDoc, updateDto);
+    });
   }
 }

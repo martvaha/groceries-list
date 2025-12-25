@@ -2,7 +2,6 @@ import { Component, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AngularFirestore } from '@angular/fire/firestore';
 import { DialogService } from '../shared/dialog-service/dialog.service';
 import { State } from '../state/app.reducer';
 import { Store } from '@ngrx/store';
@@ -15,6 +14,7 @@ import { MatSelectChange } from '@angular/material/select';
 import { takeValue } from '../shared/utils';
 
 @Component({
+  standalone: false,
   selector: 'app-list-edit',
   styleUrls: ['./list-edit.component.scss'],
   templateUrl: './list-edit.component.html',

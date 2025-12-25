@@ -16,6 +16,7 @@ import { selectAllLists } from '../state/list/list.reducer';
 import { List } from '../shared/models';
 
 @Component({
+  standalone: false,
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],

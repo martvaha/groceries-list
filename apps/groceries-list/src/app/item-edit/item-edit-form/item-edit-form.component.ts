@@ -3,6 +3,7 @@ import { FormBuilder, Validators } from '@angular/forms';
 import { Item, Group } from '../../shared/models';
 
 @Component({
+  standalone: false,
   selector: 'app-item-edit-form',
   templateUrl: './item-edit-form.component.html',
   styleUrls: ['./item-edit-form.component.scss'],
@@ -13,7 +14,7 @@ export class ItemEditFormComponent {
   set item(value: Item | null | undefined) {
     if (!value) return;
     this._item = value;
-    this.form.patchValue(value);
+    this.form.patchValue(value as any);
   }
   get item() {
     return this._item;
@@ -22,10 +23,10 @@ export class ItemEditFormComponent {
   @Output() updated = new EventEmitter<Item>();
   @Output() return = new EventEmitter<void>();
   form = this.formBuilder.group({
-    name: [undefined, [Validators.required]],
-    description: [undefined],
-    active: [undefined, [Validators.required]],
-    groupId: [undefined],
+    name: [undefined as string | undefined, [Validators.required]],
+    description: [undefined as string | undefined],
+    active: [undefined as boolean | undefined, [Validators.required]],
+    groupId: [undefined as string | undefined],
   });
   @Output() groupAdd = new EventEmitter<void>();
   private _item?: Item | null;
@@ -34,6 +35,6 @@ export class ItemEditFormComponent {
 
   onUpdate() {
     console.log(this.item, this.form.getRawValue());
-    this.updated.emit({ ...this.item, ...this.form.getRawValue() });
+    this.updated.emit({ ...this.item, ...this.form.getRawValue() } as Item);
   }
 }

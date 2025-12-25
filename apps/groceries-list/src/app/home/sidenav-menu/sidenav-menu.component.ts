@@ -4,6 +4,7 @@ import { User } from '../../auth/auth.service';
 import { List } from '../../shared/models';
 
 @Component({
+  standalone: false,
   selector: 'app-sidenav-menu',
   templateUrl: './sidenav-menu.component.html',
   styleUrls: ['./sidenav-menu.component.scss'],

@@ -15,6 +15,7 @@ import { selectItemEntities, selectItemLoading } from '../state/item/item.reduce
 import { Location } from '@angular/common';
 
 @Component({
+  standalone: false,
   selector: 'app-item-edit',
   templateUrl: './item-edit.component.html',
   styleUrls: ['./item-edit.component.scss'],

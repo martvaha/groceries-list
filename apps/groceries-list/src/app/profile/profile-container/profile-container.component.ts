@@ -12,6 +12,7 @@ import { setLanguage } from '../../state/config/config.actions';
 import { AppLanguage, AppTheme, selectLanguage } from '../../state/config/config.reducer';
 
 @Component({
+  standalone: false,
   selector: 'app-profile-container',
   templateUrl: './profile-container.component.html',
   styleUrls: ['./profile-container.component.scss'],

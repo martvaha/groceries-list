@@ -1,4 +1,4 @@
-import { Observable, of, combineLatest, timer, OperatorFunction } from 'rxjs';
+import { Observable, of, combineLatest, timer, OperatorFunction, firstValueFrom } from 'rxjs';
 import { take, switchMap, map } from 'rxjs/operators';
 import { MIN_LOADING_DURATION } from './const';
 
@@ -17,7 +17,7 @@ export const highlight = function (text: string, indices: number[][]) {
 };
 
 export function takeAsyncValue<T>(observable: Observable<T>): Promise<T> {
-  return observable.pipe(take(1)).toPromise();
+  return firstValueFrom(observable);
 }
 
 export function takeValue<T>(observable: Observable<T>): T {

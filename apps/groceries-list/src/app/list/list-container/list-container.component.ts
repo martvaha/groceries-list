@@ -41,6 +41,7 @@ export interface FuseAdvancedResult<T> {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-list-container',
   templateUrl: './list-container.component.html',
   styleUrls: ['./list-container.component.scss'],

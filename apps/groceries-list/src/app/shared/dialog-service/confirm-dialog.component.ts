@@ -14,6 +14,7 @@ export interface ConfirmDialogData {
 }
 
 @Component({
+  standalone: false,
   template: `
     <h1 mat-dialog-title *ngIf="data.title">{{ data.title }}</h1>
     <mat-dialog-content> {{ data.message }} </mat-dialog-content>

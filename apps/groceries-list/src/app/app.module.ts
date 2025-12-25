@@ -1,13 +1,13 @@
 import { BrowserModule, HammerModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http';
 import { MediaMatcher } from '@angular/cdk/layout';
-import { AngularFireModule } from '@angular/fire';
-import { AngularFireAuthModule } from '@angular/fire/auth';
-import { AngularFirestoreModule } from '@angular/fire/firestore';
-import { AngularFireAnalyticsModule, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
+import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { provideAuth, getAuth } from '@angular/fire/auth';
+import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { provideAnalytics, getAnalytics, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
 
 import { environment } from '../environments/environment';
 import { SharedModule } from './shared/shared.module';
@@ -36,9 +36,10 @@ import { AppShellModule } from './app-shell/app-shell.module';
 @NgModule({
   declarations: [AppComponent, HomeComponent, SidenavMenuComponent, ListsContainerComponent, UserAvatarComponent],
   imports: [
-    BrowserModule.withServerTransition({ appId: 'groceries-list' }),
+    BrowserModule,
     ServiceWorkerModule.register('ngsw-worker.js', {
       enabled: environment.production,
+      registrationStrategy: 'registerWhenStable:30000'
     }),
     BrowserAnimationsModule,
     AppRoutingModule,
@@ -46,10 +47,6 @@ import { AppShellModule } from './app-shell/app-shell.module';
     RouterModule,
     SharedModule,
     HttpClientModule,
-    AngularFireModule.initializeApp(environment.firebase, 'groceries-list'),
-    AngularFireAnalyticsModule,
-    AngularFireAuthModule,
-    AngularFirestoreModule,
     StoreModule.forRoot(reducers, {
       metaReducers,
       runtimeChecks: {
@@ -61,6 +58,7 @@ import { AppShellModule } from './app-shell/app-shell.module';
     StoreDevtoolsModule.instrument({
       maxAge: 25,
       logOnly: environment.production,
+      connectInZone: true
     }),
     StoreRouterConnectingModule.forRoot({
       routerState: RouterState.Minimal,
@@ -68,12 +66,15 @@ import { AppShellModule } from './app-shell/app-shell.module';
     HammerModule,
   ],
   providers: [
+    provideFirebaseApp(() => initializeApp(environment.firebase)),
+    provideFirestore(() => getFirestore()),
+    provideAuth(() => getAuth()),
+    provideAnalytics(() => getAnalytics()),
     AuthGuard,
     MediaMatcher,
     UserTrackingService,
     ScreenTrackingService,
     ...sentryInstrumentation,
-    // { provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig },
   ],
   bootstrap: [AppComponent],
 })

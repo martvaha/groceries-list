@@ -43,3 +43,6 @@ Thumbs.db
 .runtimeconfig.json
 .firebase
 project
+
+.nx/cache
+.nx/workspace-data

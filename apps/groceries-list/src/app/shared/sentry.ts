@@ -27,7 +27,7 @@ export function sentryReducer(reducer: ActionReducer<State, any>): ActionReducer
         },
       });
     }
-    return nextState;
+    return nextState as State;
   };
 }
 
@@ -42,8 +42,8 @@ if (environment.sentry.dsn) {
       const ngrxBreadcrumbs = (data.breadcrumbs as Sentry.Breadcrumb[]).filter((crumb) => crumb.category === 'ngrx');
       console.log(ngrxBreadcrumbs);
       for (let i = ngrxBreadcrumbs.length - 1; i > 0; i--) {
-        const prevState: unknown | undefined = ngrxBreadcrumbs[i - 1]?.data?.nextState;
-        const nextState: unknown | undefined = ngrxBreadcrumbs[i]?.data?.nextState;
+        const prevState: unknown | undefined = ngrxBreadcrumbs[i - 1]?.data?.['nextState'];
+        const nextState: unknown | undefined = ngrxBreadcrumbs[i]?.data?.['nextState'];
         let stateDiff;
         if (prevState === undefined && nextState !== undefined) {
           stateDiff = 'initialized';
@@ -69,7 +69,7 @@ if (environment.sentry.dsn) {
         }
       }
       for (let i = 0; i < ngrxBreadcrumbs.length; i++) {
-        if (ngrxBreadcrumbs[i]?.message?.substr(0, 18) === '@ngrx/router-store') {
+        if (ngrxBreadcrumbs[i]?.message?.substring(0, 18) === '@ngrx/router-store') {
           delete ngrxBreadcrumbs[i].data;
         }
       }
@@ -100,6 +100,7 @@ export class SentryErrorHandler implements ErrorHandler {
 }
 
 function removeUndefinedData(obj: { data?: any }) {
+  if (!obj.data) return;
   Object.keys(obj.data).forEach((prop) => {
     if (obj.data[prop] === undefined) {
       delete obj.data[prop];

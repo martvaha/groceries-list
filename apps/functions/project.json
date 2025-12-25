@@ -1,0 +1,67 @@
+{
+  "name": "functions",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/functions/src",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/functions",
+        "main": "apps/functions/src/main.ts",
+        "tsConfig": "apps/functions/tsconfig.app.json",
+        "assets": [
+          "apps/functions/src/assets",
+          {
+            "glob": ".runtimeconfig.json",
+            "input": ".",
+            "output": "."
+          }
+        ],
+        "rootDir": "."
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/functions/src/environments/environment.ts",
+              "with": "apps/functions/src/environments/environment.prod.ts"
+            }
+          ]
+        }
+      }
+    },
+    "serve": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "firebase emulators:start --only functions --inspect-functions"
+      }
+    },
+    "deploy": {
+      "executor": "nx:run-commands",
+      "options": {
+        "commands": [
+          "nx run functions:build",
+          "firebase deploy --only functions"
+        ],
+        "parallel": false
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/functions/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/functions"],
+      "options": {
+        "jestConfig": "apps/functions/jest.config.js",
+        "passWithNoTests": true
+      }
+    }
+  }
+}

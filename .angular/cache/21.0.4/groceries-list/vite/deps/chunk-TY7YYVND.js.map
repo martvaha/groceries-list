@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../../../node_modules/.pnpm/@angular+cdk@21.0.5_@angular+common@21.0.6_@angular+core@21.0.6_@angular+compiler@21.0._a6a89b22bdc48301626f5fedaf4faad0/node_modules/@angular/cdk/fesm2022/_fake-event-detection-chunk.mjs"],
+  "sourcesContent": ["function isFakeMousedownFromScreenReader(event) {\n  return event.buttons === 0 || event.detail === 0;\n}\nfunction isFakeTouchstartFromScreenReader(event) {\n  const touch = event.touches && event.touches[0] || event.changedTouches && event.changedTouches[0];\n  return !!touch && touch.identifier === -1 && (touch.radiusX == null || touch.radiusX === 1) && (touch.radiusY == null || touch.radiusY === 1);\n}\n\nexport { isFakeMousedownFromScreenReader, isFakeTouchstartFromScreenReader };\n\n"],
+  "mappings": ";AAAA,SAAS,gCAAgC,OAAO;AAC9C,SAAO,MAAM,YAAY,KAAK,MAAM,WAAW;AACjD;AACA,SAAS,iCAAiC,OAAO;AAC/C,QAAM,QAAQ,MAAM,WAAW,MAAM,QAAQ,CAAC,KAAK,MAAM,kBAAkB,MAAM,eAAe,CAAC;AACjG,SAAO,CAAC,CAAC,SAAS,MAAM,eAAe,OAAO,MAAM,WAAW,QAAQ,MAAM,YAAY,OAAO,MAAM,WAAW,QAAQ,MAAM,YAAY;AAC7I;",
+  "names": []
+}

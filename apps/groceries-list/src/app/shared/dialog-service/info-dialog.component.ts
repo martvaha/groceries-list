@@ -10,6 +10,7 @@ export interface InfoDialogConfig extends MatDialogConfig {
 }
 
 @Component({
+  standalone: false,
   template: `
     <h1 mat-dialog-title *ngIf="title">{{ title }}</h1>
     <mat-dialog-content> {{ message }} </mat-dialog-content>

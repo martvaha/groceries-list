@@ -1,5 +1,5 @@
 @use './favorite-button-theme.component' as favorite-button;
-@import '../../../theme.scss';
+@use '../../../theme.scss' as *;
 
 .favorite-button {
   opacity: 0.2;

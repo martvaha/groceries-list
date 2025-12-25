@@ -1,9 +1,8 @@
-import { Injectable } from '@angular/core';
-import { AngularFirestore, DocumentChangeAction } from '@angular/fire/firestore';
+import { Injectable, inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
+import { Firestore, collection, query, where, collectionChanges, addDoc, doc, updateDoc, deleteDoc, serverTimestamp, DocumentChange } from '@angular/fire/firestore';
 import { Action, Store } from '@ngrx/store';
-import firebase from 'firebase/app';
 import { combineLatest, EMPTY, of } from 'rxjs';
-import { debounceTime, distinctUntilChanged, map, mergeMap, startWith, switchMap, tap } from 'rxjs/operators';
+import { catchError, debounceTime, distinctUntilChanged, filter, map, mergeMap, startWith, switchMap, tap } from 'rxjs/operators';
 import { AuthService } from '../../auth/auth.service';
 import { List } from '../../shared/models';
 import { captureException } from '../../shared/sentry';
@@ -17,7 +16,10 @@ import { selectListLastUpdated } from './list.reducer';
   providedIn: 'root',
 })
 export class ListService {
-  constructor(private db: AngularFirestore, private auth: AuthService, private store: Store<State>) {}
+  private firestore: Firestore = inject(Firestore);
+  private injector = inject(EnvironmentInjector);
+
+  constructor(private auth: AuthService, private store: Store<State>) {}
 
   getLists() {
     return combineLatest([
@@ -31,23 +33,25 @@ export class ListService {
           distinctUntilChanged()
         ),
     ]).pipe(
+      filter(([user]) => !!user),
       switchMap(([user, lastUpdated]) => {
-        if (!user) return EMPTY;
-        console.log('load list query', { uid: user.uid, lastUpdated });
-        return this.db
-          .collection<List>('lists', (ref) =>
-            ref.where('acl', 'array-contains', user.uid).where('modified', '>', lastUpdated)
-          )
-          .stateChanges()
-          .pipe(
+        console.log('load list query', { uid: user!.uid, lastUpdated });
+        return runInInjectionContext(this.injector, () => {
+          const listCollection = collection(this.firestore, 'lists');
+          const listQuery = (lastUpdated?.getTime() ?? 0) > 0
+            ? query(
+                listCollection,
+                where('acl', 'array-contains', user!.uid),
+                where('modified', '>', lastUpdated)
+              )
+            : query(listCollection, where('acl', 'array-contains', user!.uid));
+
+          return collectionChanges(listQuery).pipe(
             tap((c) => console.log('load list changes', c)),
-            // mergeMap((changes) => (changes.length ? changes : [null])),
-            // filter(change => !(change && change.payload.doc.metadata.fromCache)),
-            // tap((c) => console.log(c)),
             map((changes) => {
               if (!changes?.length) return [loadListsNothingChanged()];
-              const upserted = [];
-              const removed = [];
+              const upserted: List[] = [];
+              const removed: List[] = [];
               for (const change of changes) {
                 const list = this.extractList(change);
                 if (change.type === 'added' || change.type === 'modified') {
@@ -62,8 +66,14 @@ export class ListService {
               if (upserted.length) actions.push(upsertListSuccess({ lists: upserted }));
               if (removed.length) actions.push(removeListSuccess({ lists: removed }));
               return actions;
+            }),
+            catchError((error) => {
+              console.error('getLists error', error);
+              captureException(error);
+              return of([loadListsNothingChanged()]);
             })
           );
+        });
       })
     );
   }
@@ -74,31 +84,37 @@ export class ListService {
     const finalList = {
       ...list,
       acl: [user.uid],
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      modified: firebase.firestore.FieldValue.serverTimestamp() as any,
+      modified: serverTimestamp() as any,
     } as List;
-    return this.db.collection('lists').add(finalList);
+    return runInInjectionContext(this.injector, () => {
+      return addDoc(collection(this.firestore, 'lists'), finalList);
+    });
   }
 
   updateList(list: List) {
     const { id, ...others } = list;
-    return this.db.doc(`/lists/${id}`).update({
-      ...others,
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      modified: firebase.firestore.FieldValue.serverTimestamp() as any,
-    } as List);
+    return runInInjectionContext(this.injector, () => {
+      const listDoc = doc(this.firestore, `/lists/${id}`);
+      return updateDoc(listDoc, {
+        ...others,
+        modified: serverTimestamp() as any,
+      } as any);
+    });
   }
 
   removeList(list: List) {
     console.log(list);
-    return this.db.doc('lists/' + list.id).delete();
+    return runInInjectionContext(this.injector, () => {
+      const listDoc = doc(this.firestore, 'lists/' + list.id);
+      return deleteDoc(listDoc);
+    });
   }
 
-  private extractList(change: DocumentChangeAction<List>) {
-    const data = change.payload.doc.data();
-    const id = change.payload.doc.id;
+  private extractList(change: DocumentChange<any>) {
+    const data = change.doc.data();
+    const id = change.doc.id;
     const modified = (data?.modified as any)?.toDate() || new Date(0);
-    const shared = data.acl?.length > 1;
+    const shared = (data.acl?.length || 0) > 1;
     const list = { ...data, id, modified, shared } as List;
     return list;
   }

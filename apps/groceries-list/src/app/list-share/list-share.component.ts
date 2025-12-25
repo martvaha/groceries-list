@@ -1,27 +1,31 @@
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
 import { map } from 'rxjs/operators';
 import { COMMA, ENTER, FF_SEMICOLON } from '@angular/cdk/keycodes';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs';
-import { AngularFirestore } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc } from '@angular/fire/firestore';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { FormControl, Validators, ValidationErrors } from '@angular/forms';
 import { User } from '../auth/auth.service';
 
 @Component({
+  standalone: false,
   selector: 'app-list-share',
   styleUrls: ['./list-share.component.scss'],
   templateUrl: './list-share.component.html',
-
 })
 export class ListShareComponent implements OnInit {
-  emailControl = new FormControl(undefined, [
-    Validators.required,
-    Validators.email,
-  ]);
+  private firestore: Firestore = inject(Firestore);
+  private injector = inject(EnvironmentInjector);
+  
+  emailControl = new FormControl<string | undefined>(undefined, {
+    nonNullable: false,
+    validators: [Validators.required, Validators.email]
+  });
   users: Partial<User>[] = [];
   private listId!: Observable<string>;
-  constructor(private route: ActivatedRoute, private db: AngularFirestore) {}
+  
+  constructor(private route: ActivatedRoute) {}
 
   readonly separatorKeysCodes = [ENTER, COMMA, FF_SEMICOLON];
   readonly separatorChars = [';', ',', '\n'];
@@ -63,8 +67,7 @@ export class ListShareComponent implements OnInit {
         this.users.push({ email });
       }
     }
-    invalid.join(this.separatorChars[0] + ' ');
-    this.emailControl.patchValue(invalid);
+    this.emailControl.patchValue(invalid.join(this.separatorChars[0] + ' '));
   }
 
   validateEmail(value: string) {
@@ -73,7 +76,7 @@ export class ListShareComponent implements OnInit {
       Validators.required,
     ]);
 
-    form.patchValue(value);
+    form.patchValue(value as any);
     if (form.invalid) return { error: form.errors, value: value };
 
     return { value, error: (undefined as unknown) as ValidationErrors };
@@ -82,8 +85,10 @@ export class ListShareComponent implements OnInit {
   share(): void {
     if (this.users.length < 1) return;
     this.listId.subscribe((listId) => {
-      this.users.forEach((user) => {
-        this.db.collection('invites').add({ listId: listId, to: user.email });
+      runInInjectionContext(this.injector, () => {
+        this.users.forEach((user) => {
+          addDoc(collection(this.firestore, 'invites'), { listId: listId, to: user.email });
+        });
       });
     });
   }

@@ -11,6 +11,7 @@ import { AppTheme } from '../../state/config/config.reducer';
 import { login, logout } from '../../state/user/user.actions';
 
 @Component({
+  standalone: false,
   selector: 'app-user-avatar',
   templateUrl: './user-avatar.component.html',
   styleUrls: ['./user-avatar.component.scss'],

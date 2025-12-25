@@ -1,0 +1,140 @@
+{
+  "name": "groceries-list",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "application",
+  "sourceRoot": "apps/groceries-list/src",
+  "prefix": "groceries-list",
+  "i18n": {
+    "sourceLocale": "en",
+    "locales": {
+      "et": "apps/groceries-list/src/i18n/et.xlf"
+    }
+  },
+  "tags": [],
+  "targets": {
+    "build": {
+      "executor": "@nx/angular:application",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/apps/groceries-list",
+        "index": "apps/groceries-list/src/index.html",
+        "browser": "apps/groceries-list/src/main.ts",
+        "polyfills": ["apps/groceries-list/src/polyfills.ts"],
+        "tsConfig": "apps/groceries-list/tsconfig.app.json",
+        "assets": [
+          "apps/groceries-list/src/favicon.ico",
+          "apps/groceries-list/src/assets",
+          "apps/groceries-list/src/manifest.webmanifest"
+        ],
+        "styles": ["apps/groceries-list/src/styles.scss"],
+        "scripts": [],
+        "allowedCommonJsDependencies": ["jsondiffpatch"]
+      },
+      "configurations": {
+        "production": {
+          "fileReplacements": [
+            {
+              "replace": "apps/groceries-list/src/environments/environment.ts",
+              "with": "apps/groceries-list/src/environments/environment.prod.ts"
+            }
+          ],
+          "optimization": true,
+          "outputHashing": "all",
+          "sourceMap": false,
+          "namedChunks": false,
+          "extractLicenses": true,
+          "budgets": [
+            {
+              "type": "initial",
+              "maximumWarning": "2mb",
+              "maximumError": "5mb"
+            },
+            {
+              "type": "anyComponentStyle",
+              "maximumWarning": "6kb",
+              "maximumError": "10kb"
+            }
+          ],
+          "serviceWorker": "apps/groceries-list/ngsw-config.json"
+        },
+        "development": {
+          "optimization": false,
+          "extractLicenses": false,
+          "sourceMap": true,
+          "namedChunks": true
+        },
+        "et": {
+          "localize": ["et"]
+        }
+      },
+      "defaultConfiguration": "production"
+    },
+    "serve": {
+      "executor": "@nx/angular:dev-server",
+      "configurations": {
+        "production": {
+          "buildTarget": "groceries-list:build:production"
+        },
+        "development": {
+          "buildTarget": "groceries-list:build:development"
+        },
+        "et": {
+          "buildTarget": "groceries-list:build:et"
+        }
+      },
+      "defaultConfiguration": "development",
+      "options": {
+        "proxyConfig": "apps/groceries-list/proxy.conf.json"
+      }
+    },
+    "extract-i18n": {
+      "executor": "@angular-devkit/build-angular:extract-i18n",
+      "options": {
+        "buildTarget": "groceries-list:build"
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/groceries-list/src/**/*.ts", "apps/groceries-list/src/**/*.html"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/apps/groceries-list"],
+      "options": {
+        "jestConfig": "apps/groceries-list/jest.config.js",
+        "passWithNoTests": true
+      }
+    },
+    "server": {
+      "executor": "@angular-devkit/build-angular:server",
+      "options": {
+        "outputPath": "dist/apps/groceries-list/server",
+        "main": "apps/groceries-list/src/main.server.ts",
+        "tsConfig": "apps/groceries-list/tsconfig.server.json"
+      },
+      "configurations": {
+        "production": {
+          "outputHashing": "media",
+          "fileReplacements": [
+            {
+              "replace": "apps/groceries-list/src/environments/environment.ts",
+              "with": "apps/groceries-list/src/environments/environment.prod.ts"
+            }
+          ],
+          "sourceMap": false,
+          "optimization": true,
+          "localize": true
+        },
+        "development": {
+          "optimization": false,
+          "sourceMap": true,
+          "extractLicenses": false
+        }
+      },
+      "defaultConfiguration": "production"
+    }
+  }
+}

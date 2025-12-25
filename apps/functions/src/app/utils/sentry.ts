@@ -1,8 +1,7 @@
 import * as Sentry from '@sentry/node';
 import { CONFIG } from '../const';
-import { EventHint, Event } from '@sentry/types';
 
-function beforeSend(event: Event, hint: EventHint) {
+function beforeSend(event: any, hint: any) {
   if (!CONFIG.sentry.enabled) {
     console.error(hint.originalException || hint.syntheticException);
     return null; // this drops the event and nothing will be sent to sentry

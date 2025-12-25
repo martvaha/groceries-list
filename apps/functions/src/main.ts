@@ -7,8 +7,8 @@ import { NestFactory } from '@nestjs/core';
 import { ExpressAdapter } from '@nestjs/platform-express';
 import { AppModule } from './app/app.module';
 
-import * as express from 'express';
-import * as functions from 'firebase-functions';
+import express from 'express';
+import { https } from 'firebase-functions/v2';
 
 const server = express();
 
@@ -19,4 +19,4 @@ async function bootstrap() {
 
 bootstrap();
 
-export const api = functions.region('europe-west1').https.onRequest(server);
+export const api = https.onRequest({ region: 'europe-west1' }, server);

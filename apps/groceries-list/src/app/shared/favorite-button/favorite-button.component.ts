@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
+  standalone: false,
   selector: 'app-favorite-button',
   templateUrl: './favorite-button.component.html',
   styleUrls: ['./favorite-button.component.scss'],

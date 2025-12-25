@@ -1,7 +1,6 @@
-import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID, inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
 import { BehaviorSubject, of } from 'rxjs';
-import { AngularFireAuth } from '@angular/fire/auth';
-import firebase from 'firebase/app';
+import { Auth, user, onAuthStateChanged, signInWithPopup, signOut, getRedirectResult, FacebookAuthProvider, GoogleAuthProvider, updateProfile, updateEmail, User as FirebaseUser } from '@angular/fire/auth';
 import { Router } from '@angular/router';
 import { captureException } from '../shared/sentry';
 import { distinctUntilChanged } from 'rxjs/operators';
@@ -20,10 +19,10 @@ export interface User {
 })
 export class AuthService {
   private userSubject = new BehaviorSubject<User | null | undefined>(undefined);
-  private test = new BehaviorSubject<User | null | undefined>(undefined);
+  private auth: Auth = inject(Auth);
+  private injector = inject(EnvironmentInjector);
 
   constructor(
-    private fireAuth: AngularFireAuth,
     private router: Router,
     private dialog: DialogService,
     @Inject(PLATFORM_ID) private platformId: any
@@ -34,37 +33,40 @@ export class AuthService {
   }
 
   signInWithProvider(provider: 'facebook' | 'google', redirect?: string | string[]) {
-    this.fireAuth.useDeviceLanguage();
-    const providerInstance =
-      provider === 'facebook' ? new firebase.auth.FacebookAuthProvider() : new firebase.auth.GoogleAuthProvider();
-    return this.fireAuth
-      .signInWithPopup(providerInstance)
-      .then(() => {
-        if (redirect) return this.redirect(redirect);
-        return true;
-      })
-      .catch((error: { code: any; message: string; email: string; credential: { providerId: string } }) => {
-        if (error?.code === 'auth/account-exists-with-different-credential') {
-          const otherProvider = error?.credential?.providerId === 'facebook.com' ? 'Google' : 'Facebook';
-          this.dialog.info({
-            data: {
-              title: $localize`Account already exists`,
-              message: $localize`Account with email ${error.email} already exists. Try logging in with ${otherProvider} instead.`,
-            },
-          });
-        } else {
-          captureException(error as unknown as Error);
-        }
-      });
+    return runInInjectionContext(this.injector, () => {
+      this.auth.useDeviceLanguage();
+      const providerInstance =
+        provider === 'facebook' ? new FacebookAuthProvider() : new GoogleAuthProvider();
+      return signInWithPopup(this.auth, providerInstance)
+        .then(() => {
+          if (redirect) return this.redirect(redirect);
+          return true;
+        })
+        .catch((error: any) => {
+          if (error?.code === 'auth/account-exists-with-different-credential') {
+            const otherProvider = error?.customData?._tokenResponse?.providerId === 'facebook.com' ? 'Google' : 'Facebook';
+            this.dialog.info({
+              data: {
+                title: $localize`Account already exists`,
+                message: $localize`Account with email ${error.customData?.email} already exists. Try logging in with ${otherProvider} instead.`,
+              },
+            });
+          } else {
+            captureException(error as unknown as Error);
+          }
+        });
+    });
   }
 
   signOut(redirect?: string | string[]) {
     this.userSubject.next(null);
-    if (redirect) {
-      return this.redirect(redirect).then(() => this.fireAuth.signOut());
-    } else {
-      return this.fireAuth.signOut();
-    }
+    return runInInjectionContext(this.injector, () => {
+      if (redirect) {
+        return this.redirect(redirect).then(() => signOut(this.auth));
+      } else {
+        return signOut(this.auth);
+      }
+    });
   }
 
   getUser() {
@@ -77,11 +79,13 @@ export class AuthService {
   }
 
   private registerAuthStateObserver() {
-    this.fireAuth.onAuthStateChanged((user) => {
-      if (!user) return this.userSubject.next(null);
-      const providerData = user.providerData?.[0];
-      this.userSubject.next(this.minimalUser(user));
-      if (providerData) this.updateProfileFromProvider(user, providerData);
+    runInInjectionContext(this.injector, () => {
+      onAuthStateChanged(this.auth, (user) => {
+        if (!user) return this.userSubject.next(null);
+        const providerData = user.providerData?.[0];
+        this.userSubject.next(this.minimalUser(user));
+        if (providerData) this.updateProfileFromProvider(user, providerData);
+      });
     });
   }
 
@@ -90,21 +94,23 @@ export class AuthService {
    * @param user
    * @param providerData
    */
-  private updateProfileFromProvider(user: firebase.User, providerData: firebase.UserInfo) {
+  private updateProfileFromProvider(user: FirebaseUser, providerData: any) {
     console.log('providerData', providerData, user);
     const { displayName, photoURL, email } = providerData;
-    if (user.photoURL !== photoURL || user.displayName !== displayName) {
-      user.updateProfile({
-        displayName,
-        photoURL,
-      });
-    }
-    if (email && user.email !== email) {
-      user.updateEmail(email);
-    }
+    runInInjectionContext(this.injector, () => {
+      if (user.photoURL !== photoURL || user.displayName !== displayName) {
+        updateProfile(user, {
+          displayName,
+          photoURL,
+        });
+      }
+      if (email && user.email !== email) {
+        updateEmail(user, email);
+      }
+    });
   }
 
-  private minimalUser(user: firebase.User): User {
+  private minimalUser(user: FirebaseUser): User {
     const { uid, photoURL, displayName, email } = user;
     return {
       uid,
@@ -115,28 +121,26 @@ export class AuthService {
   }
 
   private handleRedirect() {
-    this.fireAuth
-      .getRedirectResult()
-      .then(function (result) {
-        if (result.credential) {
-          // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-          // const token = result.credential.accessToken;
-        }
-        // The signed-in user info.
-        const user = result.user;
-      })
-      .catch((error: { code: any; message: string; email: string; credential: { providerId: string } }) => {
-        if (error?.code === 'auth/account-exists-with-different-credential') {
-          const otherProvider = error?.credential?.providerId === 'facebook.com' ? 'Google' : 'Facebook';
-          this.dialog.info({
-            data: {
-              title: $localize`Account already exists`,
-              message: $localize`Account with email ${error.email} already exists. Try logging in with ${otherProvider} instead.`,
-            },
-          });
-        } else {
-          captureException(error as unknown as Error);
-        }
-      });
+    runInInjectionContext(this.injector, () => {
+      getRedirectResult(this.auth)
+        .then((result) => {
+          if (!result) return;
+          // The signed-in user info.
+          const user = result.user;
+        })
+        .catch((error: any) => {
+          if (error?.code === 'auth/account-exists-with-different-credential') {
+            const otherProvider = error?.customData?._tokenResponse?.providerId === 'facebook.com' ? 'Google' : 'Facebook';
+            this.dialog.info({
+              data: {
+                title: $localize`Account already exists`,
+                message: $localize`Account with email ${error.customData?.email} already exists. Try logging in with ${otherProvider} instead.`,
+              },
+            });
+          } else {
+            captureException(error as unknown as Error);
+          }
+        });
+    });
   }
 }

@@ -2,11 +2,11 @@ import { isPlatformServer } from '@angular/common';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { SwUpdate } from '@angular/service-worker';
+import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { Action, Store } from '@ngrx/store';
 import { EMPTY } from 'rxjs';
-import { exhaustMap, map, switchMap, take, tap } from 'rxjs/operators';
+import { exhaustMap, filter, map, switchMap, take, tap } from 'rxjs/operators';
 import { checkForUpdate, clearState, initAppEffects } from './app.actions';
 import { State } from './app.reducer';
 import { selectActiveListId } from './list/list.reducer';
@@ -83,7 +83,8 @@ export class AppEffects {
       this.actions$.pipe(
         ofType(initAppEffects),
         switchMap(() =>
-          this.updates.available.pipe(
+          this.updates.versionUpdates.pipe(
+            filter((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY'),
             switchMap(() =>
               this.snack
                 .open($localize`New version available`, $localize`Update`)

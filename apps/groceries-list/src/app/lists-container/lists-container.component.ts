@@ -8,6 +8,7 @@ import { addList, removeList } from '../state/list/list.actions';
 import { selectAllLists } from '../state/list/list.reducer';
 
 @Component({
+  standalone: false,
   selector: 'app-lists-container',
   templateUrl: './lists-container.component.html',
   styleUrls: ['./lists-container.component.scss'],

@@ -1,6 +1,6 @@
-@use '~@angular/material' as mat;
+@use '@angular/material' as mat;
 @use './list-container.theme' as list-container;
-@import '../../../theme.scss';
+@use '../../../theme.scss' as *;
 
 :host {
   display: flex;

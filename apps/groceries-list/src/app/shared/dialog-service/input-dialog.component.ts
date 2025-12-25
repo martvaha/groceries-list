@@ -10,6 +10,7 @@ export interface InputDialogConfig extends MatDialogConfig {
 }
 
 @Component({
+  standalone: false,
   template: `
     <h1 *ngIf="title" mat-dialog-title>{{ title }}</h1>
     <mat-dialog-content (keydown.enter)="dialogRef.close(input.value)">

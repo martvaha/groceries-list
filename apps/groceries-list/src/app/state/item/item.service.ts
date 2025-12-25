@@ -1,9 +1,8 @@
-import { Injectable } from '@angular/core';
-import { AngularFirestore, DocumentChange } from '@angular/fire/firestore';
-import { map, tap, mergeMap, exhaustMap, catchError } from 'rxjs/operators';
+import { Injectable, inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
+import { Firestore, collection, query, where, collectionChanges, doc, updateDoc, deleteDoc, serverTimestamp, DocumentChange } from '@angular/fire/firestore';
+import { map, tap, mergeMap, switchMap, catchError } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { State } from '../app.reducer';
-import * as firebase from 'firebase/app';
 import { combineLatest, EMPTY, of } from 'rxjs';
 import { selectActiveListId } from '../list/list.reducer';
 import { deleteItemSuccess, getItemsFail, getItemsNothingChanged, upsertItemListSuccess } from './item.actions';
@@ -15,60 +14,64 @@ import { captureException } from '../../shared/sentry';
   providedIn: 'root',
 })
 export class ItemService {
-  constructor(private db: AngularFirestore, private store: Store<State>) {}
+  private firestore: Firestore = inject(Firestore);
+  private injector = inject(EnvironmentInjector);
+
+  constructor(private store: Store<State>) {}
 
   getItems() {
     return combineLatest([this.store.select(selectActiveListId), this.store.select(selectItemLastUpdated)]).pipe(
       tap((c) => console.log('items', c)),
-      exhaustMap(([listId, maxModified]) => {
+      switchMap(([listId, maxModified]) => {
         if (!listId) return EMPTY;
-        return this.db
-          .collection<Item>(`lists/${listId}/items`, (ref) =>
-            maxModified?.getTime() ?? 0 > 0 ? ref.where('modified', '>', maxModified) : ref
-          )
-          .stateChanges()
-          .pipe(
+        return runInInjectionContext(this.injector, () => {
+          const itemCollection = collection(this.firestore, `lists/${listId}/items`);
+          const itemQuery = (maxModified?.getTime() ?? 0) > 0 
+            ? query(itemCollection, where('modified', '>', maxModified))
+            : query(itemCollection);
+
+          return collectionChanges(itemQuery).pipe(
             mergeMap((changes) => {
               if (!changes?.length) return [null];
 
-              const groupedChanges: Record<string, DocumentChange<Item>[]> = {
+              const groupedChanges: Record<string, DocumentChange<any>[]> = {
                 added: [],
                 modified: [],
                 removed: [],
               };
 
               for (const change of changes) {
-                groupedChanges[change.type].push(change.payload);
+                groupedChanges[change.type].push(change);
               }
 
-              // Returns list of changes with grouped changes
-              // [{type: 'added', payload: [{}, {},...]}, {type: 'removed', ...}]
               return Object.keys(groupedChanges)
                 .filter((key) => groupedChanges[key]?.length)
                 .map((key) => ({ type: key, payload: groupedChanges[key] }));
             }),
             map((change) => {
               if (!change) return getItemsNothingChanged();
-              if (!Array.isArray(change.payload)) change.payload = [change.payload];
+              
+              const payload = Array.isArray(change.payload) ? change.payload : [change.payload];
 
-              console.log('####', change.type, this.extractItem(change.payload[0]));
+              console.log('####', change.type, this.extractItem(payload[0]));
               switch (change.type) {
                 case 'added':
                 case 'modified':
-                  return upsertItemListSuccess({ listId, items: change.payload.map((data) => this.extractItem(data)) });
+                  return upsertItemListSuccess({ listId, items: payload.map((data) => this.extractItem(data)) });
 
                 case 'removed':
                   console.error('item remove not implemented!');
-                  return deleteItemSuccess({ listId, item: change.payload.map((data) => this.extractItem(data)) });
+                  return deleteItemSuccess({ listId, item: payload.map((data) => this.extractItem(data)) });
                 default:
                   return getItemsNothingChanged();
               }
             }),
-            catchError((error: firebase.default.FirebaseError) => {
+            catchError((error: any) => {
               captureException(error);
               return of(getItemsFail({ error }));
             })
           );
+        });
       })
     );
   }
@@ -76,26 +79,30 @@ export class ItemService {
   updateItem(item: Item, listId: string) {
     console.log(item);
     const { id, ...others } = item;
-    return this.db
-      .doc(`/lists/${listId}/items/${id}`)
-      .update({
+    return runInInjectionContext(this.injector, () => {
+      const itemDoc = doc(this.firestore, `/lists/${listId}/items/${id}`);
+      return updateDoc(itemDoc, {
         ...others,
-        modified: firebase.default.firestore.FieldValue.serverTimestamp(),
+        modified: serverTimestamp(),
       })
       .catch((reason) => captureException(reason));
+    });
   }
 
   deleteItem(item: Item, listId: string) {
     console.log(listId, item);
-    return this.db.doc(`/lists/${listId}/items/${item.id}`).delete();
+    return runInInjectionContext(this.injector, () => {
+      const itemDoc = doc(this.firestore, `/lists/${listId}/items/${item.id}`);
+      return deleteDoc(itemDoc);
+    });
   }
 
-  private extractItem(payload: DocumentChange<Item>) {
-    const data = payload.doc.data();
-    const id = payload.doc.id;
+  private extractItem(change: DocumentChange<any>) {
+    const data = change.doc.data();
+    const id = change.doc.id;
     const modified = (data.modified as any)?.toDate() || new Date(0);
     const groupId = data.groupId || 'others';
-    const group = { ...data, id, modified, groupId } as Item;
-    return group;
+    const item = { ...data, id, modified, groupId } as Item;
+    return item;
   }
 }

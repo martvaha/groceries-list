@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { User } from '../auth/auth.service';
 
 @Component({
+  standalone: false,
   selector: 'app-list-invite',
   templateUrl: './list-invite.component.html',
   styleUrls: ['./list-invite.component.scss'],

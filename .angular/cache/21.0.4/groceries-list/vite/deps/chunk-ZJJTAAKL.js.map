@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["../../../../../../node_modules/.pnpm/@angular+cdk@21.0.5_@angular+common@21.0.6_@angular+core@21.0.6_@angular+compiler@21.0._a6a89b22bdc48301626f5fedaf4faad0/node_modules/@angular/cdk/fesm2022/_test-environment-chunk.mjs"],
+  "sourcesContent": ["function _isTestEnvironment() {\n  return (typeof __karma__ !== 'undefined' && !!__karma__ || typeof jasmine !== 'undefined' && !!jasmine || typeof jest !== 'undefined' && !!jest || typeof Mocha !== 'undefined' && !!Mocha\n  );\n}\n\nexport { _isTestEnvironment };\n\n"],
+  "mappings": ";AAAA,SAAS,qBAAqB;AAC5B,SAAQ,OAAO,cAAc,eAAe,CAAC,CAAC,aAAa,OAAO,YAAY,eAAe,CAAC,CAAC,WAAW,OAAO,SAAS,eAAe,CAAC,CAAC,QAAQ,OAAO,UAAU,eAAe,CAAC,CAAC;AAEvL;",
+  "names": []
+}

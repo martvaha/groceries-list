@@ -28,7 +28,7 @@ export class ListEffects {
     this.actions$.pipe(
       ofType(ROUTER_NAVIGATED),
       withLatestFrom(this.store.select(selectRouteParams)),
-      map(([action, params]) => (params?.listId || null) as string | null),
+      map(([action, params]) => (params?.['listId'] || null) as string | null),
       distinctUntilChanged(),
       map((id) => ListActions.setActive({ id }))
     )

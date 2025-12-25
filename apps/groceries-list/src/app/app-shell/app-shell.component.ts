@@ -4,6 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { environment } from '../../environments/environment';
 
 @Component({
+  standalone: false,
   selector: 'app-app-shell',
   templateUrl: './app-shell.component.html',
   styleUrls: ['./app-shell.component.scss'],

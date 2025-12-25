@@ -4,7 +4,7 @@ import fs from 'fs';
 import path from 'path';
 import util from 'util';
 import mjml2html from 'mjml';
-import htmlToText from 'html-to-text';
+import { convert } from 'html-to-text';
 import { handlebars } from './handlebars';
 import { Dict } from './types';
 import { APP_ROOT, CONFIG } from '../const';
@@ -17,7 +17,7 @@ const templateCache: Dict<{
 
 const readFilePromise = util.promisify(fs.readFile);
 
-const transporter = nodemailer.createTransport(CONFIG.smtpConfig);
+const transporter = nodemailer.createTransport(CONFIG.smtpConfig as any);
 
 function timeout(milliseconds: number) {
   return new Promise(resolve => setTimeout(resolve, milliseconds));
@@ -26,7 +26,7 @@ function timeout(milliseconds: number) {
 async function compileTemplate<T = any>(
   template: string,
   data?: T
-): Promise<{ html?: string; text?: string; error?: Error }> {
+): Promise<{ html?: string; text?: string; error?: any }> {
   try {
     let { compileHtml, compileText } =
       templateCache[template.toLowerCase()] || {};
@@ -39,7 +39,7 @@ async function compileTemplate<T = any>(
       if (mjmlErrors && mjmlErrors.length) {
         Sentry.captureException(mjmlErrors);
       }
-      const textTemplate: string = htmlToText.fromString(htmlTemplate);
+      const textTemplate: string = convert(htmlTemplate);
       compileHtml = handlebars.compile<T>(htmlTemplate);
       compileText = handlebars.compile<T>(textTemplate);
       if (!CONFIG.disableTemplateCache) {
@@ -81,7 +81,7 @@ export async function sendMail<T = any>(
     const info = await transporter.sendMail(message);
     console.log(`Email sent to "${message.to}"`);
     if (CONFIG.smtpConfig.host === 'smtp.ethereal.email') {
-      console.log('Preview: ' + nodemailer.getTestMessageUrl(info));
+      console.log('Preview: ' + nodemailer.getTestMessageUrl(info as any));
     }
   } catch (error) {
     Sentry.captureException(error);

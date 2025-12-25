@@ -1,5 +1,5 @@
 import { Injectable, NgZone } from '@angular/core';
-import Fuse from 'fuse.js';
+import Fuse, { IFuseOptions, FuseResult } from 'fuse.js';
 
 @Injectable({
   providedIn: 'root',
@@ -7,7 +7,7 @@ import Fuse from 'fuse.js';
 export class SearchService {
   worker?: Worker;
   fuse?: Fuse<unknown>;
-  options: Fuse.IFuseOptions<unknown> = {};
+  options: IFuseOptions<unknown> = {};
 
   constructor(private ngZone: NgZone) {
     if (typeof Worker !== 'undefined') {
@@ -15,8 +15,8 @@ export class SearchService {
     }
   }
 
-  setCollection<T>(docs: T[], options = {} as Fuse.IFuseOptions<T>) {
-    this.options = options as Fuse.IFuseOptions<unknown>;
+  setCollection<T>(docs: T[], options = {} as IFuseOptions<T>) {
+    this.options = options as IFuseOptions<unknown>;
     if (this.worker) {
       this.worker.postMessage({
         action: 'setCollection',
@@ -30,8 +30,8 @@ export class SearchService {
   search<T>(pattern: string) {
     console.log('6057', pattern);
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    let resolve = (value: Fuse.FuseResult<T>[] | undefined) => {};
-    const promise = new Promise<Fuse.FuseResult<T>[] | undefined>((res) => {
+    let resolve = (value: FuseResult<T>[] | undefined) => {};
+    const promise = new Promise<FuseResult<T>[] | undefined>((res) => {
       resolve = (val) => {
         console.log('8289', val);
         this.ngZone.run(() => res(val));
