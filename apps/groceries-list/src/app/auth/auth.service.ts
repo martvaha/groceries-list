@@ -6,6 +6,7 @@ import { captureException } from '../shared/sentry';
 import { distinctUntilChanged } from 'rxjs/operators';
 import { isPlatformServer } from '@angular/common';
 import { DialogService } from '../shared/dialog-service/dialog.service';
+import { environment } from '../../environments/environment';
 
 export interface User {
   uid: string;
@@ -79,6 +80,10 @@ export class AuthService {
   }
 
   private registerAuthStateObserver() {
+    if (!environment.production && environment.mockUser) {
+      this.userSubject.next(environment.mockUser);
+      return;
+    }
     runInInjectionContext(this.injector, () => {
       onAuthStateChanged(this.auth, (user) => {
         if (!user) return this.userSubject.next(null);

@@ -20,6 +20,12 @@ export const environment = {
     measurementId: 'G-PV5T849VVX',
   },
   sentry: { dsn: '' },
+  mockUser: {
+    uid: 'dev-user-id',
+    email: 'dev@example.com',
+    displayName: 'Dev User',
+    photoURL: 'https://api.dicebear.com/7.x/avataaars/svg?seed=Dev'
+  }
 };
 
 /*

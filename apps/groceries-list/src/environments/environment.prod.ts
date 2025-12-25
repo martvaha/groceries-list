@@ -16,4 +16,5 @@ export const environment = {
     measurementId: 'G-RYTGXQRWJ1',
   },
   sentry: { dsn: 'https://e0ad91b3a5b944eba7624b3fc20a56d5@sentry.io/1508217' },
+  mockUser: null
 };
