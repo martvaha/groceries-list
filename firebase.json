@@ -4,12 +4,13 @@
     "indexes": "firestore.indexes.json"
   },
   "functions": {
-    "source": "dist/apps/functions"
+    "source": "packages/functions",
+    "predeploy": ["pnpm --filter @groceries-list/functions build"]
   },
   "hosting": [
     {
       "target": "groceries-list",
-      "public": "dist/apps/groceries-list/browser",
+      "public": "dist/frontend/browser",
       "ignore": ["**/.*"],
       "headers": [
         {

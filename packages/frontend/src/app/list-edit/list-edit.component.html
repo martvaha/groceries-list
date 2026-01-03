@@ -1,0 +1,35 @@
+<table class="list-edit__table">
+  <tr>
+    <th></th>
+    <th i18n>Name</th>
+    <th i18n>Group</th>
+    <th></th>
+  </tr>
+  @for (item of items$ | async; track item; let i = $index) {
+    <tr class="list-edit_table-row">
+      <td>{{ i + 1 }}.</td>
+      <td>{{ item.name }}</td>
+      <td>
+        <mat-select
+          class="list-edit__item-group"
+          placeholder="Pick group"
+          i18n-placeholder
+          name="group"
+          [value]="item.groupId"
+          (selectionChange)="onSelectionChange($event, item)"
+          >
+          @for (group of groups$ | async; track group) {
+            <mat-option [value]="group.id">
+              {{ group.name }}
+            </mat-option>
+          }
+        </mat-select>
+      </td>
+      <td>
+        <button class="item-edit__delete" mat-icon-button (click)="deleteList(item)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </tr>
+  }
+</table>

@@ -1,0 +1,29 @@
+<label id="theme-select" i18n>Theme</label>
+
+<mat-radio-group
+  aria-labelledby="theme-select"
+  class="theme"
+  [formControl]="themeControl"
+  (change)="onThemeChange($event)"
+  >
+  <mat-radio-button value="system">
+    @if (systemTheme$ | async; as systemTheme) {
+      <ng-container i18n>
+      System ({ systemTheme , select, light {light} dark {dark} other {{{systemTheme}}} })
+    </ng-container>
+    }
+  </mat-radio-button>
+  <mat-radio-button value="light" i18n> Light </mat-radio-button>
+  <mat-radio-button value="dark" i18n> Dark </mat-radio-button>
+</mat-radio-group>
+
+<label id="language-select" i18n>Language</label>
+
+<div class="language-control">
+  <button mat-stroked-button (click)="onLanguageChange('en')">
+    <mat-icon svgIcon="en" /><span i18n> English</span>
+  </button>
+  <button mat-stroked-button (click)="onLanguageChange('et')">
+    <mat-icon svgIcon="et" /><span i18n> Estonian</span>
+  </button>
+</div>

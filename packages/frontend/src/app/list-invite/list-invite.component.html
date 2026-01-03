@@ -1,0 +1,11 @@
+@if (user) {
+  <div>
+    {{user | json}}
+  </div>
+}
+@if (user === undefined) {
+  <mat-spinner />
+}
+@if (user === null) {
+  <app-auth [redirect]="redirect" />
+}
