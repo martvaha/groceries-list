@@ -1,11 +1,13 @@
 <div class="list-container__content">
-  <mat-list [hidden]="!inputControl.value?.length" class="lists-container__search-items">
-    @for (item of filteredItems$ | async; track trackById($index, item)) {
-      <mat-list-item #searchItem (click)="addItem(item)" class="lists-container__search-item"
-        ><span [innerHTML]="item.displayName"></span
-      ></mat-list-item>
-    }
-  </mat-list>
+  @if (inputControl.value?.length) {
+    <mat-list class="lists-container__search-items">
+      @for (item of filteredItems$ | async; track trackById($index, item)) {
+        <mat-list-item #searchItem (click)="addItem(item)" class="lists-container__search-item"
+          ><span [innerHTML]="item.displayName"></span
+        ></mat-list-item>
+      }
+    </mat-list>
+  }
 
   @if (groupsWithItems$ | async; as groups) {
     <mat-list
