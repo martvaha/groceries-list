@@ -1,116 +1,118 @@
-<form class="list-container__form" novalidate [formGroup]="inputForm" (ngSubmit)="addItemFromInput()">
-  <mat-form-field class="list-container__input" floatLabel="always">
-    <input
-      matInput
-      autocomplete="off"
-      type="text"
-      formControlName="inputControl"
-      required
-      placeholder="Add to list ..."
-      i18n-placeholder
-      [errorStateMatcher]="inputValid"
-      />
-  </mat-form-field>
-  <button mat-raised-button type="submit" color="primary" [disabled]="!inputForm.valid" i18n>Add</button>
-  @if (inactiveItems$ | async; as inactiveItems) {
-    @if (inactiveItems && inactiveItems.length <= 40) {
-      <button
-        class="extra-actions-button"
-        mat-icon-button
-        [matMenuTriggerFor]="menu"
-        aria-label="Extra actions"
-        >
-        <mat-icon>more_vert</mat-icon>
-      </button>
-    }
-    <mat-menu #menu="matMenu">
-      <ng-template matMenuContent>
-        <button mat-menu-item (click)="markAllActive(inactiveItems)" i18n>Mark all active</button>
-      </ng-template>
-    </mat-menu>
-  }
-</form>
-<mat-divider />
-<mat-list [hidden]="!inputControl.value?.length" class="lists-container__search-items">
-  @for (item of filteredItems$ | async; track trackById($index, item)) {
-    <mat-list-item
-      #searchItem
-      (click)="addItem(item)"
-      class="lists-container__search-item"
-      ><span [innerHTML]="item.displayName"></span
-    ></mat-list-item>
-  }
-</mat-list>
-
-@if (groupsWithItems$ | async; as groups) {
-  <mat-list
-    [hidden]="inputControl.value?.length"
-    cdkDropList
-    (cdkDropListDropped)="dropGroup($event)"
-    class="lists-container__item-list"
-    [disableRipple]="false"
-    [cdkDropListData]="groups"
-    >
-    @for (group of groups; track trackById($index, group); let isFirst = $first) {
-      <div
-        class="list-container__group"
-        cdkDragLockAxis="y"
-        cdkDrag
-        [cdkDragData]="group"
-        [cdkDragStartDelay]="dragDelay"
-        appLongPress
-        [duration]="dragDelay"
-        [ngClass]="{ dragged: draggingGroupId === group.id }"
-        (cdkDragStarted)="dragStart(group.id)"
-        (cdkDragReleased)="dragStart(null)"
-        (longPress)="dragStart(group.id)"
-        (longPressEnd)="dragStart(null)"
-        >
-        @if (group.active) {
-          <div>
-            <div
-              id="{{ group.id }}"
-              cdkDropList
-              cdkDropListSortingDisabled
-              [cdkDropListConnectedTo]="getConnectedGroups(group.id, groups)"
-              [cdkDropListData]="group.id"
-              (cdkDropListDropped)="drop($event)"
-              >
-              <h3 matSubheader>{{ group.name }}</h3>
-              <ng-container>
-                @for (item of group?.items; track trackById($index, item)) {
-                  <mat-list-item
-                    [cdkDragData]="item"
-                    cdkDragLockAxis="y"
-                    cdkDrag
-                    [cdkDragStartDelay]="dragDelay"
-                    appLongPress
-                    [duration]="dragDelay"
-                    [ngClass]="{ dragged: draggingGroupId === item.id }"
-                    (cdkDragStarted)="dragStart(item.id)"
-                    (cdkDragReleased)="dragStart(null)"
-                    (longPress)="dragStart(item.id)"
-                    (longPressEnd)="dragStart(null)"
-                    >
-                    <mat-checkbox (click)="markDone(item)">{{ item.name }}</mat-checkbox>
-                    <span class="description mat-hint">{{ item.description }}</span>
-                    <button mat-icon-button class="mat-hint" [routerLink]="['/home/item', listId | async, item.id]">
-                      <mat-icon>edit</mat-icon>
-                    </button>
-                  </mat-list-item>
-                }
-              </ng-container>
-            </div>
-            <mat-divider />
-          </div>
-        }
-      </div>
+<div class="list-container__content">
+  <mat-list [hidden]="!inputControl.value?.length" class="lists-container__search-items">
+    @for (item of filteredItems$ | async; track trackById($index, item)) {
+      <mat-list-item #searchItem (click)="addItem(item)" class="lists-container__search-item"
+        ><span [innerHTML]="item.displayName"></span
+      ></mat-list-item>
     }
   </mat-list>
-}
 
-@if (loading$ | async) {
-  <div class="loading">
-    <mat-spinner />
-  </div>
-}
+  @if (groupsWithItems$ | async; as groups) {
+    <mat-list
+      [hidden]="inputControl.value?.length"
+      cdkDropList
+      (cdkDropListDropped)="dropGroup($event)"
+      class="lists-container__item-list"
+      [disableRipple]="false"
+      [cdkDropListData]="groups"
+    >
+      @for (group of groups; track trackById($index, group); let isFirst = $first) {
+        <div
+          class="list-container__group"
+          cdkDragLockAxis="y"
+          cdkDrag
+          [cdkDragData]="group"
+          [cdkDragStartDelay]="dragDelay"
+          appLongPress
+          [duration]="dragDelay"
+          [ngClass]="{ dragged: draggingGroupId === group.id }"
+          (cdkDragStarted)="dragStart(group.id)"
+          (cdkDragReleased)="dragStart(null)"
+          (longPress)="dragStart(group.id)"
+          (longPressEnd)="dragStart(null)"
+        >
+          @if (group.active) {
+            <div>
+              <div
+                id="{{ group.id }}"
+                cdkDropList
+                cdkDropListSortingDisabled
+                [cdkDropListConnectedTo]="getConnectedGroups(group.id, groups)"
+                [cdkDropListData]="group.id"
+                (cdkDropListDropped)="drop($event)"
+              >
+                <div matSubheader>{{ group.name }}</div>
+                <ng-container>
+                  @for (item of group?.items; track trackById($index, item)) {
+                    <mat-list-item
+                      [cdkDragData]="item"
+                      cdkDragLockAxis="y"
+                      cdkDrag
+                      [cdkDragStartDelay]="dragDelay"
+                      appLongPress
+                      [duration]="dragDelay"
+                      [ngClass]="{ dragged: draggingGroupId === item.id }"
+                      (cdkDragStarted)="dragStart(item.id)"
+                      (cdkDragReleased)="dragStart(null)"
+                      (longPress)="dragStart(item.id)"
+                      (longPressEnd)="dragStart(null)"
+                    >
+                      <mat-checkbox (click)="markDone(item)">{{ item.name }}</mat-checkbox>
+                      <span class="description mat-hint">{{ item.description }}</span>
+                      <button
+                        mat-icon-button
+                        matListItemMeta
+                        class="mat-hint"
+                        [routerLink]="['/home/item', listId | async, item.id]"
+                      >
+                        <mat-icon>edit</mat-icon>
+                      </button>
+                    </mat-list-item>
+                  }
+                </ng-container>
+              </div>
+              <mat-divider />
+            </div>
+          }
+        </div>
+      }
+    </mat-list>
+  }
+
+  @if (loading$ | async) {
+    <div class="loading">
+      <mat-spinner />
+    </div>
+  }
+</div>
+
+<footer class="list-container__footer">
+  <mat-divider />
+  <form class="list-container__form" novalidate [formGroup]="inputForm" (ngSubmit)="addItemFromInput()">
+    <mat-form-field class="list-container__input" floatLabel="always" appearance="outline" subscriptSizing="dynamic">
+      <input
+        matInput
+        autocomplete="off"
+        type="text"
+        formControlName="inputControl"
+        required
+        placeholder="Add to list ..."
+        i18n-placeholder
+        [errorStateMatcher]="inputValid"
+      />
+    </mat-form-field>
+    <button mat-raised-button type="submit" color="primary" [disabled]="!inputForm.valid" i18n>Add</button>
+    @if (inactiveItems$ | async; as inactiveItems) {
+      @if (inactiveItems && inactiveItems.length <= 40) {
+        <button class="extra-actions-button" mat-icon-button [matMenuTriggerFor]="menu" aria-label="Extra actions">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      }
+      <mat-menu #menu="matMenu">
+        <ng-template matMenuContent>
+          <button mat-menu-item (click)="markAllActive(inactiveItems)" i18n>Mark all active</button>
+        </ng-template>
+      </mat-menu>
+    }
+  </form>
+</footer>

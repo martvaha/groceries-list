@@ -23,6 +23,7 @@ import { ItemEffects } from './state/item/item.effects';
 import { AuthGuard } from './auth/auth.guard';
 import { sentryInstrumentation } from './shared/sentry';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -55,6 +56,13 @@ export const appConfig: ApplicationConfig = {
     AuthGuard,
     UserTrackingService,
     ScreenTrackingService,
+    {
+      provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
+      useValue: {
+        subscriptSizing: 'dynamic',
+        appearance: 'outline',
+      },
+    },
     ...sentryInstrumentation, provideClientHydration(withEventReplay()),
   ],
 };

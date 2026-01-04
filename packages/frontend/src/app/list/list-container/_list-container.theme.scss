@@ -23,6 +23,10 @@
       }
     }
   }
+
+  .loading {
+    background-color: mat.m2-get-color-from-palette($background, 'background', 0.5);
+  }
 }
 
 @mixin theme($theme) {
