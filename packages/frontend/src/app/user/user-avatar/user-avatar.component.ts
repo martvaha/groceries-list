@@ -1,8 +1,13 @@
 import { Component, OnInit, inject, output, input } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { NgStyle } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { User } from '../../auth/auth.service';
 import { ThemeService } from '../../shared/theme.service';
 import { checkForUpdate } from '../../state/app.actions';
@@ -11,7 +16,8 @@ import { AppTheme } from '../../state/config/config.reducer';
 import { login, logout } from '../../state/user/user.actions';
 
 @Component({
-  standalone: false,
+  standalone: true,
+  imports: [NgStyle, RouterLink, MatButtonModule, MatIconModule, MatMenuModule],
   selector: 'app-user-avatar',
   templateUrl: './user-avatar.component.html',
   styleUrls: ['./user-avatar.component.scss'],

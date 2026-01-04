@@ -1,21 +1,24 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
 import { map, switchMap } from 'rxjs/operators';
+import { AsyncPipe } from '@angular/common';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { Firestore, doc, docSnapshots } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
 import { selectUser } from '../state/user/user.reducer';
 import { User } from '../auth/auth.service';
+import { ListInviteComponent } from './list-invite.component';
 
 @Component({
-  standalone: false,
+  standalone: true,
+  imports: [AsyncPipe, ListInviteComponent],
   selector: 'app-list-invite-container',
   template: `
     <app-list-invite [user]="user | async"
       [inviteId]="inviteId | async"
      />
   `,
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListInviteContainerComponent implements OnInit {
   private route = inject(ActivatedRoute);

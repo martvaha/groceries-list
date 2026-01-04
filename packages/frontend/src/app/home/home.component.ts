@@ -1,22 +1,37 @@
 import { Component, OnInit, OnDestroy, ChangeDetectorRef, inject, viewChild } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { RouterOutlet } from '@angular/router';
 import { MediaMatcher } from '@angular/cdk/layout';
-import { User } from '../auth/auth.service';
-import { Observable } from 'rxjs';
-import { LoadingService } from '../shared/loading-service';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconRegistry, MatIconModule } from '@angular/material/icon';
+import { MatSidenav, MatSidenavModule } from '@angular/material/sidenav';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { User } from '../auth/auth.service';
+import { LoadingService } from '../shared/loading-service';
 import { State } from '../state/app.reducer';
 import { selectUser } from '../state/user/user.reducer';
-import { clearState } from '../state/app.actions';
-import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
 import { loadLists } from '../state/list/list.actions';
-import { MatSidenav } from '@angular/material/sidenav';
 import { TitleService } from '../shared/title.service';
 import { selectAllLists } from '../state/list/list.reducer';
 import { List } from '../shared/models';
+import { UserAvatarComponent } from '../user/user-avatar/user-avatar.component';
+import { SidenavMenuComponent } from './sidenav-menu/sidenav-menu.component';
 
 @Component({
-  standalone: false,
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    RouterOutlet,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    MatSidenavModule,
+    UserAvatarComponent,
+    SidenavMenuComponent,
+  ],
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
@@ -63,7 +78,7 @@ export class HomeComponent implements OnInit, OnDestroy {
 
   toggleSidenav(isOpen?: boolean) {
     this.opened = isOpen || !this.opened;
-    this.changeDetectorRef.detectChanges();
+    this.changeDetectorRef.markForCheck();
   }
 
   ngOnDestroy() {

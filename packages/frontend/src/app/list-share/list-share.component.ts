@@ -4,14 +4,18 @@ import { COMMA, ENTER, FF_SEMICOLON } from '@angular/cdk/keycodes';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable, combineLatest } from 'rxjs';
 import { Firestore, collection, addDoc } from '@angular/fire/firestore';
-import { MatChipInputEvent } from '@angular/material/chips';
-import { FormControl, Validators, ValidationErrors } from '@angular/forms';
+import { MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
+import { FormControl, Validators, ValidationErrors, ReactiveFormsModule } from '@angular/forms';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { User, AuthService } from '../auth/auth.service';
 import { Store } from '@ngrx/store';
 import { selectActiveList } from '../state/list/list.reducer';
 
 @Component({
-  standalone: false,
+  standalone: true,
+  imports: [ReactiveFormsModule, MatChipsModule, MatFormFieldModule, MatButtonModule, MatIconModule],
   selector: 'app-list-share',
   styleUrls: ['./list-share.component.scss'],
   templateUrl: './list-share.component.html',

@@ -1,7 +1,9 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { MatIconRegistry } from '@angular/material/icon';
-import { MatRadioChange } from '@angular/material/radio';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { AsyncPipe } from '@angular/common';
+import { MatIconRegistry, MatIconModule } from '@angular/material/icon';
+import { MatRadioChange, MatRadioModule } from '@angular/material/radio';
+import { MatButtonModule } from '@angular/material/button';
 import { DomSanitizer } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
@@ -12,7 +14,8 @@ import { setLanguage } from '../../state/config/config.actions';
 import { AppLanguage, AppTheme, selectLanguage } from '../../state/config/config.reducer';
 
 @Component({
-  standalone: false,
+  standalone: true,
+  imports: [AsyncPipe, ReactiveFormsModule, MatRadioModule, MatIconModule, MatButtonModule],
   selector: 'app-profile-container',
   templateUrl: './profile-container.component.html',
   styleUrls: ['./profile-container.component.scss'],

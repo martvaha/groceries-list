@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, Input, inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 export interface InfoDialogConfig extends MatDialogConfig {
   data: {
@@ -10,7 +11,8 @@ export interface InfoDialogConfig extends MatDialogConfig {
 }
 
 @Component({
-  standalone: false,
+  standalone: true,
+  imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule],
   template: `
     @if (title) {
       <h1 mat-dialog-title>{{ title }}</h1>

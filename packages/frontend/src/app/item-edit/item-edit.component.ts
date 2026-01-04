@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/cor
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { map, filter } from 'rxjs/operators';
 import { Observable, combineLatest } from 'rxjs';
+import { AsyncPipe, Location } from '@angular/common';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { Item, Group } from '../shared/models';
 import { DialogService } from '../shared/dialog-service/dialog.service';
 import { takeValue, minLoadingTime } from '../shared/utils';
@@ -12,10 +14,11 @@ import { selectActiveListId } from '../state/list/list.reducer';
 import { addGroup, getGroups } from '../state/group/group.actions';
 import { getItems, updateItem } from '../state/item/item.actions';
 import { selectItemEntities, selectItemLoading } from '../state/item/item.reducer';
-import { Location } from '@angular/common';
+import { ItemEditFormComponent } from './item-edit-form/item-edit-form.component';
 
 @Component({
-  standalone: false,
+  standalone: true,
+  imports: [AsyncPipe, MatProgressSpinnerModule, ItemEditFormComponent],
   selector: 'app-item-edit',
   templateUrl: './item-edit.component.html',
   styleUrls: ['./item-edit.component.scss'],

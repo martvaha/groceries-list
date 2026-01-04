@@ -1,13 +1,12 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { Routes } from '@angular/router';
+import { canActivate, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 
 import { HomeComponent } from './home/home.component';
 import { AuthComponent } from './auth/auth.component';
 import { ListsContainerComponent } from './lists-container/lists-container.component';
-import { canActivate, redirectUnauthorizedTo } from '@angular/fire/auth-guard';
 import { AppShellComponent } from './app-shell/app-shell.component';
 
-const routes: Routes = [
+export const routes: Routes = [
   { path: '', redirectTo: 'home', pathMatch: 'full' },
   // This routes only purpose is to make AppShell more easily testable
   { path: 'shell', component: AppShellComponent },
@@ -19,51 +18,43 @@ const routes: Routes = [
       {
         path: 'lists',
         component: ListsContainerComponent,
-        // canActivate: [AuthGuard],
         ...canActivate(() => redirectUnauthorizedTo(['home', 'login'])),
       },
       { path: 'login', component: AuthComponent },
-      // { path: 'list/:listId', component: ListContainerComponent },
       {
         path: 'list',
         ...canActivate(() => redirectUnauthorizedTo(['home', 'login'])),
-        loadChildren: () => import('./list/list.module').then((m) => m.ListModule),
+        loadChildren: () => import('./list/list.routes').then((m) => m.LIST_ROUTES),
       },
       {
         path: 'profile',
         ...canActivate(() => redirectUnauthorizedTo(['home', 'login'])),
-        loadChildren: () => import('./profile/profile.module').then((m) => m.ProfileModule),
+        loadChildren: () => import('./profile/profile.routes').then((m) => m.PROFILE_ROUTES),
       },
       {
         path: 'edit',
         ...canActivate(() => redirectUnauthorizedTo(['home', 'login'])),
-        loadChildren: () => import('./list-edit/list-edit.module').then((m) => m.ListEditModule),
+        loadChildren: () => import('./list-edit/list-edit.routes').then((m) => m.LIST_EDIT_ROUTES),
       },
       {
         path: 'item',
         ...canActivate(() => redirectUnauthorizedTo(['home', 'login'])),
-        loadChildren: () => import('./item-edit/item-edit.module').then((m) => m.ItemEditModule),
+        loadChildren: () => import('./item-edit/item-edit.routes').then((m) => m.ITEM_EDIT_ROUTES),
       },
       {
         path: 'share',
         ...canActivate(() => redirectUnauthorizedTo(['home', 'login'])),
-        loadChildren: () => import('./list-share/list-share.module').then((m) => m.ListShareModule),
+        loadChildren: () => import('./list-share/list-share.routes').then((m) => m.LIST_SHARE_ROUTES),
       },
       {
         path: 'invite',
         ...canActivate(() => redirectUnauthorizedTo(['home', 'login'])),
-        loadChildren: () => import('./list-invite/list-invite.module').then((m) => m.ListInviteModule),
+        loadChildren: () => import('./list-invite/list-invite.routes').then((m) => m.LIST_INVITE_ROUTES),
       },
       {
         path: 'legal',
-        loadChildren: () => import('./legal/legal.module').then((m) => m.LegalModule),
+        loadChildren: () => import('./legal/legal.routes').then((m) => m.LEGAL_ROUTES),
       },
     ],
   },
 ];
-
-@NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule],
-})
-export class AppRoutingModule {}

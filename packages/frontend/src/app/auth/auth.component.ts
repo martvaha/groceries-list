@@ -1,11 +1,13 @@
 import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { Store } from '@ngrx/store';
+import { MatButtonModule } from '@angular/material/button';
 import { environment } from '../../environments/environment';
 import { State } from '../state/app.reducer';
 import { login } from '../state/user/user.actions';
 
 @Component({
-  standalone: false,
+  standalone: true,
+  imports: [MatButtonModule],
   selector: 'app-auth',
   templateUrl: './auth.component.html',
   styleUrls: ['./auth.component.scss'],

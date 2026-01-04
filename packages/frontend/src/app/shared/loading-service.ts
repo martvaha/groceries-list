@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { distinctUntilChanged, delay } from 'rxjs/operators';
-import { SharedModule } from './shared.module';
 
 @Injectable({
-  providedIn: SharedModule
+  providedIn: 'root',
 })
 export class LoadingService {
   private _counter = 0;

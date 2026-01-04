@@ -37,6 +37,7 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+.playwright-mcp
 
 # System Files
 .DS_Store
@@ -47,6 +48,3 @@ Thumbs.db
 .runtimeconfig.json
 .firebase
 project
-
-.nx/cache
-.nx/workspace-data

@@ -1,14 +1,22 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
+import { AsyncPipe } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { Observable } from 'rxjs';
+import { MatListModule } from '@angular/material/list';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
 import { DialogService } from '../shared/dialog-service/dialog.service';
 import { List } from '../shared/models';
 import { Store } from '@ngrx/store';
 import { State, selectLoading } from '../state/app.reducer';
 import { addList, removeList } from '../state/list/list.actions';
 import { selectAllLists } from '../state/list/list.reducer';
+import { FavoriteButtonComponent } from '../shared/favorite-button/favorite-button.component';
 
 @Component({
-  standalone: false,
+  standalone: true,
+  imports: [AsyncPipe, RouterLink, MatListModule, MatIconModule, MatButtonModule, MatMenuModule, FavoriteButtonComponent],
   selector: 'app-lists-container',
   templateUrl: './lists-container.component.html',
   styleUrls: ['./lists-container.component.scss'],

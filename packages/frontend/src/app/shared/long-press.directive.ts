@@ -1,7 +1,9 @@
 import { Directive, HostBinding, HostListener, output, input } from '@angular/core';
 
 @Directive({
-  standalone: false, selector: '[appLongPress]' })
+  standalone: true,
+  selector: '[appLongPress]',
+})
 export class LongPressDirective {
   readonly duration = input(500);
 

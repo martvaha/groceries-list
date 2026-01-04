@@ -1,10 +1,14 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MatIconRegistry } from '@angular/material/icon';
+import { MatIconRegistry, MatIconModule } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { environment } from '../../environments/environment';
 
 @Component({
-  standalone: false,
+  standalone: true,
+  imports: [MatToolbarModule, MatButtonModule, MatIconModule, MatProgressSpinnerModule],
   selector: 'app-app-shell',
   templateUrl: './app-shell.component.html',
   styleUrls: ['./app-shell.component.scss'],

@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialogConfig, MatDialogRef, MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose } from '@angular/material/dialog';
+import { MatButtonModule } from '@angular/material/button';
 
 export interface ConfirmDialogConfig extends MatDialogConfig {
   data: ConfirmDialogData;
@@ -14,7 +15,8 @@ export interface ConfirmDialogData {
 }
 
 @Component({
-  standalone: false,
+  standalone: true,
+  imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatButtonModule],
   template: `
     @if (data.title) {
       <h1 mat-dialog-title>{{ data.title }}</h1>

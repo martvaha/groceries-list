@@ -1,10 +1,21 @@
 import { ListKeyManager } from '@angular/cdk/a11y';
-import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
+import { CdkDragDrop, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
 import { DOWN_ARROW, ENTER, UP_ARROW } from '@angular/cdk/keycodes';
 import { AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, viewChildren } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { AsyncPipe, NgClass } from '@angular/common';
+import { RouterLink } from '@angular/router';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatListModule } from '@angular/material/list';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { combineLatest, from, Observable, of, Subject } from 'rxjs';
@@ -19,6 +30,7 @@ import { selectAllInactiveItems, selectAllItems } from '../../state/item/item.re
 import { upsertGroupsOrder } from '../../state/list/list.actions';
 import { selectActiveListId, selectListStateLoading } from '../../state/list/list.reducer';
 import { ListService } from '../list.service';
+import { LongPressDirective } from '../../shared/long-press.directive';
 
 export interface FuseMatch {
   indices: [number, number][];
@@ -33,7 +45,24 @@ export interface FuseAdvancedResult<T> {
 }
 
 @Component({
-  standalone: false,
+  standalone: true,
+  imports: [
+    AsyncPipe,
+    NgClass,
+    RouterLink,
+    ReactiveFormsModule,
+    DragDropModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
+    MatListModule,
+    MatDividerModule,
+    MatCheckboxModule,
+    MatProgressSpinnerModule,
+    LongPressDirective,
+  ],
   selector: 'app-list-container',
   templateUrl: './list-container.component.html',
   styleUrls: ['./list-container.component.scss'],

@@ -1,12 +1,10 @@
-import { Injectable, NgZone, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import Fuse, { IFuseOptions, FuseResult } from 'fuse.js';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SearchService {
-  private ngZone = inject(NgZone);
-
   worker?: Worker;
   fuse?: Fuse<unknown>;
   options: IFuseOptions<unknown> = {};
@@ -36,7 +34,7 @@ export class SearchService {
     const promise = new Promise<FuseResult<T>[] | undefined>((res) => {
       resolve = (val) => {
         console.log('8289', val);
-        this.ngZone.run(() => res(val));
+        res(val);
       };
     });
 

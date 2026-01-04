@@ -1,7 +1,11 @@
 import { Component, OnInit, ChangeDetectionStrategy, inject } from '@angular/core';
 import { map } from 'rxjs/operators';
+import { AsyncPipe } from '@angular/common';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Observable } from 'rxjs';
+import { MatSelectChange, MatSelectModule } from '@angular/material/select';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 import { DialogService } from '../shared/dialog-service/dialog.service';
 import { State } from '../state/app.reducer';
 import { Store } from '@ngrx/store';
@@ -10,11 +14,11 @@ import { getItems, deleteItem, updateItem } from '../state/item/item.actions';
 import { selectAllItems } from '../state/item/item.reducer';
 import { Item, Group } from '../shared/models';
 import { selectAllGroups } from '../state/group/group.reducer';
-import { MatSelectChange } from '@angular/material/select';
 import { takeValue } from '../shared/utils';
 
 @Component({
-  standalone: false,
+  standalone: true,
+  imports: [AsyncPipe, MatSelectModule, MatButtonModule, MatIconModule],
   selector: 'app-list-edit',
   styleUrls: ['./list-edit.component.scss'],
   templateUrl: './list-edit.component.html',

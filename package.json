@@ -6,6 +6,7 @@
   "scripts": {
     "ng": "pnpm --filter @groceries-list/frontend ng",
     "dev": "pnpm --filter @groceries-list/frontend dev",
+    "preview": "pnpm --filter @groceries-list/frontend preview",
     "build": "pnpm --filter @groceries-list/frontend build && pnpm --filter @groceries-list/functions build",
     "build:frontend": "pnpm --filter @groceries-list/frontend build",
     "build:functions": "pnpm --filter @groceries-list/functions build",
@@ -17,7 +18,7 @@
     "test": "pnpm --filter @groceries-list/frontend test"
   },
   "devDependencies": {
-    "firebase-tools": "^13.35.1",
+    "firebase-tools": "^15.1.0",
     "prettier": "^3.7.4",
     "typescript": "~5.9.3"
   },

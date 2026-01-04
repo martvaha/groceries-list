@@ -1,12 +1,16 @@
 import { ChangeDetectionStrategy, Component, Input, input } from '@angular/core';
+import { JsonPipe } from '@angular/common';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { User } from '../auth/auth.service';
+import { AuthComponent } from '../auth/auth.component';
 
 @Component({
-  standalone: false,
+  standalone: true,
+  imports: [JsonPipe, MatProgressSpinnerModule, AuthComponent],
   selector: 'app-list-invite',
   templateUrl: './list-invite.component.html',
   styleUrls: ['./list-invite.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ListInviteComponent {
   // TODO: Skipped for migration because:

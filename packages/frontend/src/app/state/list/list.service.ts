@@ -48,6 +48,9 @@ export class ListService {
             : query(listCollection, where('acl', 'array-contains', user!.uid));
 
           return collectionChanges(listQuery).pipe(
+            // startWith ensures we emit immediately when query returns no documents
+            // (collectionChanges may not emit for empty results with time-based filters)
+            startWith([] as DocumentChange<any>[]),
             tap((c) => console.log('load list changes', c)),
             map((changes) => {
               if (!changes?.length) return [loadListsNothingChanged()];
