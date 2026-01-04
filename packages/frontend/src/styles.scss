@@ -47,13 +47,6 @@ body {
 
 .app-dark {
   @include mat.all-component-colors($dark-theme);
-
-  a:not(.mat-tab-link):not(.mat-list-item):not(.mat-line):not(.mat-icon-button):not(.mat-menu-item) {
-    color: #7c4dff;
-    &:visited {
-      color: #8e37bb;
-    }
-  }
 }
 
 body.app-dark {

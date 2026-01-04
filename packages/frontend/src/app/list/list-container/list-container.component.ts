@@ -1,7 +1,15 @@
 import { ListKeyManager } from '@angular/cdk/a11y';
 import { CdkDragDrop, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
 import { DOWN_ARROW, ENTER, UP_ARROW } from '@angular/cdk/keycodes';
-import { AfterViewInit, ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject, viewChildren } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  OnDestroy,
+  OnInit,
+  inject,
+  viewChildren,
+} from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -122,7 +130,7 @@ export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit 
     const search$ = this.inputControl.valueChanges.pipe(
       startWith(''),
       debounceTime(300),
-      map((input: string | { name: string }) => (typeof input === 'string' ? input : input.name))
+      map((input: string | { name: string }) => (typeof input === 'string' ? input : input.name)),
     );
 
     const unselected$ = this.items$.pipe(
@@ -131,7 +139,7 @@ export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit 
         this.search.setCollection(items, this.searchOptions);
 
         return { items };
-      })
+      }),
     );
 
     this.filteredItems$ = combineLatest([search$, unselected$]).pipe(
@@ -142,13 +150,13 @@ export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit 
               matches?.map((match) => ({
                 ...match.item,
                 displayName: highlight(match.item.name, match?.matches?.[0]?.indices as unknown as number[][]),
-              }))
-            )
+              })),
+            ),
           );
         } else {
           return of(items.map((item) => ({ ...item, displayName: item.name })));
         }
-      })
+      }),
       // tap(items => (this.keyboardEventsManager = new ListKeyManager(this.searchItems)))
     );
   }

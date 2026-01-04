@@ -11,10 +11,10 @@
         <mat-divider />
         <div mat-subheader i18n>Favorites</div>
         @for (list of pinnedLists(); track list) {
-          <mat-list-item>
-            <a #link matLine [routerLink]="['/home/list', list.id]" (click)="closeSidenavOnMobile()">{{ list.name }}</a>
-            <app-favorite-button [favorite]="true" />
-          </mat-list-item>
+          <a mat-list-item class="favorite-item" [routerLink]="['/home/list', list.id]" (click)="closeSidenavOnMobile()">
+            <span matListItemTitle>{{ list.name }}</span>
+            <app-favorite-button matListItemMeta [favorite]="true" />
+          </a>
         }
       }
 
