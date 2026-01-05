@@ -1,15 +1,15 @@
 import { ListKeyManager } from '@angular/cdk/a11y';
 import { CdkDragDrop, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
-import { DOWN_ARROW, ENTER, UP_ARROW } from '@angular/cdk/keycodes';
 import {
-  AfterViewInit,
   ChangeDetectionStrategy,
   Component,
   OnDestroy,
   OnInit,
+  effect,
   inject,
   viewChildren,
 } from '@angular/core';
+import { SearchItemHighlightDirective } from './search-item-highlight.directive';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { AsyncPipe, NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
@@ -70,13 +70,14 @@ export interface FuseAdvancedResult<T> {
     MatCheckboxModule,
     MatProgressSpinnerModule,
     LongPressDirective,
+    SearchItemHighlightDirective,
   ],
   selector: 'app-list-container',
   templateUrl: './list-container.component.html',
   styleUrls: ['./list-container.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit {
+export class ListContainerComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private listService = inject(ListService);
   private snackBar = inject(MatSnackBar);
@@ -96,8 +97,9 @@ export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit 
   inactiveItems$!: Observable<Item[]>;
   dragDelay = 300;
   draggingGroupId!: string | null;
-  readonly searchItems = viewChildren<any>('searchItem');
-  keyboardEventsManager!: ListKeyManager<any>;
+  readonly searchItems = viewChildren(SearchItemHighlightDirective);
+  keyboardEventsManager!: ListKeyManager<SearchItemHighlightDirective>;
+  private filteredItemsCache: Item[] = [];
   private searchOptions = {
     keys: ['name'],
     includeMatches: true,
@@ -110,9 +112,23 @@ export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit 
     },
   };
 
-  ngAfterViewInit(): void {
-    console.log('3240');
-    // this.searchItems.changes.subscribe((items) => (this.keyboardEventsManager = new ListKeyManager(this.searchItems)));
+  constructor() {
+    effect(() => {
+      const items = this.searchItems();
+      if (items.length) {
+        this.keyboardEventsManager = new ListKeyManager(items).withWrap();
+        // Subscribe to change events to apply active/inactive styles
+        this.keyboardEventsManager.change.subscribe((activeIndex) => {
+          items.forEach((item, index) => {
+            if (index === activeIndex) {
+              item.setActiveStyles();
+            } else {
+              item.setInactiveStyles();
+            }
+          });
+        });
+      }
+    });
   }
 
   ngOnInit() {
@@ -157,8 +173,17 @@ export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit 
           return of(items.map((item) => ({ ...item, displayName: item.name })));
         }
       }),
-      // tap(items => (this.keyboardEventsManager = new ListKeyManager(this.searchItems)))
     );
+
+    // Cache filtered items for keyboard selection
+    this.filteredItems$.subscribe((items) => {
+      this.filteredItemsCache = items ?? [];
+    });
+
+    // Reset active item when user types
+    this.inputControl.valueChanges.subscribe(() => {
+      this.keyboardEventsManager?.setActiveItem(-1);
+    });
   }
 
   getConnectedGroups(id: string, groups: GroupWithItems[]) {
@@ -184,16 +209,42 @@ export class ListContainerComponent implements OnInit, OnDestroy, AfterViewInit 
     }
   }
 
-  handleKeyUp(event: KeyboardEvent) {
-    event.stopImmediatePropagation();
-    if (this.keyboardEventsManager) {
-      console.log(event.key);
-      if (event.keyCode === DOWN_ARROW || event.keyCode === UP_ARROW) {
-        // passing the event to key manager so we get a change fired
+  handleKeyDown(event: KeyboardEvent) {
+    if (!this.keyboardEventsManager) return;
+
+    const items = this.searchItems();
+    if (!items.length) return;
+
+    if (event.key === 'ArrowDown') {
+      event.preventDefault();
+      if (
+        this.keyboardEventsManager.activeItemIndex === null ||
+        this.keyboardEventsManager.activeItemIndex === -1
+      ) {
+        this.keyboardEventsManager.setFirstItemActive();
+      } else {
         this.keyboardEventsManager.onKeydown(event);
-      } else if (event.keyCode === ENTER) {
-        // when we hit enter, the keyboardManager should call the selectItem method of the `ListItemComponent`
-        this.keyboardEventsManager.activeItem.selectItem();
+      }
+    } else if (event.key === 'ArrowUp') {
+      event.preventDefault();
+      if (
+        this.keyboardEventsManager.activeItemIndex === null ||
+        this.keyboardEventsManager.activeItemIndex === -1
+      ) {
+        this.keyboardEventsManager.setLastItemActive();
+      } else {
+        this.keyboardEventsManager.onKeydown(event);
+      }
+    } else if (
+      event.key === 'Enter' &&
+      this.keyboardEventsManager.activeItemIndex !== null &&
+      this.keyboardEventsManager.activeItemIndex >= 0
+    ) {
+      event.preventDefault();
+      const activeIndex = this.keyboardEventsManager.activeItemIndex;
+      const item = this.filteredItemsCache[activeIndex];
+      if (item) {
+        this.addItem(item);
       }
     }
   }

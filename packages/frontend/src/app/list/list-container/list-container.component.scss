@@ -46,6 +46,16 @@
 
 .lists-container__search-item {
   cursor: pointer;
+  position: relative;
+
+  &.active::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-color: var(--mat-list-list-item-focus-state-layer-color, var(--mat-sys-on-surface));
+    opacity: var(--mat-list-list-item-focus-state-layer-opacity, var(--mat-sys-focus-state-layer-opacity));
+    pointer-events: none;
+  }
 }
 
 .lists-container__item-list {

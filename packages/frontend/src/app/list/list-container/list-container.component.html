@@ -2,7 +2,11 @@
   @if (inputControl.value?.length) {
     <mat-list class="lists-container__search-items">
       @for (item of filteredItems$ | async; track trackById($index, item)) {
-        <mat-list-item #searchItem (click)="addItem(item)" class="lists-container__search-item"
+        <mat-list-item
+          appSearchItemHighlight
+          #searchItem="appSearchItemHighlight"
+          (click)="addItem(item)"
+          class="lists-container__search-item"
           ><span [innerHTML]="item.displayName"></span
         ></mat-list-item>
       }
@@ -101,6 +105,7 @@
         placeholder="Add to list ..."
         i18n-placeholder
         [errorStateMatcher]="inputValid"
+        (keydown)="handleKeyDown($event)"
       />
     </mat-form-field>
     <button mat-raised-button type="submit" color="primary" [disabled]="!inputForm.valid" i18n>Add</button>
