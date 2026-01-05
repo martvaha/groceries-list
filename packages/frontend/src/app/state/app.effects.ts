@@ -1,10 +1,10 @@
 import { isPlatformServer } from '@angular/common';
-import { Injectable, PLATFORM_ID, inject } from '@angular/core';
+import { PLATFORM_ID, inject } from '@angular/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { SwUpdate, VersionReadyEvent } from '@angular/service-worker';
-import { Actions, createEffect, ofType } from '@ngrx/effects';
-import { Action, Store } from '@ngrx/store';
+import { Actions, ROOT_EFFECTS_INIT, createEffect, ofType } from '@ngrx/effects';
+import { Store } from '@ngrx/store';
 import { EMPTY } from 'rxjs';
 import { exhaustMap, filter, map, switchMap, take, tap } from 'rxjs/operators';
 import { checkForUpdate, clearState, initAppEffects } from './app.actions';
@@ -12,95 +12,100 @@ import { State } from './app.reducer';
 import { selectActiveListId } from './list/list.reducer';
 import { logout } from './user/user.actions';
 
-@Injectable()
-export class AppEffects {
-  private actions$ = inject(Actions);
-  private store = inject<Store<State>>(Store);
-  private router = inject(Router);
-  private updates = inject(SwUpdate);
-  private snack = inject(MatSnackBar);
-  private platformId = inject(PLATFORM_ID);
+export const initApp$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(ROOT_EFFECTS_INIT),
+      map(() => initAppEffects())
+    ),
+  { functional: true }
+);
 
-
-  clear$ = createEffect(() =>
-    this.actions$.pipe(
+export const clear$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
       ofType(logout),
       exhaustMap(() => [clearState()])
-    )
-  );
+    ),
+  { functional: true }
+);
 
-  checkForUpdates$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(checkForUpdate),
-        map(() => {
-          if (!this.updates.isEnabled) {
-            const snackRef = this.snack.open(
-              $localize`Browser does not support background updates. Just reload the page to get the latest version.`,
-              $localize`Reload`,
-              { duration: 5000 }
-            );
-            snackRef.afterDismissed().subscribe(({ dismissedByAction }) => {
-              if (dismissedByAction) document.location.reload();
-            });
-          } else {
-            this.updates.checkForUpdate();
-          }
-        })
-      ),
-    { dispatch: false }
-  );
+export const checkForUpdates$ = createEffect(
+  (actions$ = inject(Actions), updates = inject(SwUpdate), snack = inject(MatSnackBar)) =>
+    actions$.pipe(
+      ofType(checkForUpdate),
+      map(() => {
+        if (!updates.isEnabled) {
+          const snackRef = snack.open(
+            $localize`Browser does not support background updates. Just reload the page to get the latest version.`,
+            $localize`Reload`,
+            { duration: 5000 }
+          );
+          snackRef.afterDismissed().subscribe(({ dismissedByAction }) => {
+            if (dismissedByAction) document.location.reload();
+          });
+        } else {
+          updates.checkForUpdate();
+        }
+      })
+    ),
+  { functional: true, dispatch: false }
+);
 
-  // Restores activeList if active ID is present in localstore and path is root ("/")
-  // This is used to restore previously active list after PWA is closed and reopened.
-  restoreActiveList$ = createEffect(
-    () =>
-      isPlatformServer(this.platformId)
-        ? EMPTY
-        : this.actions$.pipe(
-            ofType(initAppEffects),
-            switchMap(() =>
-              this.store.select(selectActiveListId).pipe(
-                take(1),
-                tap((activeListId) =>
-                  console.log('restoreActiveList$', { activeListId, pathname: document.location.pathname })
-                ),
-                tap(
-                  (activeListId) =>
-                    activeListId &&
-                    document.location.pathname === '/' &&
-                    this.router.navigate(['home', 'list', activeListId])
-                )
+// Restores activeList if active ID is present in localstore and path is root ("/")
+// This is used to restore previously active list after PWA is closed and reopened.
+export const restoreActiveList$ = createEffect(
+  (
+    actions$ = inject(Actions),
+    store = inject<Store<State>>(Store),
+    router = inject(Router),
+    platformId = inject(PLATFORM_ID)
+  ) =>
+    isPlatformServer(platformId)
+      ? EMPTY
+      : actions$.pipe(
+          ofType(initAppEffects),
+          switchMap(() =>
+            store.select(selectActiveListId).pipe(
+              take(1),
+              tap((activeListId) =>
+                console.log('restoreActiveList$', { activeListId, pathname: document.location.pathname })
+              ),
+              tap(
+                (activeListId) =>
+                  activeListId &&
+                  document.location.pathname === '/' &&
+                  router.navigate(['home', 'list', activeListId])
               )
             )
-          ),
-    { dispatch: false }
-  );
+          )
+        ),
+  { functional: true, dispatch: false }
+);
 
-  initAppUpdates$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(initAppEffects),
-        switchMap(() =>
-          this.updates.versionUpdates.pipe(
-            filter((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY'),
-            switchMap(() =>
-              this.snack
-                .open($localize`New version available`, $localize`Update`)
-                .afterDismissed()
-                .pipe(tap(() => this.updates.activateUpdate().then(() => document.location.reload())))
-            )
+export const initAppUpdates$ = createEffect(
+  (actions$ = inject(Actions), updates = inject(SwUpdate), snack = inject(MatSnackBar)) =>
+    actions$.pipe(
+      ofType(initAppEffects),
+      switchMap(() =>
+        updates.versionUpdates.pipe(
+          filter((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY'),
+          switchMap(() =>
+            snack
+              .open($localize`New version available`, $localize`Update`)
+              .afterDismissed()
+              .pipe(tap(() => updates.activateUpdate().then(() => document.location.reload())))
           )
         )
-      ),
-    { dispatch: false }
-  );
+      )
+    ),
+  { functional: true, dispatch: false }
+);
 
-  ngrxOnInitEffects(): Action {
-    return initAppEffects();
-  }
-
-  private shouldRestoreActiveList(pathname: string) {
-    return pathname === '/';
-  }
-}
+export const appEffects = {
+  initApp$,
+  clear$,
+  checkForUpdates$,
+  restoreActiveList$,
+  initAppUpdates$,
+};

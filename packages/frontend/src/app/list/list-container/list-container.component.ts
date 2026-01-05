@@ -27,7 +27,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { combineLatest, from, Observable, of, Subject } from 'rxjs';
-import { debounceTime, delay, map, startWith, switchMap, take, withLatestFrom } from 'rxjs/operators';
+import { debounceTime, delay, distinctUntilChanged, map, shareReplay, startWith, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
 import { DialogService } from '../../shared/dialog-service/dialog.service';
 import { GroupWithItems, Item } from '../../shared/models';
 import { SearchService } from '../../shared/search.service';
@@ -147,19 +147,22 @@ export class ListContainerComponent implements OnInit, OnDestroy {
       startWith(''),
       debounceTime(300),
       map((input: string | { name: string }) => (typeof input === 'string' ? input : input.name)),
+      distinctUntilChanged(),
+      shareReplay(1),
     );
 
+    // Use shareReplay to cache items and avoid re-executing setCollection unnecessarily
     const unselected$ = this.items$.pipe(
       map((items) => items.filter((item) => !item.active)),
-      map((items) => {
+      distinctUntilChanged((prev, curr) => prev.length === curr.length && prev.every((p, i) => p.id === curr[i]?.id)),
+      tap((items) => {
         this.search.setCollection(items, this.searchOptions);
-
-        return { items };
       }),
+      shareReplay(1),
     );
 
     this.filteredItems$ = combineLatest([search$, unselected$]).pipe(
-      switchMap(([search, { items }]) => {
+      switchMap(([search, items]) => {
         if (items && search.length) {
           return from(this.search.search<Item>(search)).pipe(
             map((matches) =>
@@ -170,7 +173,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
             ),
           );
         } else {
-          return of(items.map((item) => ({ ...item, displayName: item.name })));
+          return of(items.map((item: Item) => ({ ...item, displayName: item.name })));
         }
       }),
     );
@@ -210,6 +213,11 @@ export class ListContainerComponent implements OnInit, OnDestroy {
   }
 
   handleKeyDown(event: KeyboardEvent) {
+    if (event.key === 'Escape') {
+      this.inputControl.reset('', { emitEvent: true });
+      return;
+    }
+
     if (!this.keyboardEventsManager) return;
 
     const items = this.searchItems();

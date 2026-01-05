@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATED } from '@ngrx/router-store';
 import { Store } from '@ngrx/store';
@@ -14,87 +14,87 @@ import * as ListActions from './list.actions';
 import { selectActiveList } from './list.reducer';
 import { ListService } from './list.service';
 
-@Injectable()
-export class ListEffects {
-  private actions$ = inject(Actions);
-  private listService = inject(ListService);
-  private dialogService = inject(DialogService);
-  private store = inject<Store<State>>(Store);
-  private title = inject(TitleService);
-
-
-  active$ = createEffect(() =>
-    this.actions$.pipe(
+export const active$ = createEffect(
+  (actions$ = inject(Actions), store = inject<Store<State>>(Store)) =>
+    actions$.pipe(
       ofType(ROUTER_NAVIGATED),
-      withLatestFrom(this.store.select(selectRouteParams)),
+      withLatestFrom(store.select(selectRouteParams)),
       map(([action, params]) => (params?.['listId'] || null) as string | null),
       distinctUntilChanged(),
       map((id) => ListActions.setActive({ id }))
-    )
-  );
+    ),
+  { functional: true }
+);
 
-  listTitle$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(ListActions.setActive),
-        switchMap(() =>
-          this.store
-            .select(selectActiveList)
-            .pipe(tap((list) => (list ? this.title.setTitle(list.name) : this.title.clearTitle())))
-        )
-      ),
-    { dispatch: false }
-  );
+export const listTitle$ = createEffect(
+  (actions$ = inject(Actions), store = inject<Store<State>>(Store), title = inject(TitleService)) =>
+    actions$.pipe(
+      ofType(ListActions.setActive),
+      switchMap(() =>
+        store.select(selectActiveList).pipe(tap((list) => (list ? title.setTitle(list.name) : title.clearTitle())))
+      )
+    ),
+  { functional: true, dispatch: false }
+);
 
-  groupsOrder$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(ListActions.upsertGroupsOrder),
-        switchMap(({ groupsOrder, id }) => this.listService.updateList({ groupsOrder, id } as List))
-      ),
-    { dispatch: false }
-  );
+export const groupsOrder$ = createEffect(
+  (actions$ = inject(Actions), listService = inject(ListService)) =>
+    actions$.pipe(
+      ofType(ListActions.upsertGroupsOrder),
+      switchMap(({ groupsOrder, id }) => listService.updateList({ groupsOrder, id } as List))
+    ),
+  { functional: true, dispatch: false }
+);
 
-  setActive$ = createEffect(() =>
-    this.actions$.pipe(
+export const setActive$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
       ofType(ListActions.setActive),
       switchMap(() => [getGroups(), getItems()])
-    )
-  );
+    ),
+  { functional: true }
+);
 
-  load$ = createEffect(() =>
-    this.actions$.pipe(
+export const load$ = createEffect(
+  (actions$ = inject(Actions), listService = inject(ListService)) =>
+    actions$.pipe(
       ofType(ListActions.loadLists),
       switchMap(() => {
-        return this.listService.getLists().pipe(mergeMap((action) => action));
+        return listService.getLists().pipe(mergeMap((action) => action));
       })
-    )
-  );
+    ),
+  { functional: true }
+);
 
-  add$ = createEffect(() =>
-    this.actions$.pipe(
+export const add$ = createEffect(
+  (actions$ = inject(Actions), listService = inject(ListService)) =>
+    actions$.pipe(
       ofType(ListActions.addList),
-      concatMap(({ list }) => this.listService.addList(list).then(() => ListActions.addListSuccess()))
-    )
-  );
+      concatMap(({ list }) => listService.addList(list).then(() => ListActions.addListSuccess()))
+    ),
+  { functional: true }
+);
 
-  remove$ = createEffect(() =>
-    this.actions$.pipe(
+export const remove$ = createEffect(
+  (actions$ = inject(Actions), listService = inject(ListService)) =>
+    actions$.pipe(
       ofType(ListActions.removeList),
       concatMap(({ list }) =>
-        this.listService
+        listService
           .removeList(list)
           .then(() => ListActions.removeListSuccess({ lists: [list] }))
           .catch((error) => ListActions.removeListFail({ error, list }))
       )
-    )
-  );
+    ),
+  { functional: true }
+);
 
-  error$ = createEffect(() =>
-    this.actions$.pipe(
+export const error$ = createEffect(
+  (actions$ = inject(Actions), dialogService = inject(DialogService)) =>
+    actions$.pipe(
       ofType(ListActions.removeListFail),
       switchMap(({ error, list }) => {
-        const dialogRef = this.dialogService.confirm({
+        const dialogRef = dialogService.confirm({
           data: { title: error.name, message: error.message, confirmLabel: $localize`Refresh`, confirmColor: 'accent' },
         });
 
@@ -108,13 +108,27 @@ export class ListEffects {
           })
         );
       })
-    )
-  );
+    ),
+  { functional: true }
+);
 
-  reload$ = createEffect(() =>
-    this.actions$.pipe(
+export const reload$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
       ofType(ListActions.removeListFailReload, ListActions.reload),
       switchMap(() => [ListActions.clearLists(), ListActions.loadLists()])
-    )
-  );
-}
+    ),
+  { functional: true }
+);
+
+export const listEffects = {
+  active$,
+  listTitle$,
+  groupsOrder$,
+  setActive$,
+  load$,
+  add$,
+  remove$,
+  error$,
+  reload$,
+};

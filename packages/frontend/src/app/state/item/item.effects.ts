@@ -1,8 +1,7 @@
-import { Injectable, inject } from '@angular/core';
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { switchMap, filter, tap } from 'rxjs/operators';
-import { Store } from '@ngrx/store';
-import { State } from '../app.reducer';
 import { ItemService } from './item.service';
 import {
   getItems,
@@ -15,120 +14,79 @@ import {
   deleteItemFail,
   getItemsFail,
 } from './item.actions';
-import { Router } from '@angular/router';
 
-@Injectable()
-export class ItemEffects {
-  private actions$ = inject(Actions);
-  private store = inject<Store<State>>(Store);
-  private itemService = inject(ItemService);
-  private router = inject(Router);
-
-
-  load$ = createEffect(() =>
-    this.actions$.pipe(
+export const loadItems$ = createEffect(
+  (actions$ = inject(Actions), itemService = inject(ItemService)) =>
+    actions$.pipe(
       ofType(getItems),
       switchMap(() => {
-        return this.itemService.getItems();
+        return itemService.getItems();
       })
-    )
-  );
+    ),
+  { functional: true }
+);
 
-  loadFail$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(getItemsFail),
-        tap(() => this.router.navigate(['home']))
-      ),
-    { dispatch: false }
-  );
+export const loadItemsFail$ = createEffect(
+  (actions$ = inject(Actions), router = inject(Router)) =>
+    actions$.pipe(
+      ofType(getItemsFail),
+      tap(() => router.navigate(['home']))
+    ),
+  { functional: true, dispatch: false }
+);
 
-  setGroup$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(setGroupId),
-        switchMap(({ item, groupId, listId }) => this.itemService.updateItem({ ...item, groupId }, listId))
-      ),
-    { dispatch: false }
-  );
+export const setGroup$ = createEffect(
+  (actions$ = inject(Actions), itemService = inject(ItemService)) =>
+    actions$.pipe(
+      ofType(setGroupId),
+      switchMap(({ item, groupId, listId }) => itemService.updateItem({ ...item, groupId }, listId))
+    ),
+  { functional: true, dispatch: false }
+);
 
-  update$ = createEffect(() =>
-    this.actions$.pipe(
+export const updateItemEffect$ = createEffect(
+  (actions$ = inject(Actions), itemService = inject(ItemService)) =>
+    actions$.pipe(
       ofType(updateItem),
       switchMap(({ item, listId, returnToList }) =>
-        this.itemService
+        itemService
           .updateItem(item, listId)
           .then(() => updateItemSuccess({ item, listId, returnToList }))
           .catch((error) => updateItemFail(error))
       )
-    )
-  );
-  delete$ = createEffect(() =>
-    this.actions$.pipe(
+    ),
+  { functional: true }
+);
+
+export const deleteItemEffect$ = createEffect(
+  (actions$ = inject(Actions), itemService = inject(ItemService)) =>
+    actions$.pipe(
       ofType(deleteItem),
       switchMap(({ item, listId }) =>
-        this.itemService
+        itemService
           .deleteItem(item, listId)
           .then(() => deleteItemSuccess({ item, listId }))
           .catch((error) => deleteItemFail(error))
       )
-    )
-  );
+    ),
+  { functional: true }
+);
 
-  returnToList$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(updateItemSuccess),
-        filter(({ returnToList }) => returnToList),
-        tap(({ listId }) => this.router.navigate(['home', 'list', listId]))
-      ),
-    { dispatch: false }
-  );
+export const returnToList$ = createEffect(
+  (actions$ = inject(Actions), router = inject(Router)) =>
+    actions$.pipe(
+      ofType(updateItemSuccess),
+      filter(({ returnToList }) => returnToList),
+      tap(({ listId }) => router.navigate(['home', 'list', listId]))
+    ),
+  { functional: true, dispatch: false }
+);
 
-  // add$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(ListActions.addList),
-  //     concatMap(({ list }) => this.listService.addList(list).then(() => ListActions.addListSuccess()))
-  //   )
-  // );
-
-  // remove$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(ListActions.removeList),
-  //     concatMap(({ list }) =>
-  //       this.listService
-  //         .removeList(list)
-  //         .then(() => ListActions.removeListSuccess({ list }))
-  //         .catch(error => ListActions.removeListFail({ error, list }))
-  //     )
-  //   )
-  // );
-
-  // error$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(ListActions.removeListFail),
-  //     switchMap(({ error, list }) => {
-  //       const dialogRef = this.dialogService.confirm({
-  //         data: { title: error.name, message: error.message, confirmLabel: 'Värskenda lehte', confirmColor: 'accent' }
-  //       });
-
-  //       return dialogRef.afterClosed().pipe(
-  //         map(resp => {
-  //           if (resp) {
-  //             return ListActions.removeListFailReload({ error, list });
-  //           } else {
-  //             return ListActions.removeListFailIgnore({ error, list });
-  //           }
-  //         })
-  //       );
-  //     })
-  //   )
-  // );
-
-  // reload$ = createEffect(() =>
-  //   this.actions$.pipe(
-  //     ofType(ListActions.removeListFailReload, ListActions.reload),
-  //     switchMap(() => [ListActions.clearLists(), ListActions.loadLists()])
-  //   )
-  // );
-}
+export const itemEffects = {
+  loadItems$,
+  loadItemsFail$,
+  setGroup$,
+  updateItemEffect$,
+  deleteItemEffect$,
+  returnToList$,
+};

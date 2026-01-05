@@ -1,4 +1,4 @@
-import { ApplicationConfig, provideZonelessChangeDetection, isDevMode } from '@angular/core';
+import { ApplicationConfig, provideZonelessChangeDetection } from '@angular/core';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideServiceWorker } from '@angular/service-worker';
@@ -9,17 +9,17 @@ import { provideAnalytics, getAnalytics, ScreenTrackingService, UserTrackingServ
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
 import { provideStoreDevtools } from '@ngrx/store-devtools';
-import { provideRouterStore, routerReducer, RouterState } from '@ngrx/router-store';
+import { provideRouterStore, RouterState } from '@ngrx/router-store';
 
 import { environment } from '../environments/environment';
 import { routes } from './app.routes';
 import { reducers, metaReducers } from './state/app.reducer';
-import { AppEffects } from './state/app.effects';
-import { ConfigEffects } from './state/config/config.effects';
-import { ListEffects } from './state/list/list.effects';
-import { UserEffects } from './state/user/user.effects';
-import { GroupEffects } from './state/group/group.effects';
-import { ItemEffects } from './state/item/item.effects';
+import { appEffects } from './state/app.effects';
+import { configEffects } from './state/config/config.effects';
+import { listEffects } from './state/list/list.effects';
+import { userEffects } from './state/user/user.effects';
+import { groupEffects } from './state/group/group.effects';
+import { itemEffects } from './state/item/item.effects';
 import { AuthGuard } from './auth/auth.guard';
 import { sentryInstrumentation } from './shared/sentry';
 import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
@@ -45,7 +45,7 @@ export const appConfig: ApplicationConfig = {
         strictActionImmutability: true,
       },
     }),
-    provideEffects([AppEffects, ConfigEffects, ListEffects, UserEffects, GroupEffects, ItemEffects]),
+    provideEffects(appEffects, configEffects, listEffects, userEffects, groupEffects, itemEffects),
     provideStoreDevtools({
       maxAge: 25,
       logOnly: environment.production,

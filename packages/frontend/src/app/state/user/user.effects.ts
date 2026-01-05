@@ -1,52 +1,57 @@
-import { Injectable, inject } from '@angular/core';
-import { Actions, createEffect, ofType, OnInitEffects } from '@ngrx/effects';
-import { Action } from '@ngrx/store';
+import { inject } from '@angular/core';
+import { Actions, ROOT_EFFECTS_INIT, createEffect, ofType } from '@ngrx/effects';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { AuthService } from '../../auth/auth.service';
-import { clearState } from '../app.actions';
 import { getUser, getUserSuccess, login, logout } from './user.actions';
 
-@Injectable()
-export class UserEffects implements OnInitEffects {
-  private actions$ = inject(Actions);
-  private auth = inject(AuthService);
+/**
+ * getUser effect is run after effect init. This is necessary to
+ * bootstrap sync between firebase auth and Store.
+ */
+export const initUser$ = createEffect(
+  (actions$ = inject(Actions)) =>
+    actions$.pipe(
+      ofType(ROOT_EFFECTS_INIT),
+      map(() => getUser())
+    ),
+  { functional: true }
+);
 
-
-  get$ = createEffect(() =>
-    this.actions$.pipe(
+export const get$ = createEffect(
+  (actions$ = inject(Actions), auth = inject(AuthService)) =>
+    actions$.pipe(
       ofType(getUser),
       switchMap(() =>
-        this.auth.getUser().pipe(
+        auth.getUser().pipe(
           filter((user) => user !== undefined),
           map((user) => getUserSuccess({ user }))
         )
       )
-    )
-  );
+    ),
+  { functional: true }
+);
 
-  login$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(login),
-        switchMap(({ provider, redirect }) => this.auth.signInWithProvider(provider, redirect))
-      ),
-    { dispatch: false }
-  );
+export const loginEffect$ = createEffect(
+  (actions$ = inject(Actions), auth = inject(AuthService)) =>
+    actions$.pipe(
+      ofType(login),
+      switchMap(({ provider, redirect }) => auth.signInWithProvider(provider, redirect))
+    ),
+  { functional: true, dispatch: false }
+);
 
-  logout$ = createEffect(
-    () =>
-      this.actions$.pipe(
-        ofType(logout),
-        switchMap(() => this.auth.signOut(['/home/login']))
-      ),
-    { dispatch: false }
-  );
+export const logoutEffect$ = createEffect(
+  (actions$ = inject(Actions), auth = inject(AuthService)) =>
+    actions$.pipe(
+      ofType(logout),
+      switchMap(() => auth.signOut(['/home/login']))
+    ),
+  { functional: true, dispatch: false }
+);
 
-  /**
-   * getUser effect is run after effect init. This is necessary to
-   * bootstrap sync between firebase auth and Store.
-   */
-  ngrxOnInitEffects(): Action {
-    return getUser();
-  }
-}
+export const userEffects = {
+  initUser$,
+  get$,
+  loginEffect$,
+  logoutEffect$,
+};
