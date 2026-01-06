@@ -38,6 +38,7 @@ yarn-error.log
 testem.log
 /typings
 .playwright-mcp
+packages/frontend/src/i18n/*.json
 
 # System Files
 .DS_Store
