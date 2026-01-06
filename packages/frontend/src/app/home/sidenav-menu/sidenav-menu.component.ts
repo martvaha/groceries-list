@@ -19,9 +19,14 @@ export class SidenavMenuComponent {
   readonly user = input<User | null>();
   pinnedLists = input<List[] | null>();
   readonly closeSidenav = output();
+  readonly unfavorite = output<List>();
   version = environment.version;
 
   closeSidenavOnMobile() {
     this.closeSidenav.emit();
+  }
+
+  onUnfavorite(list: List) {
+    this.unfavorite.emit(list);
   }
 }

@@ -2,7 +2,8 @@ import { inject } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { ROUTER_NAVIGATED } from '@ngrx/router-store';
 import { Store } from '@ngrx/store';
-import { concatMap, distinctUntilChanged, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { catchError, concatMap, distinctUntilChanged, map, mergeMap, switchMap, tap, withLatestFrom } from 'rxjs/operators';
+import { from, of } from 'rxjs';
 import { DialogService } from '../../shared/dialog-service/dialog.service';
 import { List } from '../../shared/models';
 import { TitleService } from '../../shared/title.service';
@@ -121,6 +122,20 @@ export const reload$ = createEffect(
   { functional: true }
 );
 
+export const toggleFavorite$ = createEffect(
+  (actions$ = inject(Actions), listService = inject(ListService)) =>
+    actions$.pipe(
+      ofType(ListActions.toggleFavorite),
+      concatMap(({ listId, isFavorite }) =>
+        from(listService.toggleFavorite(listId, isFavorite)).pipe(
+          map(() => ListActions.loadListsNothingChanged()),
+          catchError(() => of(ListActions.loadListsNothingChanged()))
+        )
+      )
+    ),
+  { functional: true }
+);
+
 export const listEffects = {
   active$,
   listTitle$,
@@ -131,4 +146,5 @@ export const listEffects = {
   remove$,
   error$,
   reload$,
+  toggleFavorite$,
 };

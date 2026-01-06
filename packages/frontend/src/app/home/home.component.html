@@ -18,6 +18,7 @@
     <app-sidenav-menu [user]="user$ | async"
       [pinnedLists]="lists$ | async"
       (closeSidenav)="nav?.mode === 'over' && toggleSidenav()"
+      (unfavorite)="onUnfavorite($event)"
      />
   </mat-drawer>
   <mat-drawer-content class="home__sidenav-content" role="main">

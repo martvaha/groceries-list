@@ -68,9 +68,6 @@ export const restoreActiveList$ = createEffect(
           switchMap(() =>
             store.select(selectActiveListId).pipe(
               take(1),
-              tap((activeListId) =>
-                console.log('restoreActiveList$', { activeListId, pathname: document.location.pathname })
-              ),
               tap(
                 (activeListId) =>
                   activeListId &&

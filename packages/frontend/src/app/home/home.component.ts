@@ -13,9 +13,9 @@ import { User } from '../auth/auth.service';
 import { LoadingService } from '../shared/loading-service';
 import { State } from '../state/app.reducer';
 import { selectUser } from '../state/user/user.reducer';
-import { loadLists } from '../state/list/list.actions';
+import { loadLists, toggleFavorite } from '../state/list/list.actions';
 import { TitleService } from '../shared/title.service';
-import { selectAllLists } from '../state/list/list.reducer';
+import { selectFavoriteLists } from '../state/list/list.reducer';
 import { List } from '../shared/models';
 import { UserAvatarComponent } from '../user/user-avatar/user-avatar.component';
 import { SidenavMenuComponent } from './sidenav-menu/sidenav-menu.component';
@@ -69,7 +69,11 @@ export class HomeComponent implements OnInit, OnDestroy {
     this.store.dispatch(loadLists());
     this.title$ = this.titleService.title$;
 
-    this.lists$ = this.store.select(selectAllLists);
+    this.lists$ = this.store.select(selectFavoriteLists);
+  }
+
+  onUnfavorite(list: List) {
+    this.store.dispatch(toggleFavorite({ listId: list.id, isFavorite: true }));
   }
 
   private shouldSidenavBeOpen() {

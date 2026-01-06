@@ -1,5 +1,5 @@
 import { Injectable, inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
-import { Firestore, collection, query, where, collectionChanges, addDoc, doc, updateDoc, deleteDoc, serverTimestamp, DocumentChange } from '@angular/fire/firestore';
+import { Firestore, collection, query, where, collectionChanges, addDoc, doc, updateDoc, deleteDoc, serverTimestamp, DocumentChange, arrayUnion, arrayRemove } from '@angular/fire/firestore';
 import { Action, Store } from '@ngrx/store';
 import { combineLatest, EMPTY, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, map, mergeMap, startWith, switchMap, tap } from 'rxjs/operators';
@@ -88,6 +88,7 @@ export class ListService {
     const finalList = {
       ...list,
       acl: [user.uid],
+      favorites: [],
       modified: serverTimestamp() as any,
     } as List;
     return runInInjectionContext(this.injector, () => {
@@ -114,12 +115,26 @@ export class ListService {
     });
   }
 
+  toggleFavorite(listId: string, isFavorite: boolean) {
+    const user = takeValue(this.store.select(selectUser));
+    if (!user) throw new Error('User not authenticated');
+
+    return runInInjectionContext(this.injector, () => {
+      const listDoc = doc(this.firestore, `/lists/${listId}`);
+      return updateDoc(listDoc, {
+        favorites: isFavorite ? arrayRemove(user.uid) : arrayUnion(user.uid),
+        modified: serverTimestamp() as any,
+      });
+    });
+  }
+
   private extractList(change: DocumentChange<any>) {
     const data = change.doc.data();
     const id = change.doc.id;
     const modified = (data?.modified as any)?.toDate() || new Date(0);
     const shared = (data.acl?.length || 0) > 1;
-    const list = { ...data, id, modified, shared } as List;
+    const favorites = data.favorites || [];
+    const list = { ...data, id, modified, shared, favorites } as List;
     return list;
   }
 }

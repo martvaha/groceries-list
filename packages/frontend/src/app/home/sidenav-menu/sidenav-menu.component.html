@@ -13,7 +13,7 @@
         @for (list of pinnedLists(); track list) {
           <a mat-list-item class="favorite-item" [routerLink]="['/home/list', list.id]" (click)="closeSidenavOnMobile()">
             <span matListItemTitle>{{ list.name }}</span>
-            <app-favorite-button matListItemMeta [favorite]="true" />
+            <app-favorite-button matListItemMeta [favorite]="true" (favoriteToggle)="onUnfavorite(list)" />
           </a>
         }
       }

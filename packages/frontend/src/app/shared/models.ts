@@ -5,6 +5,7 @@ export interface List {
   acl: string[];
   groupsOrder: string[];
   shared: boolean;
+  favorites: string[];
 }
 
 export interface Group {

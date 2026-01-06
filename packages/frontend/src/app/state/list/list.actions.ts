@@ -21,6 +21,8 @@ export const updateList = createAction('[List] update', props<{ list: Update<Lis
 export const setActive = createAction('[List] set active', props<{ id: string | null }>());
 export const upsertGroupsOrder = createAction('[List] upsert order', props<{ groupsOrder: string[]; id: string }>());
 
+export const toggleFavorite = createAction('[List] toggle favorite', props<{ listId: string; isFavorite: boolean }>());
+
 // export const addUser = createAction('[List] Add User', props<{ user: List }>());
 // export const upsertUser = createAction('[List] Upsert User', props<{ user: List }>());
 // export const addUsers = createAction('[List] Add Users', props<{ users: List[] }>());

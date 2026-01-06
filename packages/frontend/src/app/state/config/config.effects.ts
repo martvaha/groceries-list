@@ -17,7 +17,6 @@ export const setLanguage$ = createEffect(
         language = language === 'system' ? 'en' : language;
         const urlBase = document.location.href.split('/').slice(0, 3).join('/');
         const urlPath = ['', language, ...(currentLanguage ? pathname.slice(1) : pathname)].join('/');
-        console.log('9230', urlBase, urlPath);
         document.location.href = urlBase + urlPath;
       })
     ),

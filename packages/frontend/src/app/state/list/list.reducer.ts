@@ -4,6 +4,7 @@ import { List } from '../../shared/models';
 import * as ListActions from './list.actions';
 import { lastUpdated, sortByName } from '../utils';
 import { State } from '../app.reducer';
+import { selectUser } from '../user/user.reducer';
 
 export interface ListState extends EntityState<List> {
   activeId: string | null;
@@ -71,3 +72,9 @@ export const selectActiveList = createSelector(selectListEntities, selectActiveL
 );
 
 export const selectGroupsOrder = createSelector(selectActiveList, (list) => (list ? list.groupsOrder : null));
+
+export const selectFavoriteLists = createSelector(
+  selectAllLists,
+  selectUser,
+  (lists, user) => (user ? lists.filter((list) => list.favorites?.includes(user.uid)) : [])
+);

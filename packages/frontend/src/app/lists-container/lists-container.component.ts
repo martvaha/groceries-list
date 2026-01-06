@@ -10,8 +10,9 @@ import { DialogService } from '../shared/dialog-service/dialog.service';
 import { List } from '../shared/models';
 import { Store } from '@ngrx/store';
 import { State, selectLoading } from '../state/app.reducer';
-import { addList, removeList } from '../state/list/list.actions';
+import { addList, removeList, toggleFavorite } from '../state/list/list.actions';
 import { selectAllLists } from '../state/list/list.reducer';
+import { selectUser } from '../state/user/user.reducer';
 import { FavoriteButtonComponent } from '../shared/favorite-button/favorite-button.component';
 
 @Component({
@@ -26,12 +27,25 @@ export class ListsContainerComponent implements OnInit {
   private dialogService = inject(DialogService);
   private store = inject<Store<State>>(Store);
 
+  private user = this.store.selectSignal(selectUser);
+
   lists$!: Observable<List[]>;
   loading$!: Observable<boolean>;
 
   ngOnInit() {
     this.loading$ = this.store.select(selectLoading);
     this.lists$ = this.store.select(selectAllLists);
+  }
+
+  isListFavorited(list: List): boolean {
+    const user = this.user();
+    if (!user) return false;
+    return list.favorites?.includes(user.uid) ?? false;
+  }
+
+  onToggleFavorite(list: List) {
+    const isFavorite = this.isListFavorited(list);
+    this.store.dispatch(toggleFavorite({ listId: list.id, isFavorite }));
   }
 
   addList() {
