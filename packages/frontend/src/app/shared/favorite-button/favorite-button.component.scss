@@ -1,0 +1,27 @@
+@use './favorite-button-theme.component' as favorite-button;
+@use '../../../theme.scss' as *;
+
+.favorite-button {
+  opacity: 0.2;
+
+  .favorite-button__icon__active {
+    display: initial;
+  }
+
+  .favorite-button__icon__disable {
+    display: none;
+  }
+
+  &:hover {
+    opacity: 0.7;
+    .favorite-button__icon__active {
+      display: none;
+    }
+
+    .favorite-button__icon__disable {
+      display: initial;
+    }
+  }
+}
+
+@include favorite-button.theme($theme);

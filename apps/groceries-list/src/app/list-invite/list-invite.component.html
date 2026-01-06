@@ -1,5 +1,0 @@
-<div *ngIf="user">
-  {{user | json}}
-</div>
-<mat-spinner *ngIf="user === undefined"></mat-spinner>
-<app-auth *ngIf="user === null" [redirect]="redirect"></app-auth>

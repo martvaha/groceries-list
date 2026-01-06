@@ -1,0 +1,46 @@
+:host {
+  display: flex;
+  flex: 1;
+  height: 100%;
+}
+
+.sidenav__menu {
+  padding-top: 0;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  overflow: hidden;
+
+  // Prevent horizontal overflow and ellipsis long text
+  mat-list-item {
+    overflow: hidden;
+
+    a[matLine] {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .favorite-item {
+    text-decoration: none;
+    color: inherit;
+
+    &:visited {
+      color: inherit;
+    }
+  }
+}
+
+.version {
+  align-self: right;
+}
+
+
+
+.info-container {
+  margin-top: auto;
+  padding: 0.5rem 1rem;
+  display: flex;
+  justify-content: space-between;
+}

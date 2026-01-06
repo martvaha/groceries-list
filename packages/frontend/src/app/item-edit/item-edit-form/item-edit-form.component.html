@@ -1,0 +1,50 @@
+<form class="item-edit-form" [formGroup]="form">
+  <mat-form-field appearance="outline" class="item-edit-form__field">
+    <mat-label i18n>Name</mat-label>
+    <input matInput formControlName="name" />
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="item-edit-form__field">
+    <mat-label i18n>Details</mat-label>
+    <textarea matInput formControlName="description" rows="3"></textarea>
+  </mat-form-field>
+
+  <div class="item-edit-form__group-row">
+    <mat-form-field appearance="outline" class="item-edit-form__field item-edit-form__field--grow">
+      <mat-label i18n>Group</mat-label>
+      <mat-select formControlName="groupId">
+        @for (group of groups(); track group) {
+          <mat-option [value]="group.id">
+            {{ group.name }}
+          </mat-option>
+        }
+      </mat-select>
+    </mat-form-field>
+    <button
+      type="button"
+      mat-mini-fab
+      color="primary"
+      class="item-edit-form__add-group-btn"
+      (click)="groupAdd.emit()"
+      matTooltip="Create new group"
+      i18n-matTooltip>
+      <mat-icon>add</mat-icon>
+    </button>
+  </div>
+
+  <div class="item-edit-form__toggle-row">
+    <span class="item-edit-form__toggle-title" i18n>Active</span>
+    <mat-slide-toggle formControlName="active" color="primary"></mat-slide-toggle>
+  </div>
+
+  <div class="item-edit-form__actions">
+    <button mat-stroked-button type="button" (click)="return.emit()" class="item-edit-form__btn-back">
+      <mat-icon>arrow_back</mat-icon>
+      <span i18n>Back</span>
+    </button>
+    <button mat-flat-button color="primary" type="button" (click)="onUpdate()" class="item-edit-form__btn-save">
+      <mat-icon>check</mat-icon>
+      <span i18n>Save</span>
+    </button>
+  </div>
+</form>

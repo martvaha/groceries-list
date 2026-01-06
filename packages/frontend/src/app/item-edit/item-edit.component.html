@@ -1,0 +1,13 @@
+@if (item | async; as item) {
+  <app-item-edit-form [item]="item"
+    [groups]="groups | async"
+    (updated)="onItemUpdated($event)"
+    (return)="onReturn()"
+    (groupAdd)="onGroupAdd()"
+   />
+}
+@if (loading$ | async) {
+  <div class="loading">
+    <mat-spinner />
+  </div>
+}

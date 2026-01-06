@@ -1,0 +1,9 @@
+<button mat-icon-button class="favorite-button" [matTooltip]="favorite() ? 'Remove favorite' : 'Add favorite'" (click)="onClick($event)">
+  @if (favorite()) {
+    <mat-icon class="favorite-button__icon__active">favorite</mat-icon>
+    <mat-icon class="favorite-button__icon__disable">favorite_border</mat-icon>
+  } @else {
+    <mat-icon class="favorite-button__icon__disable">favorite</mat-icon>
+    <mat-icon class="favorite-button__icon__active">favorite_border</mat-icon>
+  }
+</button>

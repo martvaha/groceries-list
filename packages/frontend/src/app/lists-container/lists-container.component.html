@@ -1,0 +1,32 @@
+<mat-nav-list class="list-container__nav-list">
+  @for (list of lists$ | async; track list) {
+    <a mat-list-item [routerLink]="['/home/list', list.id]">
+      <mat-icon matListItemIcon>{{ list.acl && list.acl.length > 1 ? 'folder_shared' : 'folder' }}</mat-icon>
+      <span matListItemTitle>{{ list.name }}</span>
+      <app-favorite-button matListItemMeta [favorite]="isListFavorited(list)" (favoriteToggle)="onToggleFavorite(list)" />
+      <button matListItemMeta mat-icon-button [matMenuTriggerFor]="menu" aria-label="List actions" (click)="$event.preventDefault(); $event.stopPropagation()">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+      <mat-menu #menu="matMenu">
+        <ng-template matMenuContent>
+          <button mat-menu-item class="mat-hint" [routerLink]="['/home/edit', list.id]">
+            <mat-icon>edit</mat-icon>
+            <span i18n>Edit</span>
+          </button>
+          <button mat-menu-item color="accent" [routerLink]="['/home/share', list.id]">
+            <mat-icon>share</mat-icon>
+            <span i18n>Share</span>
+          </button>
+          <button mat-menu-item color="warn" (click)="deleteList(list)">
+            <mat-icon>delete</mat-icon>
+            <span i18n>Delete</span>
+          </button>
+        </ng-template>
+      </mat-menu>
+    </a>
+  }
+</mat-nav-list>
+
+<button class="app__fab" mat-fab (click)="addList()">
+  <mat-icon class="mat-18">add</mat-icon>
+</button>

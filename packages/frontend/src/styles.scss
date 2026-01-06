@@ -1,0 +1,55 @@
+// Custom Theming for Angular Material
+// For more information: https://material.angular.io/guide/theming
+// Plus imports for other components in your app.
+
+// Include the common styles for Angular Material. We include this here so that you only
+// have to load a single css file for Angular Material in your app.
+// Be sure that you only ever include this mixin once!
+@use 'sass:map';
+@use '@angular/material' as mat;
+@use './theme.scss' as *;
+
+@include mat.core();
+// @use './app/shared/themes/app.theme' as *;
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  /* Disables pull-to-refresh but allows overscroll glow effects. */
+  overscroll-behavior-y: contain;
+}
+
+.space {
+  flex: 1 1 auto;
+}
+
+button.app__fab {
+  position: absolute;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1;
+}
+
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
+}
+
+@include mat.all-component-themes($theme);
+
+.app-dark {
+  @include mat.all-component-colors($dark-theme);
+}
+
+body.app-dark {
+  color: mat.get-theme-color($dark-theme, foreground, text);
+  background-color: mat.get-theme-color($dark-theme, background, background);
+}

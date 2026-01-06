@@ -1,0 +1,30 @@
+@use 'sass:map';
+@use '@angular/material' as mat;
+
+@mixin color($theme) {
+  // Get the color config from the theme.
+  $color-config: mat.m2-get-color-config($theme);
+
+  // Get the primary color palette from the color-config.
+  $warn-palette: map.get($color-config, 'warn');
+
+  .favorite-button {
+    // Read the 500 hue from the primary color palette.
+    color: mat.m2-get-color-from-palette($warn-palette, 300);
+  }
+}
+
+@mixin typography($theme) {
+}
+
+@mixin theme($theme) {
+  $color-config: mat.m2-get-color-config($theme);
+  @if $color-config != null {
+    @include color($theme);
+  }
+
+  $typography-config: mat.m2-get-typography-config($theme);
+  @if $typography-config != null {
+    @include typography($theme);
+  }
+}

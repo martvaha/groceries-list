@@ -1,0 +1,61 @@
+.item-edit-form {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.5rem;
+  gap: 1rem;
+  max-width: 40rem;
+
+  // Form fields
+  &__field {
+    width: 100%;
+
+    &--grow {
+      flex: 1;
+      min-width: 0;
+    }
+  }
+
+  // Group row with add button
+  &__group-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+
+  &__add-group-btn {
+    margin-top: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  // Toggle row
+  &__toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.5rem 0;
+  }
+
+  // Action buttons
+  &__actions {
+    display: flex;
+    gap: 0.75rem;
+    margin-top: auto;
+    padding-top: 1rem;
+
+    button {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+  }
+}
+
+// Responsive adjustments
+@media (max-width: 480px) {
+  .item-edit-form {
+    padding: 1rem;
+  }
+}

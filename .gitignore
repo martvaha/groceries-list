@@ -4,9 +4,13 @@
 /dist
 /tmp
 /out-tsc
+.angular
+.nx
+
 
 # dependencies
 /node_modules
+.pnpm-store
 
 # IDEs and editors
 /.idea
@@ -33,6 +37,8 @@ npm-debug.log
 yarn-error.log
 testem.log
 /typings
+.playwright-mcp
+packages/frontend/src/i18n/*.json
 
 # System Files
 .DS_Store
