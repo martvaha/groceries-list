@@ -9,9 +9,15 @@
       "sourceRoot": "src",
       "prefix": "groceries-list",
       "i18n": {
-        "sourceLocale": "en",
+        "sourceLocale": {
+          "code": "en",
+          "baseHref": "/en/"
+        },
         "locales": {
-          "et": "src/i18n/et.xlf"
+          "et": {
+            "translation": "src/i18n/et.xlf",
+            "baseHref": "/et/"
+          }
         }
       },
       "architect": {
