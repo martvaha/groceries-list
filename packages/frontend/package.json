@@ -8,6 +8,8 @@
     "dev": "ng serve",
     "preview": "ng build --configuration=development && pnpm dlx serve ../../dist/frontend/browser -s",
     "build": "ng build --configuration production",
+    "build:test": "ng build --configuration test",
+    "build:production": "ng build --configuration production",
     "build:localize": "ng build --configuration production --localize",
     "build:en": "ng build --configuration production",
     "build:et": "ng build --configuration production,et",
