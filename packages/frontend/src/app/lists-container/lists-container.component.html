@@ -3,10 +3,12 @@
     <a mat-list-item [routerLink]="['/home/list', list.id]">
       <mat-icon matListItemIcon>{{ list.acl && list.acl.length > 1 ? 'folder_shared' : 'folder' }}</mat-icon>
       <span matListItemTitle>{{ list.name }}</span>
-      <app-favorite-button matListItemMeta [favorite]="isListFavorited(list)" (favoriteToggle)="onToggleFavorite(list)" />
-      <button matListItemMeta mat-icon-button [matMenuTriggerFor]="menu" aria-label="List actions" (click)="$event.preventDefault(); $event.stopPropagation()">
-        <mat-icon>more_vert</mat-icon>
-      </button>
+      <span matListItemMeta class="list-actions">
+        <app-favorite-button [favorite]="isListFavorited(list)" (favoriteToggle)="onToggleFavorite(list)" />
+        <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="List actions" (click)="$event.preventDefault(); $event.stopPropagation()">
+          <mat-icon>more_vert</mat-icon>
+        </button>
+      </span>
       <mat-menu #menu="matMenu">
         <ng-template matMenuContent>
           <button mat-menu-item class="mat-hint" [routerLink]="['/home/edit', list.id]">
