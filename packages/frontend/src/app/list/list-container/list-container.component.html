@@ -16,7 +16,7 @@
 
   @if (groupsWithItems$ | async; as groups) {
     <mat-list
-      [hidden]="inputControl.value?.length"
+      [hidden]="inputControl.value?.length && !isMobile()"
       cdkDropList
       (cdkDropListDropped)="dropGroup($event)"
       class="lists-container__item-list"
@@ -109,6 +109,11 @@
         (keydown)="handleKeyDown($event)"
         [matAutocomplete]="auto"
       />
+      @if (inputControl.value) {
+        <button matSuffix mat-icon-button type="button" (click)="clearInput()" aria-label="Clear input" i18n-aria-label>
+          <mat-icon>close</mat-icon>
+        </button>
+      }
       <mat-autocomplete
         #auto="matAutocomplete"
         [displayWith]="inputDisplay"

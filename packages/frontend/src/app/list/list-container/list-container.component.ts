@@ -280,6 +280,10 @@ export class ListContainerComponent implements OnInit, OnDestroy {
     this.inputControl.reset('', { emitEvent: true });
   }
 
+  clearInput() {
+    this.inputControl.reset('', { emitEvent: true });
+  }
+
   onAutocompleteSelected(event: MatAutocompleteSelectedEvent): void {
     this.addItem(event.option.value as Item);
   }
