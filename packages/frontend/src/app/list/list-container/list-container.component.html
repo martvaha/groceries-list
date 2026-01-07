@@ -1,5 +1,6 @@
 <div class="list-container__content">
-  @if (inputControl.value?.length) {
+  @if (inputControl.value?.length && !isMobile()) {
+    <!-- Desktop: Custom mat-list with keyboard navigation -->
     <mat-list class="lists-container__search-items">
       @for (item of filteredItems$ | async; track trackById($index, item)) {
         <mat-list-item
@@ -106,7 +107,19 @@
         i18n-placeholder
         [errorStateMatcher]="inputValid"
         (keydown)="handleKeyDown($event)"
+        [matAutocomplete]="auto"
       />
+      <mat-autocomplete
+        #auto="matAutocomplete"
+        [displayWith]="inputDisplay"
+        (optionSelected)="onAutocompleteSelected($event)"
+      >
+        @if (isMobile()) {
+          @for (item of filteredItems$ | async; track trackById($index, item)) {
+            <mat-option [value]="item">{{ item.name }}</mat-option>
+          }
+        }
+      </mat-autocomplete>
     </mat-form-field>
     <button mat-raised-button type="submit" color="primary" [disabled]="!inputForm.valid" i18n>Add</button>
     @if (inactiveItems$ | async; as inactiveItems) {

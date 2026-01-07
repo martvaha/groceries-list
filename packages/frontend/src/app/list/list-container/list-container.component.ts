@@ -1,5 +1,6 @@
 import { ListKeyManager } from '@angular/cdk/a11y';
 import { CdkDragDrop, moveItemInArray, DragDropModule } from '@angular/cdk/drag-drop';
+import { MediaMatcher } from '@angular/cdk/layout';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,6 +8,7 @@ import {
   OnInit,
   effect,
   inject,
+  signal,
   viewChildren,
 } from '@angular/core';
 import { SearchItemHighlightDirective } from './search-item-highlight.directive';
@@ -24,6 +26,7 @@ import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { combineLatest, from, Observable, of, Subject } from 'rxjs';
@@ -69,6 +72,7 @@ export interface FuseAdvancedResult<T> {
     MatDividerModule,
     MatCheckboxModule,
     MatProgressSpinnerModule,
+    MatAutocompleteModule,
     LongPressDirective,
     SearchItemHighlightDirective,
   ],
@@ -84,6 +88,10 @@ export class ListContainerComponent implements OnInit, OnDestroy {
   private store = inject<Store<State>>(Store);
   private search = inject(SearchService);
   private dialog = inject(DialogService);
+  private media = inject(MediaMatcher);
+  private mobileQuery = this.media.matchMedia('(max-width: 600px)');
+  private mobileQueryListener = () => this.isMobile.set(this.mobileQuery.matches);
+  isMobile = signal(this.mobileQuery.matches);
 
   private destroy$: Subject<void> | undefined = new Subject<void>();
   loading$!: Observable<boolean>;
@@ -132,6 +140,8 @@ export class ListContainerComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.mobileQuery.addEventListener('change', this.mobileQueryListener);
+
     this.loading$ = this.store.select(selectListStateLoading);
     this.items$ = this.store.select(selectAllItems);
     this.inactiveItems$ = this.store.select(selectAllInactiveItems);
@@ -218,6 +228,9 @@ export class ListContainerComponent implements OnInit, OnDestroy {
       return;
     }
 
+    // Skip custom keyboard navigation on mobile (autocomplete handles it)
+    if (this.isMobile()) return;
+
     if (!this.keyboardEventsManager) return;
 
     const items = this.searchItems();
@@ -265,6 +278,10 @@ export class ListContainerComponent implements OnInit, OnDestroy {
       this.listService.markItemTodo(listId, { ...item, description: null });
     });
     this.inputControl.reset('', { emitEvent: true });
+  }
+
+  onAutocompleteSelected(event: MatAutocompleteSelectedEvent): void {
+    this.addItem(event.option.value as Item);
   }
 
   markDone(item: Item) {
@@ -328,8 +345,8 @@ export class ListContainerComponent implements OnInit, OnDestroy {
     this.store.dispatch(upsertGroupsOrder({ groupsOrder, id }));
   }
 
-  inputDisplay(item?: Item): string | undefined {
-    return item ? item.name : undefined;
+  inputDisplay(item?: Item): string {
+    return item?.name ?? '';
   }
 
   trackById(index: number, item: { id?: string }) {
@@ -337,6 +354,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.mobileQuery.removeEventListener('change', this.mobileQueryListener);
     this.destroy$?.next();
     this.destroy$?.complete();
     delete this.destroy$;
