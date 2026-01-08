@@ -144,4 +144,25 @@
   .app-dark {
     @include list-container.theme($dark-theme);
   }
+
+  // Full-width autocomplete panel for mobile
+  @media (max-width: 600px) {
+    .cdk-overlay-pane:has(.list-container-autocomplete-panel) {
+      left: 0 !important;
+      top: 0 !important;
+      bottom: 73px !important;
+      width: 100vw !important;
+      min-width: 100vw !important;
+      height: auto !important;
+      background: var(--mat-autocomplete-background-color, var(--mat-sys-surface-container));
+    }
+
+    .list-container-autocomplete-panel {
+      width: 100vw !important;
+      max-width: 100vw !important;
+      min-width: 100vw !important;
+      max-height: 100% !important;
+      height: 100% !important;
+    }
+  }
 }

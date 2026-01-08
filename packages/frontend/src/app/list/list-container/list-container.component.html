@@ -118,6 +118,7 @@
         #auto="matAutocomplete"
         [displayWith]="inputDisplay"
         (optionSelected)="onAutocompleteSelected($event)"
+        class="list-container-autocomplete-panel"
       >
         @if (isMobile()) {
           @for (item of filteredItems$ | async; track trackById($index, item)) {
