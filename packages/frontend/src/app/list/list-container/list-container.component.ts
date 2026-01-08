@@ -183,7 +183,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
             ),
           );
         } else {
-          return of(items.map((item: Item) => ({ ...item, displayName: item.name })));
+          return of([]);
         }
       }),
     );
