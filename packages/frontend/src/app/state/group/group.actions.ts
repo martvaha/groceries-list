@@ -12,3 +12,8 @@ export const upsertGroupsSuccess = createAction('[Group] upsert list', props<{ g
 export const getGroupsSuccess = createAction('[Group] get', props<{ group: Group }>());
 
 export const addGroup = createAction('[Group] add', props<{ group: Group; listId: string }>());
+
+export const removeGroupsFromState = createAction(
+  '[Group] Remove Groups From State',
+  props<{ listId: string; groupIds: string[] }>()
+);

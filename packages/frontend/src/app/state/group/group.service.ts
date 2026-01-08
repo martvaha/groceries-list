@@ -1,5 +1,5 @@
 import { Injectable, inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
-import { Firestore, collection, query, where, collectionChanges, doc, setDoc, serverTimestamp, DocumentChange } from '@angular/fire/firestore';
+import { Firestore, collection, query, where, collectionChanges, doc, setDoc, serverTimestamp, DocumentChange, updateDoc } from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
 import { combineLatest, EMPTY, of } from 'rxjs';
 import { switchMap, map, mergeMap, catchError } from 'rxjs/operators';
@@ -7,7 +7,7 @@ import slugify from 'slugify';
 import { Group } from '../../shared/models';
 import { State } from '../app.reducer';
 import { selectActiveListId } from '../list/list.reducer';
-import { getGroupsNothingChanged, upsertGroupsSuccess } from './group.actions';
+import { getGroupsNothingChanged, removeGroupsFromState, upsertGroupsSuccess } from './group.actions';
 import { selectGroupLastUpdated } from './group.reducer';
 
 @Injectable({
@@ -49,18 +49,31 @@ export class GroupService2 {
             }),
             map((change) => {
               if (!change) return getGroupsNothingChanged();
-              
+
               const payload = Array.isArray(change.payload) ? change.payload : [change.payload];
 
               console.log('####', change.type, this.extractGroup(payload[0]));
               switch (change.type) {
                 case 'added':
-                case 'modified':
-                  return upsertGroupsSuccess({ listId, groups: payload.map((data) => this.extractGroup(data)) });
+                case 'modified': {
+                  const groups = payload.map((data) => this.extractGroup(data));
+                  const deletedGroups = groups.filter(g => g.deleted);
+                  const activeGroups = groups.filter(g => !g.deleted);
+
+                  // Dispatch removal for soft-deleted groups (cleanup handled by backend scheduled job)
+                  if (deletedGroups.length) {
+                    this.store.dispatch(removeGroupsFromState({ listId, groupIds: deletedGroups.map(g => g.id) }));
+                  }
+
+                  if (activeGroups.length) {
+                    return upsertGroupsSuccess({ listId, groups: activeGroups });
+                  }
+                  return getGroupsNothingChanged();
+                }
 
                 case 'removed':
-                  console.error('group remove not implemented!');
-                  return getGroupsNothingChanged();
+                  // This case is rarely triggered with timestamp filtering, but handle it for completeness
+                  return removeGroupsFromState({ listId, groupIds: payload.map((data) => this.extractGroup(data).id) });
                 default:
                   return getGroupsNothingChanged();
               }
@@ -82,6 +95,17 @@ export class GroupService2 {
       const groupDoc = doc(this.firestore, `lists/${listId}/groups/${slug}`);
       return setDoc(groupDoc, {
         ...others,
+        modified: serverTimestamp(),
+      });
+    });
+  }
+
+  deleteGroup(group: Group, listId: string) {
+    return runInInjectionContext(this.injector, () => {
+      const groupDoc = doc(this.firestore, `/lists/${listId}/groups/${group.id}`);
+      // Soft delete: mark as deleted instead of removing, so other users can sync the change
+      return updateDoc(groupDoc, {
+        deleted: true,
         modified: serverTimestamp(),
       });
     });

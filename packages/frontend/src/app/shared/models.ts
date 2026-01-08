@@ -12,6 +12,7 @@ export interface Group {
   id: string;
   name: string;
   modified: Date;
+  deleted?: boolean;
 }
 export interface Item {
   id: string;
@@ -21,6 +22,7 @@ export interface Item {
   displayName?: string;
   description: string | null;
   modified: Date;
+  deleted?: boolean;
 }
 
 export interface GroupWithItems extends Group {

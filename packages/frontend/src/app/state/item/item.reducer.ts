@@ -11,6 +11,7 @@ import {
   upsertItemListSuccess,
   updateItemSuccess,
   updateItemFail,
+  removeItemsFromState,
 } from './item.actions';
 import { selectActiveListId } from '../list/list.reducer';
 import { State } from '../app.reducer';
@@ -80,6 +81,10 @@ const listReducer = createReducer(
   on(deleteItemSuccess, (state, { item, listId }) => {
     const updatedList = { ...get(state, listId), loading: false };
     return { ...state, [listId]: updatedList };
+  }),
+  on(removeItemsFromState, (state, { listId, itemIds }) => {
+    const updatedList = adapter.removeMany(itemIds, get(state, listId));
+    return { ...state, [listId]: { ...updatedList, lastUpdated: new Date() } };
   })
 );
 
