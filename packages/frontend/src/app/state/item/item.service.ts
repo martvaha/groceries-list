@@ -1,11 +1,11 @@
 import { Injectable, inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
-import { Firestore, collection, query, where, collectionChanges, doc, updateDoc, deleteDoc, serverTimestamp, DocumentChange } from '@angular/fire/firestore';
+import { Firestore, collection, query, where, collectionChanges, doc, updateDoc, serverTimestamp, DocumentChange } from '@angular/fire/firestore';
 import { map, tap, mergeMap, switchMap, catchError } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { State } from '../app.reducer';
 import { combineLatest, EMPTY, of } from 'rxjs';
 import { selectActiveListId } from '../list/list.reducer';
-import { deleteItemSuccess, getItemsFail, getItemsNothingChanged, upsertItemListSuccess } from './item.actions';
+import { deleteItemSuccess, getItemsFail, getItemsNothingChanged, removeItemsFromState, upsertItemListSuccess } from './item.actions';
 import { Item } from '../../shared/models';
 import { selectItemLastUpdated } from './item.reducer';
 import { captureException } from '../../shared/sentry';
@@ -50,17 +50,30 @@ export class ItemService {
             }),
             map((change) => {
               if (!change) return getItemsNothingChanged();
-              
+
               const payload = Array.isArray(change.payload) ? change.payload : [change.payload];
 
               console.log('####', change.type, this.extractItem(payload[0]));
               switch (change.type) {
                 case 'added':
-                case 'modified':
-                  return upsertItemListSuccess({ listId, items: payload.map((data) => this.extractItem(data)) });
+                case 'modified': {
+                  const items = payload.map((data) => this.extractItem(data));
+                  const deletedItems = items.filter(i => i.deleted);
+                  const activeItems = items.filter(i => !i.deleted);
+
+                  // Dispatch removal for soft-deleted items (cleanup handled by backend scheduled job)
+                  if (deletedItems.length) {
+                    this.store.dispatch(removeItemsFromState({ listId, itemIds: deletedItems.map(i => i.id) }));
+                  }
+
+                  if (activeItems.length) {
+                    return upsertItemListSuccess({ listId, items: activeItems });
+                  }
+                  return getItemsNothingChanged();
+                }
 
                 case 'removed':
-                  console.error('item remove not implemented!');
+                  // This case is rarely triggered with timestamp filtering, but handle it for completeness
                   return deleteItemSuccess({ listId, item: payload.map((data) => this.extractItem(data)) });
                 default:
                   return getItemsNothingChanged();
@@ -93,7 +106,11 @@ export class ItemService {
     console.log(listId, item);
     return runInInjectionContext(this.injector, () => {
       const itemDoc = doc(this.firestore, `/lists/${listId}/items/${item.id}`);
-      return deleteDoc(itemDoc);
+      // Soft delete: mark as deleted instead of removing, so other users can sync the change
+      return updateDoc(itemDoc, {
+        deleted: true,
+        modified: serverTimestamp(),
+      });
     });
   }
 

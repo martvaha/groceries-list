@@ -1,21 +1,27 @@
-import { Directive, HostBinding, HostListener, output, input } from '@angular/core';
+import { Directive, HostBinding, HostListener, output, input, OnDestroy } from '@angular/core';
 
 @Directive({
   standalone: true,
   selector: '[appLongPress]',
 })
-export class LongPressDirective {
+export class LongPressDirective implements OnDestroy {
   readonly duration = input(500);
 
   readonly longPress = output<any>();
   readonly longPressing = output<any>();
   readonly longPressEnd = output<any>();
 
-  private pressing: boolean;
-  private islongPressing: boolean;
+  private pressing = false;
+  private islongPressing = false;
   private timeout: any;
   private mouseX = 0;
   private mouseY = 0;
+  private destroyed = false;
+
+  ngOnDestroy() {
+    this.destroyed = true;
+    clearTimeout(this.timeout);
+  }
 
   @HostBinding('class.press')
   get press() {
@@ -39,6 +45,7 @@ export class LongPressDirective {
     this.islongPressing = false;
 
     this.timeout = setTimeout(() => {
+      if (this.destroyed) return;
       this.islongPressing = true;
       this.longPress.emit(event);
       this.loop(event);
@@ -59,10 +66,12 @@ export class LongPressDirective {
   }
 
   loop(event: any) {
-    if (this.islongPressing) {
+    if (this.islongPressing && !this.destroyed) {
       this.timeout = setTimeout(() => {
-        this.longPressing.emit(event);
-        this.loop(event);
+        if (!this.destroyed) {
+          this.longPressing.emit(event);
+          this.loop(event);
+        }
       }, 50);
     }
   }
@@ -71,7 +80,9 @@ export class LongPressDirective {
     clearTimeout(this.timeout);
     this.islongPressing = false;
     this.pressing = false;
-    this.longPressEnd.emit(true);
+    if (!this.destroyed) {
+      this.longPressEnd.emit(true);
+    }
   }
 
   @HostListener('mouseup')

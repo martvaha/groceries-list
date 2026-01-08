@@ -3,7 +3,7 @@ import { Action, createFeatureSelector, createReducer, createSelector, on } from
 import { Group } from '../../shared/models';
 import { selectActiveListId } from '../list/list.reducer';
 import { lastUpdated, sortByName } from '../utils';
-import { upsertGroupsSuccess } from './group.actions';
+import { removeGroupsFromState, upsertGroupsSuccess } from './group.actions';
 
 export interface GroupState extends EntityState<Group> {
   loading: boolean;
@@ -36,6 +36,10 @@ const listReducer = createReducer(
       ...state,
       [listId]: { ...adapter.upsertMany(groups, get(state, listId)), lastUpdated: new Date(Date.now()) },
     };
+  }),
+  on(removeGroupsFromState, (state, { listId, groupIds }) => {
+    const updatedList = adapter.removeMany(groupIds, get(state, listId));
+    return { ...state, [listId]: { ...updatedList, lastUpdated: new Date() } };
   })
 );
 

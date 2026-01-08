@@ -13,6 +13,10 @@ export const deleteItemSuccess = createAction(
   props<{ item: Item | Item[]; listId: string }>()
 );
 export const deleteItemFail = createAction('[Item] delete fail', props<{ item: Item; listId: string }>());
+export const removeItemsFromState = createAction(
+  '[Item] Remove Items From State',
+  props<{ listId: string; itemIds: string[] }>()
+);
 // export const upsertGroup = createAction('[Item] get not changed');
 
 export const setGroupId = createAction('[Item] set group id', props<{ item: Item; listId: string; groupId: string }>());
