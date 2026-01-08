@@ -162,8 +162,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
     );
 
     // Use shareReplay to cache items and avoid re-executing setCollection unnecessarily
-    const unselected$ = this.items$.pipe(
-      map((items) => items.filter((item) => !item.active)),
+    const allItems$ = this.items$.pipe(
       distinctUntilChanged((prev, curr) => prev.length === curr.length && prev.every((p, i) => p.id === curr[i]?.id)),
       tap((items) => {
         this.search.setCollection(items, this.searchOptions);
@@ -171,7 +170,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
       shareReplay(1),
     );
 
-    this.filteredItems$ = combineLatest([search$, unselected$]).pipe(
+    this.filteredItems$ = combineLatest([search$, allItems$]).pipe(
       switchMap(([search, items]) => {
         if (items && search.length) {
           return from(this.search.search<Item>(search)).pipe(
@@ -264,7 +263,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
       event.preventDefault();
       const activeIndex = this.keyboardEventsManager.activeItemIndex;
       const item = this.filteredItemsCache[activeIndex];
-      if (item) {
+      if (item && !item.active) {
         this.addItem(item);
       }
     }

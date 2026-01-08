@@ -6,10 +6,15 @@
         <mat-list-item
           appSearchItemHighlight
           #searchItem="appSearchItemHighlight"
-          (click)="addItem(item)"
+          (click)="!item.active && addItem(item)"
           class="lists-container__search-item"
-          ><span [innerHTML]="item.displayName"></span
-        ></mat-list-item>
+          [class.lists-container__search-item--in-list]="item.active"
+        >
+          @if (item.active) {
+            <mat-icon class="in-list-icon">check</mat-icon>
+          }
+          <span [innerHTML]="item.displayName"></span>
+        </mat-list-item>
       }
     </mat-list>
   }
@@ -122,7 +127,12 @@
       >
         @if (isMobile()) {
           @for (item of filteredItems$ | async; track trackById($index, item)) {
-            <mat-option [value]="item">{{ item.name }}</mat-option>
+            <mat-option [value]="item" [disabled]="item.active">
+              @if (item.active) {
+                <mat-icon class="in-list-icon">check</mat-icon>
+              }
+              {{ item.name }}
+            </mat-option>
           }
         }
       </mat-autocomplete>

@@ -56,6 +56,20 @@
     opacity: var(--mat-list-list-item-focus-state-layer-opacity, var(--mat-sys-focus-state-layer-opacity));
     pointer-events: none;
   }
+
+  &--in-list {
+    opacity: 0.6;
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .in-list-icon {
+    color: var(--mat-sys-primary);
+    margin-right: 8px;
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+  }
 }
 
 .lists-container__item-list {
@@ -162,6 +176,20 @@
       min-width: 100vw !important;
       max-height: 100% !important;
       height: 100% !important;
+    }
+  }
+
+  .list-container-autocomplete-panel {
+    mat-option[aria-disabled='true'] {
+      opacity: 0.6;
+    }
+
+    .in-list-icon {
+      color: var(--mat-sys-primary);
+      margin-right: 8px;
+      font-size: 20px;
+      width: 20px;
+      height: 20px;
     }
   }
 }
