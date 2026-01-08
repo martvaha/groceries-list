@@ -163,7 +163,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
 
     // Use shareReplay to cache items and avoid re-executing setCollection unnecessarily
     const allItems$ = this.items$.pipe(
-      distinctUntilChanged((prev, curr) => prev.length === curr.length && prev.every((p, i) => p.id === curr[i]?.id)),
+      distinctUntilChanged((prev, curr) => prev.length === curr.length && prev.every((p, i) => p.id === curr[i]?.id && p.active === curr[i]?.active)),
       tap((items) => {
         this.search.setCollection(items, this.searchOptions);
       }),
