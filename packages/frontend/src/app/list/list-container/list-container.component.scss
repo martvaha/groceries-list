@@ -150,10 +150,9 @@
     .cdk-overlay-pane:has(.list-container-autocomplete-panel) {
       left: 0 !important;
       top: 0 !important;
-      bottom: 73px !important;
       width: 100vw !important;
       min-width: 100vw !important;
-      height: auto !important;
+      height: calc(100dvh - 73px) !important;
       background: var(--mat-autocomplete-background-color, var(--mat-sys-surface-container));
     }
 
