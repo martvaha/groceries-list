@@ -212,7 +212,8 @@ export class ListContainerComponent implements OnInit, OnDestroy {
     if (valid && typeof value === 'string') {
       const trimmedValue = value.trim();
       this.listId.pipe(withLatestFrom(this.items$), take(1)).subscribe(([listId, items]) => {
-        const existingValue = items.find((item) => item.name === trimmedValue);
+        const normalizedInput = trimmedValue.toLocaleLowerCase();
+        const existingValue = items.find((item) => item.name.trim().toLocaleLowerCase() === normalizedInput);
         if (existingValue && !existingValue.active) {
           this.listService.markItemTodo(listId, { ...existingValue, description: null });
           return;
