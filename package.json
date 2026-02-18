@@ -18,7 +18,7 @@
     "test": "pnpm --filter @groceries-list/frontend test"
   },
   "devDependencies": {
-    "fast-xml-parser": "^5.3.3",
+    "fast-xml-parser": "^5.3.6",
     "firebase-tools": "^15.1.0",
     "prettier": "^3.7.4",
     "typescript": "~5.9.3"
