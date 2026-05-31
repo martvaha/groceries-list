@@ -47,9 +47,15 @@ export const routes: Routes = [
         loadChildren: () => import('./list-share/list-share.routes').then((m) => m.LIST_SHARE_ROUTES),
       },
       {
+        // No auth guard: the invite component handles unauthenticated users itself by
+        // showing an inline sign-in card that redirects back to the invite after login.
         path: 'invite',
-        ...canActivate(() => redirectUnauthorizedTo(['home', 'login'])),
         loadChildren: () => import('./list-invite/list-invite.routes').then((m) => m.LIST_INVITE_ROUTES),
+      },
+      {
+        path: 'members',
+        ...canActivate(() => redirectUnauthorizedTo(['home', 'login'])),
+        loadChildren: () => import('./list-members/list-members.routes').then((m) => m.LIST_MEMBERS_ROUTES),
       },
       {
         path: 'legal',

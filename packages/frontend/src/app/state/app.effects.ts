@@ -37,8 +37,8 @@ export const checkForUpdates$ = createEffect(
       map(() => {
         if (!updates.isEnabled) {
           const snackRef = snack.open(
-            $localize`Browser does not support background updates. Just reload the page to get the latest version.`,
-            $localize`Reload`,
+            $localize`:@@update.unsupported:Browser does not support background updates. Just reload the page to get the latest version.`,
+            $localize`:@@update.reload:Reload`,
             { duration: 5000 }
           );
           snackRef.afterDismissed().subscribe(({ dismissedByAction }) => {
@@ -89,7 +89,7 @@ export const initAppUpdates$ = createEffect(
           filter((evt): evt is VersionReadyEvent => evt.type === 'VERSION_READY'),
           switchMap(() =>
             snack
-              .open($localize`New version available`, $localize`Update`)
+              .open($localize`:@@update.available:New version available`, $localize`:@@update.action:Update`)
               .afterDismissed()
               .pipe(tap(() => updates.activateUpdate().then(() => document.location.reload())))
           )

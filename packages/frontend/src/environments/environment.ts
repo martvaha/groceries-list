@@ -20,6 +20,7 @@ export const environment = {
     measurementId: 'G-PV5T849VVX',
   },
   sentry: { dsn: '' },
+  recaptchaSiteKey: '6Le-mkUsAAAAACzJkEz3LLDRCeYw9ngfahOJ-JSr', // Same key as prod - ensure localhost is in allowed domains
 };
 
 /*

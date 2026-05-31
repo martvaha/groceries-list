@@ -297,7 +297,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
     // Add delay so animation has time to finish
     this.listId.pipe(delay(300)).subscribe((listId) => {
       this.listService.markItemDone(listId, item);
-      const snackBarRef = this.snackBar.open($localize`${item.name} done!`, $localize`Revert`, {
+      const snackBarRef = this.snackBar.open($localize`:@@list.itemDone:${item.name} done!`, $localize`:@@list.revert:Revert`, {
         duration: 5000,
       });
       snackBarRef.afterDismissed().subscribe((data) => {
@@ -317,12 +317,12 @@ export class ListContainerComponent implements OnInit, OnDestroy {
    */
   markAllActive(inactiveItems: Item[]) {
     if (!inactiveItems.length) {
-      this.snackBar.open($localize`No inactive items left!`, $localize`:confirm|:OK`);
+      this.snackBar.open($localize`:@@list.noInactiveItems:No inactive items left!`, $localize`:confirm|@@common.ok:OK`);
       return;
     }
 
     const dialogRef = this.dialog.confirm({
-      data: { title: $localize`Mark all active`, message: $localize`Are you sure you want to reactivate all items?` },
+      data: { title: $localize`:@@list.markAllActive:Mark all active`, message: $localize`:@@list.reactivateConfirm:Are you sure you want to reactivate all items?` },
     });
 
     dialogRef.afterClosed().subscribe((response) => {

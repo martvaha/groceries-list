@@ -38,6 +38,6 @@ export class InfoDialogComponent {
 
     this.title = data.title;
     this.message = data.message;
-    this.actionLabel = data.actionLabel || $localize`:confirm|:OK`;
+    this.actionLabel = data.actionLabel || $localize`:confirm|@@common.ok:OK`;
   }
 }

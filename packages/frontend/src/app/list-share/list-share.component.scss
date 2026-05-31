@@ -9,8 +9,27 @@
   display: flex;
   flex: 1;
   flex-direction: column;
+  gap: 16px;
 }
 
+.list-share__error {
+  color: var(--mat-sys-error);
+  background-color: var(--mat-sys-error-container);
+  padding: 12px;
+  border-radius: 4px;
+  margin: 0;
+}
+
+.list-share__actions {
+  display: flex;
+  gap: 8px;
+
+  button {
+    mat-spinner {
+      display: inline-block;
+    }
+  }
+}
 
 @media screen and (min-width: 700px) {
   .list-share__container {

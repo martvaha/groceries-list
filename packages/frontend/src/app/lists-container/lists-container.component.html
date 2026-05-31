@@ -13,15 +13,19 @@
         <ng-template matMenuContent>
           <button mat-menu-item class="mat-hint" [routerLink]="['/home/edit', list.id]">
             <mat-icon>edit</mat-icon>
-            <span i18n>Edit</span>
+            <span i18n="@@lists.edit">Edit</span>
           </button>
           <button mat-menu-item color="accent" [routerLink]="['/home/share', list.id]">
             <mat-icon>share</mat-icon>
-            <span i18n>Share</span>
+            <span i18n="@@lists.share">Share</span>
+          </button>
+          <button mat-menu-item [routerLink]="['/home/members', list.id]">
+            <mat-icon>group</mat-icon>
+            <span i18n="@@lists.members">Members</span>
           </button>
           <button mat-menu-item color="warn" (click)="deleteList(list)">
             <mat-icon>delete</mat-icon>
-            <span i18n>Delete</span>
+            <span i18n="@@lists.delete">Delete</span>
           </button>
         </ng-template>
       </mat-menu>

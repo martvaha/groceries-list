@@ -3,6 +3,7 @@ export interface List {
   id: string;
   name: string;
   acl: string[];
+  owner?: string; // Optional for backwards compatibility - falls back to acl[0]
   groupsOrder: string[];
   shared: boolean;
   favorites: string[];

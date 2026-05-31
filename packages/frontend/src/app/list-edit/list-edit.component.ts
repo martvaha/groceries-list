@@ -45,8 +45,8 @@ export class ListEditComponent implements OnInit {
   deleteList(item: Item) {
     const dialogRef = this.dialogService.confirm({
       data: {
-        title: $localize`Delete list`,
-        message: $localize`Are you sure you want to delete list "${item.name}"?`,
+        title: $localize`:@@listEdit.deleteTitle:Delete list`,
+        message: $localize`:@@listEdit.deleteMessage:Are you sure you want to delete list "${item.name}"?`,
       },
     });
     dialogRef.afterClosed().subscribe((resp) => {

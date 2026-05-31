@@ -96,7 +96,7 @@ export const error$ = createEffect(
       ofType(ListActions.removeListFail),
       switchMap(({ error, list }) => {
         const dialogRef = dialogService.confirm({
-          data: { title: error.name, message: error.message, confirmLabel: $localize`Refresh`, confirmColor: 'accent' },
+          data: { title: error.name, message: error.message, confirmLabel: $localize`:@@list.refresh:Refresh`, confirmColor: 'accent' },
         });
 
         return dialogRef.afterClosed().pipe(

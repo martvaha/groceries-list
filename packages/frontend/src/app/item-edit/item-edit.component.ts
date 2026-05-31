@@ -59,9 +59,9 @@ export class ItemEditComponent implements OnInit {
     if (!listId) return;
     const dialogRef = this.dialogService.input({
       data: {
-        actionLabel: $localize`Add`,
-        title: $localize`Add group`,
-        placeholder: $localize`Group name`,
+        actionLabel: $localize`:@@common.add:Add`,
+        title: $localize`:@@itemEdit.addGroupTitle:Add group`,
+        placeholder: $localize`:@@itemEdit.groupNameLabel:Group name`,
       },
     });
     dialogRef.afterClosed().subscribe(async (name) => {

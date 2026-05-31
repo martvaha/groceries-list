@@ -1,8 +1,8 @@
 <table class="list-edit__table">
   <tr>
     <th></th>
-    <th i18n>Name</th>
-    <th i18n>Group</th>
+    <th i18n="@@common.name">Name</th>
+    <th i18n="@@common.group">Group</th>
     <th></th>
   </tr>
   @for (item of items$ | async; track item; let i = $index) {
@@ -13,7 +13,7 @@
         <mat-select
           class="list-edit__item-group"
           placeholder="Pick group"
-          i18n-placeholder
+          i18n-placeholder="@@listEdit.pickGroup"
           name="group"
           [value]="item.groupId"
           (selectionChange)="onSelectionChange($event, item)"

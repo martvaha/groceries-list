@@ -4,18 +4,19 @@ interface UpdateableObject {
   lastUpdated?: Date | null;
 }
 
+/** Constant to avoid creating new Date objects on every selector call */
+const NEVER_UPDATED = new Date(0);
+
 /**
  * lastUpdated is used to determine items collection query modified filter.
  * Only items modified after lastUpdated will be queried.
  */
 export function lastUpdated({ lastUpdated }: UpdateableObject) {
-  const neverUpdated = new Date(0);
-
-  if (!lastUpdated) return neverUpdated;
+  if (!lastUpdated) return NEVER_UPDATED;
 
   // If last updated date is older than 30 days return neverModifiedDate to reload all items
-  if (lastUpdated.getTime() <= new Date(Date.now()).getTime() - ITEMS_FULL_RELOAD_TIMEOUT) {
-    return neverUpdated;
+  if (lastUpdated.getTime() <= Date.now() - ITEMS_FULL_RELOAD_TIMEOUT) {
+    return NEVER_UPDATED;
   }
 
   return lastUpdated;

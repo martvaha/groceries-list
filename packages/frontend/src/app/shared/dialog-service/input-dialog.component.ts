@@ -44,6 +44,6 @@ export class InputDialogComponent {
 
     this.title = data.title;
     this.placeholder = data.placeholder;
-    this.actionLabel = data.actionLabel || $localize`:confirm|:OK`;
+    this.actionLabel = data.actionLabel || $localize`:confirm|@@common.ok:OK`;
   }
 }

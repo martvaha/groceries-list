@@ -1,7 +1,7 @@
 <div class="user-avatar__container">
   @if (!user()) {
     <button mat-button (click)="login()">
-      <mat-icon>person</mat-icon><span i18n>Log in</span>
+      <mat-icon>person</mat-icon><span i18n="@@nav.logIn">Log in</span>
     </button>
   } @else {
     <button
@@ -13,9 +13,9 @@
     ></button>
     <mat-menu #menu="matMenu">
       <ng-template matMenuContent>
-        <a mat-menu-item [routerLink]="['/home', 'profile']" i18n>Profile</a>
-        <button mat-menu-item (click)="checkForUpdate()" i18n>Check for update</button>
-        <button mat-menu-item (click)="logout()" i18n>Sign out</button>
+        <a mat-menu-item [routerLink]="['/home', 'profile']" i18n="@@userMenu.profile">Profile</a>
+        <button mat-menu-item (click)="checkForUpdate()" i18n="@@userMenu.checkUpdate">Check for update</button>
+        <button mat-menu-item (click)="logout()" i18n="@@userMenu.signOut">Sign out</button>
       </ng-template>
     </mat-menu>
   }

@@ -50,7 +50,7 @@ export class ListsContainerComponent implements OnInit {
 
   addList() {
     const dialog = this.dialogService.input({
-      data: { title: $localize`Add list`, placeholder: $localize`List title` },
+      data: { title: $localize`:@@lists.addTitle:Add list`, placeholder: $localize`:@@lists.titleLabel:List title` },
     });
     dialog.afterClosed().subscribe((name) => {
       if (!name) return;
@@ -62,8 +62,8 @@ export class ListsContainerComponent implements OnInit {
   deleteList(list: List) {
     const dialogRef = this.dialogService.confirm({
       data: {
-        title: $localize`Remove list`,
-        message: $localize`Are you sure you want to remove "${list.name}"?`,
+        title: $localize`:@@lists.removeTitle:Remove list`,
+        message: $localize`:@@lists.removeMessage:Are you sure you want to remove "${list.name}"?`,
       },
     });
     dialogRef.afterClosed().subscribe((resp) => {

@@ -1,4 +1,24 @@
-<label id="theme-select" i18n>Theme</label>
+<div class="display-name-control">
+  <mat-form-field appearance="outline">
+    <mat-label i18n="@@profile.displayName">Display Name</mat-label>
+    <input matInput [formControl]="displayNameControl" />
+    <mat-hint i18n="@@profile.displayNameHint">Shown to other members in shared lists</mat-hint>
+  </mat-form-field>
+  <button
+    mat-flat-button
+    color="primary"
+    (click)="saveDisplayName()"
+    [disabled]="displayNameControl.invalid || savingProfile()"
+  >
+    @if (savingProfile()) {
+      <mat-spinner diameter="20"></mat-spinner>
+    } @else {
+      <span i18n="@@common.save">Save</span>
+    }
+  </button>
+</div>
+
+<label id="theme-select" i18n="@@profile.theme">Theme</label>
 
 <mat-radio-group
   aria-labelledby="theme-select"
@@ -8,22 +28,22 @@
   >
   <mat-radio-button value="system">
     @if (systemTheme$ | async; as systemTheme) {
-      <ng-container i18n>
+      <ng-container i18n="@@profile.themeSystem">
       System ({ systemTheme , select, light {light} dark {dark} other {{{systemTheme}}} })
     </ng-container>
     }
   </mat-radio-button>
-  <mat-radio-button value="light" i18n> Light </mat-radio-button>
-  <mat-radio-button value="dark" i18n> Dark </mat-radio-button>
+  <mat-radio-button value="light" i18n="@@profile.themeLight"> Light </mat-radio-button>
+  <mat-radio-button value="dark" i18n="@@profile.themeDark"> Dark </mat-radio-button>
 </mat-radio-group>
 
-<label id="language-select" i18n>Language</label>
+<label id="language-select" i18n="@@profile.language">Language</label>
 
 <div class="language-control">
   <button mat-stroked-button (click)="onLanguageChange('en')">
-    <mat-icon svgIcon="en" /><span i18n> English</span>
+    <mat-icon svgIcon="en" /><span i18n="@@profile.langEnglish"> English</span>
   </button>
   <button mat-stroked-button (click)="onLanguageChange('et')">
-    <mat-icon svgIcon="et" /><span i18n> Estonian</span>
+    <mat-icon svgIcon="et" /><span i18n="@@profile.langEstonian"> Estonian</span>
   </button>
 </div>

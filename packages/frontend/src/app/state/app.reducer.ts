@@ -77,7 +77,7 @@ export const selectGroupedItems = createSelector(selectAllGroups, selectActiveIt
   } else {
     groupsWithItems.push({
       id: 'others',
-      name: $localize`Other`,
+      name: $localize`:@@groups.other:Other`,
       items: unknownGroup,
       modified: new Date(0),
       active: !!unknownGroup.length,

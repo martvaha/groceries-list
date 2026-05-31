@@ -1,4 +1,4 @@
-import nodemailer, { SendMailOptions } from 'nodemailer';
+import nodemailer, { SendMailOptions, Transporter } from 'nodemailer';
 import { TemplateDelegate } from 'handlebars';
 import fs from 'fs';
 import path from 'path';
@@ -7,7 +7,7 @@ import mjml2html from 'mjml';
 import { convert } from 'html-to-text';
 import { handlebars } from './handlebars.js';
 import { Dict } from './types.js';
-import { APP_ROOT, CONFIG } from '../config.js';
+import { APP_ROOT, getConfig } from '../config.js';
 import Sentry from './sentry.js';
 
 const templateCache: Dict<{
@@ -17,12 +17,21 @@ const templateCache: Dict<{
 
 const readFilePromise = util.promisify(fs.readFile);
 
-const transporter = nodemailer.createTransport(CONFIG.smtpConfig as nodemailer.TransportOptions);
+// Lazy-initialized transporter (secrets not available at module load)
+let transporter: Transporter | null = null;
+
+function getTransporter(): Transporter {
+  if (!transporter) {
+    transporter = nodemailer.createTransport(getConfig().smtp as nodemailer.TransportOptions);
+  }
+  return transporter;
+}
 
 async function compileTemplate<T = unknown>(
   template: string,
   data?: T
 ): Promise<{ html?: string; text?: string; error?: unknown }> {
+  const config = getConfig();
   try {
     let { compileHtml, compileText } =
       templateCache[template.toLowerCase()] || {};
@@ -38,7 +47,7 @@ async function compileTemplate<T = unknown>(
       const textTemplate: string = convert(htmlTemplate);
       compileHtml = handlebars.compile<T>(htmlTemplate);
       compileText = handlebars.compile<T>(textTemplate);
-      if (!CONFIG.disableTemplateCache) {
+      if (!config.disableTemplateCache) {
         templateCache[template.toLocaleLowerCase()] = {
           compileHtml,
           compileText,
@@ -63,20 +72,22 @@ export async function sendMail<T = unknown>(
   template: string,
   data?: T
 ) {
-  if (!CONFIG.sendEmail) return;
+  const config = getConfig();
+
+  if (!config.sendEmail) return;
   const { html, text, error } = await compileTemplate(template, data);
   if (error) throw error;
 
   const message: SendMailOptions = { html, text, ...options };
 
-  if (CONFIG.sendEmailTo.length) {
-    message.to = CONFIG.sendEmailTo;
+  if (config.sendEmailTo.length) {
+    message.to = config.sendEmailTo;
   }
 
   try {
-    const info = await transporter.sendMail(message);
+    const info = await getTransporter().sendMail(message);
     console.log(`Email sent to "${message.to}"`);
-    if (CONFIG.smtpConfig.host === 'smtp.ethereal.email') {
+    if (config.smtp.host === 'smtp.ethereal.email') {
       console.log('Preview: ' + nodemailer.getTestMessageUrl(info as nodemailer.SentMessageInfo));
     }
   } catch (error) {

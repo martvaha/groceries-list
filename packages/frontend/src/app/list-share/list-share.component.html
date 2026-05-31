@@ -13,7 +13,7 @@
         type="email"
         (paste)="onPaste($event)"
         placeholder="Share with..."
-        i18n-placeholder
+        i18n-placeholder="@@share.placeholder"
         [formControl]="emailControl"
         [matChipInputFor]="chipGrid"
         [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
@@ -21,7 +21,27 @@
         />
     </mat-chip-grid>
   </mat-form-field>
-  <div>
-    <button class="list-share__share-button" mat-raised-button (click)="share()" i18n>Share</button>
+
+  @if (error()) {
+    <p class="list-share__error">{{ error() }}</p>
+  }
+
+  <div class="list-share__actions">
+    @if (sending()) {
+      <button class="list-share__share-button" mat-raised-button disabled>
+        <mat-spinner diameter="20" />
+      </button>
+    } @else {
+      <button
+        class="list-share__share-button"
+        mat-raised-button
+        color="primary"
+        (click)="share()"
+        [disabled]="users.length === 0"
+        i18n="@@share.shareButton"
+      >
+        Share
+      </button>
+    }
   </div>
 </div>

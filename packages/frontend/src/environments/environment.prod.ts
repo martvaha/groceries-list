@@ -2,7 +2,7 @@ import { VERSION } from './version';
 
 export const environment = {
   version: VERSION,
-  appName: $localize`:app name|:Groceries List`,
+  appName: $localize`:app name|@@app.name:Groceries List`,
   production: true,
   debug: false,
   firebase: {
@@ -16,4 +16,5 @@ export const environment = {
     measurementId: 'G-RYTGXQRWJ1',
   },
   sentry: { dsn: 'https://e0ad91b3a5b944eba7624b3fc20a56d5@sentry.io/1508217' },
+  recaptchaSiteKey: '6Le-mkUsAAAAACzJkEz3LLDRCeYw9ngfahOJ-JSr',
 };

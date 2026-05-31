@@ -1,15 +1,15 @@
 <mat-nav-list class="sidenav__menu">
-  <a mat-list-item [routerLink]="['/home/lists']" (click)="closeSidenavOnMobile()" i18n="Button back to home page"
+  <a mat-list-item [routerLink]="['/home/lists']" (click)="closeSidenavOnMobile()" i18n="Button back to home page@@nav.home"
     >Home</a
     >
     @if (!user()) {
-      <a mat-list-item routerLink="/home/login" (click)="closeSidenavOnMobile()" i18n="Sidenav log in link"
+      <a mat-list-item routerLink="/home/login" (click)="closeSidenavOnMobile()" i18n="Sidenav log in link@@nav.logIn"
         >Log in</a
         >
       }
       @if (pinnedLists()?.length) {
         <mat-divider />
-        <div mat-subheader i18n>Favorites</div>
+        <div mat-subheader i18n="@@nav.favorites">Favorites</div>
         @for (list of pinnedLists(); track list) {
           <a mat-list-item class="favorite-item" [routerLink]="['/home/list', list.id]" (click)="closeSidenavOnMobile()">
             <span matListItemTitle>{{ list.name }}</span>
@@ -20,7 +20,7 @@
 
       <div class="info-container">
         <span class="legal mat-hint"
-          ><a i18n [routerLink]="['/home', 'legal', 'privacy']" target="_blank">Privacy Policy</a></span
+          ><a i18n="@@nav.privacyPolicy" [routerLink]="['/home', 'legal', 'privacy']" target="_blank">Privacy Policy</a></span
           >
           <span class="version mat-hint">{{ version }}</span>
         </div>

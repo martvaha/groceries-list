@@ -1,0 +1,119 @@
+<!-- Loading state -->
+@if (user === undefined) {
+  <div class="members-page members-page--loading">
+    <mat-spinner />
+  </div>
+}
+
+@if (user && !list) {
+  <div class="members-page members-page--error">
+    <mat-icon class="members-page__error-icon">error_outline</mat-icon>
+    <h2 i18n="@@members.listNotFoundTitle">List not found</h2>
+    <p i18n="@@members.listNotFoundMessage">This list doesn't exist or you don't have access to it.</p>
+  </div>
+}
+
+@if (user && list) {
+  <div class="members-page">
+    <!-- Current Members -->
+    <h3 class="members-page__section-title" i18n="@@members.currentTitle">Current Members ({{ members.length }})</h3>
+    <mat-list class="members-page__list">
+      @for (memberUid of members; track memberUid) {
+        <mat-list-item>
+          <mat-icon matListItemIcon>person</mat-icon>
+          <span matListItemTitle>
+            {{ getMemberLabel(memberUid) }}
+            @if (memberUid === owner) {
+              <span class="members-page__owner-badge" i18n="@@members.ownerBadge">(Owner)</span>
+            }
+          </span>
+          @if (canRemoveMember(memberUid)) {
+            <button
+              matListItemMeta
+              mat-icon-button
+              color="warn"
+              (click)="confirmRemoveMember(memberUid)"
+              [disabled]="removing() === memberUid"
+              [attr.aria-label]="memberUid === user!.uid ? 'Leave list' : 'Remove member'"
+            >
+              @if (removing() === memberUid) {
+                <mat-spinner diameter="20" />
+              } @else {
+                <mat-icon>{{ memberUid === user!.uid ? 'logout' : 'person_remove' }}</mat-icon>
+              }
+            </button>
+          }
+        </mat-list-item>
+      }
+    </mat-list>
+
+    <!-- Pending Invites (active only) -->
+    @if (activeInvites.length > 0) {
+      <h3 class="members-page__section-title" i18n="@@members.pendingTitle">Pending Invitations ({{ activeInvites.length }})</h3>
+      <mat-list class="members-page__list">
+        @for (invite of activeInvites; track invite.id) {
+          <mat-list-item>
+            <mat-icon matListItemIcon>mail_outline</mat-icon>
+            <span matListItemTitle>{{ invite.to }}</span>
+            @if (isOwner) {
+              <button
+                matListItemMeta
+                mat-icon-button
+                color="warn"
+                (click)="confirmCancelInvite(invite)"
+                [disabled]="cancellingInvite() === invite.id"
+                aria-label="Cancel invitation"
+              >
+                @if (cancellingInvite() === invite.id) {
+                  <mat-spinner diameter="20" />
+                } @else {
+                  <mat-icon>cancel</mat-icon>
+                }
+              </button>
+            }
+          </mat-list-item>
+        }
+      </mat-list>
+    }
+
+    <!-- Expired Invites (collapsed, owner only) -->
+    @if (isOwner && expiredInvites.length > 0) {
+      <h3 class="members-page__section-title members-page__section-title--expired" i18n="@@members.expiredTitle">Expired Invitations ({{ expiredInvites.length }})</h3>
+      <mat-list class="members-page__list">
+        @for (invite of expiredInvites; track invite.id) {
+          <mat-list-item class="members-page__list-item--expired">
+            <mat-icon matListItemIcon>mail_outline</mat-icon>
+            <span matListItemTitle>
+              {{ invite.to }}
+              <span class="members-page__expired-badge" i18n="@@members.expiredBadge">(Expired)</span>
+            </span>
+            <button
+              matListItemMeta
+              mat-icon-button
+              (click)="cancelInvite(invite.id)"
+              [disabled]="cancellingInvite() === invite.id"
+              aria-label="Remove expired invitation"
+            >
+              @if (cancellingInvite() === invite.id) {
+                <mat-spinner diameter="20" />
+              } @else {
+                <mat-icon>delete_outline</mat-icon>
+              }
+            </button>
+          </mat-list-item>
+        }
+      </mat-list>
+    }
+
+    <div class="members-page__actions">
+      <a mat-stroked-button [routerLink]="['/home/list', listId]">
+        <mat-icon>arrow_back</mat-icon>
+        <span i18n="@@common.backButton">Back</span>
+      </a>
+      <a mat-flat-button color="primary" [routerLink]="['/home/share', listId]">
+        <mat-icon>person_add</mat-icon>
+        <span i18n="@@members.inviteMore">Invite More</span>
+      </a>
+    </div>
+  </div>
+}

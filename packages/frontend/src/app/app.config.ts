@@ -2,9 +2,11 @@ import { ApplicationConfig, provideZonelessChangeDetection } from '@angular/core
 import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withFetch } from '@angular/common/http';
 import { provideServiceWorker } from '@angular/service-worker';
-import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
+import { provideFirebaseApp, initializeApp, getApp } from '@angular/fire/app';
+import { provideAppCheck, initializeAppCheck, ReCaptchaV3Provider } from '@angular/fire/app-check';
 import { provideAuth, getAuth } from '@angular/fire/auth';
 import { provideFirestore, getFirestore } from '@angular/fire/firestore';
+import { provideFunctions, getFunctions } from '@angular/fire/functions';
 import { provideAnalytics, getAnalytics, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
 import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
@@ -35,8 +37,25 @@ export const appConfig: ApplicationConfig = {
       registrationStrategy: 'registerWhenStable:30000',
     }),
     provideFirebaseApp(() => initializeApp(environment.firebase)),
+    // App Check only works in browser - skip during SSR
+    ...(typeof document !== 'undefined'
+      ? [
+          provideAppCheck(() => {
+            // Enable debug mode in development - generates a debug token logged to console
+            // Register the debug token in Firebase Console > App Check > Manage debug tokens
+            if (!environment.production) {
+              (self as any).FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+            }
+            return initializeAppCheck(getApp(), {
+              provider: new ReCaptchaV3Provider(environment.recaptchaSiteKey),
+              isTokenAutoRefreshEnabled: true,
+            });
+          }),
+        ]
+      : []),
     provideFirestore(() => getFirestore()),
     provideAuth(() => getAuth()),
+    provideFunctions(() => getFunctions(undefined, 'europe-west1')),
     provideAnalytics(() => getAnalytics()),
     provideStore(reducers, {
       metaReducers,

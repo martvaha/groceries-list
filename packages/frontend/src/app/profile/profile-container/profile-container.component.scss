@@ -5,6 +5,27 @@
   align-items: baseline;
 }
 
+.display-name-control {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+
+  mat-form-field {
+    flex: 1;
+    min-width: 200px;
+  }
+
+  button {
+    height: 56px; // Match form field height
+    min-width: 80px;
+
+    mat-spinner {
+      margin: 0 auto;
+    }
+  }
+}
+
 .theme,
 .language {
   display: flex;

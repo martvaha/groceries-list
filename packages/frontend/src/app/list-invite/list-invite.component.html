@@ -1,11 +1,137 @@
-@if (user) {
-  <div>
-    {{user | json}}
-  </div>
-}
-@if (user === undefined) {
-  <mat-spinner />
-}
-@if (user === null) {
-  <app-auth [redirect]="redirect" />
-}
+<div class="invite-container">
+  <!-- Loading state while checking authentication -->
+  @if (user === undefined) {
+    <mat-spinner />
+  }
+
+  <!-- Not authenticated - show invite context + sign-in options -->
+  @if (user === null) {
+    <mat-card>
+      <mat-card-header>
+        <mat-icon mat-card-avatar>folder_shared</mat-icon>
+        <mat-card-title i18n="@@invite.title">List Invitation</mat-card-title>
+        @if (preview && preview.listName) {
+          <mat-card-subtitle>
+            <span i18n="@@invite.invitedYou">{{ preview.inviterName || 'Someone' }} invited you to</span>
+            <strong> {{ preview.listName }}</strong>
+          </mat-card-subtitle>
+        } @else {
+          <mat-card-subtitle i18n="@@invite.subtitle">You've been invited to a shared shopping list</mat-card-subtitle>
+        }
+      </mat-card-header>
+
+      <mat-card-content>
+        @if (linkSent()) {
+          <p class="link-sent">
+            <mat-icon class="link-sent__icon">mark_email_read</mat-icon>
+            <span i18n="@@invite.checkInbox">Check your inbox for a secure sign-in link to accept this invitation.</span>
+          </p>
+        } @else {
+          <p i18n="@@invite.signInPrompt">Sign in to accept this invitation and start sharing the list.</p>
+          @if (linkError()) {
+            <p class="error-message">{{ linkError() }}</p>
+          }
+        }
+      </mat-card-content>
+
+      @if (!linkSent()) {
+        <mat-card-actions class="invite-actions">
+          <button mat-flat-button color="primary" (click)="continueWithGoogle()">
+            <mat-icon>login</mat-icon>
+            <span i18n="@@invite.continueGoogle">Continue with Google</span>
+          </button>
+
+          @if (sendingLink()) {
+            <button mat-stroked-button disabled>
+              <mat-spinner diameter="20" />
+            </button>
+          } @else {
+            <button mat-stroked-button (click)="sendSignInLink()">
+              <mat-icon>mail</mat-icon>
+              <span i18n="@@invite.emailLink">Email me a sign-in link</span>
+            </button>
+          }
+        </mat-card-actions>
+      }
+    </mat-card>
+  }
+
+  <!-- Authenticated - show invite details -->
+  @if (user) {
+    <mat-card>
+      @if (invite) {
+        <mat-card-header>
+          <mat-icon mat-card-avatar>folder_shared</mat-icon>
+          <mat-card-title i18n="@@invite.title">List Invitation</mat-card-title>
+          <mat-card-subtitle>
+            <span i18n="@@invite.from">From</span>: {{ invite.userName || 'Someone' }}
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p class="list-name">
+            <strong i18n="@@invite.listLabel">List:</strong> {{ invite.listName || 'Unnamed list' }}
+          </p>
+
+          @if (error()) {
+            <p class="error-message">{{ error() }}</p>
+          }
+        </mat-card-content>
+        <mat-card-actions>
+          @if (accepting()) {
+            <button mat-flat-button color="primary" disabled>
+              <mat-spinner diameter="20" />
+            </button>
+          } @else {
+            <button mat-flat-button color="primary" (click)="acceptInvite()">
+              <mat-icon>check</mat-icon>
+              <span i18n="@@invite.accept">Accept Invitation</span>
+            </button>
+          }
+        </mat-card-actions>
+      } @else {
+        <!-- Signed in with an email that does not match the invite -->
+        <mat-card-header>
+          <mat-icon mat-card-avatar>switch_account</mat-icon>
+          <mat-card-title i18n="@@invite.wrongAccountTitle">Wrong account</mat-card-title>
+          <mat-card-subtitle i18n="@@invite.wrongAccountMessage">This invitation was sent to a different email address</mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <p class="current-email">
+            <strong i18n="@@invite.signedInAs">Currently signed in as:</strong> {{ user.email }}
+          </p>
+          <p i18n="@@invite.useCorrectAddress">
+            Use the address this invite was sent to. We can email a secure sign-in link to the
+            correct address, or you can sign in with a different account.
+          </p>
+
+          @if (linkSent()) {
+            <p class="link-sent">
+              <mat-icon class="link-sent__icon">mark_email_read</mat-icon>
+              <span i18n="@@invite.checkInbox">Check your inbox for a secure sign-in link to accept this invitation.</span>
+            </p>
+          } @else if (linkError()) {
+            <p class="error-message">{{ linkError() }}</p>
+          }
+        </mat-card-content>
+        @if (!linkSent()) {
+          <mat-card-actions class="invite-actions">
+            @if (sendingLink()) {
+              <button mat-flat-button color="primary" disabled>
+                <mat-spinner diameter="20" />
+              </button>
+            } @else {
+              <button mat-flat-button color="primary" (click)="sendSignInLink()">
+                <mat-icon>mail</mat-icon>
+                <span i18n="@@invite.emailLink">Email me a sign-in link</span>
+              </button>
+            }
+            <button mat-stroked-button (click)="switchAccount()">
+              <mat-icon>switch_account</mat-icon>
+              <span i18n="@@invite.differentAccount">Sign in with a different account</span>
+            </button>
+          </mat-card-actions>
+        }
+      }
+    </mat-card>
+  }
+</div>

@@ -9,7 +9,7 @@
 
 
 # dependencies
-/node_modules
+**/node_modules
 .pnpm-store
 
 # IDEs and editors
@@ -49,3 +49,9 @@ Thumbs.db
 .runtimeconfig.json
 .firebase
 project
+
+# Firebase Functions env files (contain secrets)
+packages/functions/.env.*
+!packages/functions/.env.example
+.secret.local
+*.secret.local

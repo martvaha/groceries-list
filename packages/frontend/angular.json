@@ -11,12 +11,12 @@
       "i18n": {
         "sourceLocale": {
           "code": "en",
-          "baseHref": "/en/"
+          "subPath": "en"
         },
         "locales": {
           "et": {
             "translation": "src/i18n/et.xlf",
-            "baseHref": "/et/"
+            "subPath": "et"
           }
         }
       },

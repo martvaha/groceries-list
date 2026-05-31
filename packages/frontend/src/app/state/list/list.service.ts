@@ -1,9 +1,8 @@
 import { Injectable, inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
 import { Firestore, collection, query, where, collectionChanges, addDoc, doc, updateDoc, deleteDoc, serverTimestamp, DocumentChange, arrayUnion, arrayRemove } from '@angular/fire/firestore';
 import { Action, Store } from '@ngrx/store';
-import { combineLatest, EMPTY, of } from 'rxjs';
-import { catchError, debounceTime, distinctUntilChanged, filter, map, mergeMap, startWith, switchMap, tap } from 'rxjs/operators';
-import { AuthService } from '../../auth/auth.service';
+import { combineLatest, of } from 'rxjs';
+import { catchError, debounceTime, distinctUntilChanged, filter, map, startWith, switchMap } from 'rxjs/operators';
 import { List } from '../../shared/models';
 import { captureException } from '../../shared/sentry';
 import { takeValue } from '../../shared/utils';
@@ -16,7 +15,6 @@ import { selectListLastUpdated } from './list.reducer';
   providedIn: 'root',
 })
 export class ListService {
-  private auth = inject(AuthService);
   private store = inject<Store<State>>(Store);
 
   private firestore: Firestore = inject(Firestore);
@@ -36,7 +34,6 @@ export class ListService {
     ]).pipe(
       filter(([user]) => !!user),
       switchMap(([user, lastUpdated]) => {
-        console.log('load list query', { uid: user!.uid, lastUpdated });
         return runInInjectionContext(this.injector, () => {
           const listCollection = collection(this.firestore, 'lists');
           const listQuery = (lastUpdated?.getTime() ?? 0) > 0
@@ -51,7 +48,6 @@ export class ListService {
             // startWith ensures we emit immediately when query returns no documents
             // (collectionChanges may not emit for empty results with time-based filters)
             startWith([] as DocumentChange<any>[]),
-            tap((c) => console.log('load list changes', c)),
             map((changes) => {
               if (!changes?.length) return [loadListsNothingChanged()];
               const upserted: List[] = [];

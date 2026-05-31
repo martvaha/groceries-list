@@ -1,0 +1,23 @@
+<mjml>
+  <mj-head>
+    <mj-title>Sinu sisselogimise link</mj-title>
+    <mj-attributes>
+
+    </mj-attributes>
+  </mj-head>
+  <mj-body>
+    <mj-section>
+      <mj-column width="600px">
+        <mj-text>
+          Kasutaja {{userName}} jagas sinuga nimekirja {{listName}}. Kutse vastuvõtmiseks logi sisse alloleva turvalise lingi kaudu.
+        </mj-text>
+        <mj-button href="{{signInLink}}">
+          Logi sisse ja võta kutse vastu
+        </mj-button>
+        <mj-text font-size="12px" color="#888888">
+          Kui sa seda kutset ei oodanud, võid selle kirja eirata. Link aegub varsti.
+        </mj-text>
+      </mj-column>
+    </mj-section>
+  </mj-body>
+</mjml>

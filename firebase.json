@@ -3,10 +3,13 @@
     "rules": "firestore.rules",
     "indexes": "firestore.indexes.json"
   },
-  "functions": {
-    "source": "packages/functions",
-    "predeploy": ["pnpm --filter @groceries-list/functions build"]
-  },
+  "functions": [
+    {
+      "source": "packages/functions",
+      "predeploy": ["pnpm --filter @groceries-list/functions build"],
+      "codebase": "default"
+    }
+  ],
   "hosting": [
     {
       "target": "groceries-list",

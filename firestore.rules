@@ -5,37 +5,78 @@ service cloud.firestore {
     	return request.auth != null;
     }
 
-    function getRoleExample(rsc) {
-      return rsc.data.acl[request.auth.uid];
-    }
-
-    function hasRoleExample(rsc, array) {
-      return signedIn() && (getRoleExample(rsc) in array);
-    }
-
     match /{document=**} {
       allow read, write: if false;
     }
 
-    match /invites/{uid} {
-      allow read, write: if signedIn;
+    match /invites/{inviteId} {
+      // Allow reading invites only if the user is in the list's ACL (for member
+      // management, e.g. listing pending invites). Recipients do NOT read invite
+      // docs directly; they use the getInvite Cloud Function so the invitee email
+      // (PII) is never exposed to the client.
+      allow read: if signedIn() &&
+        request.auth.uid in get(/databases/$(database)/documents/lists/$(resource.data.listId)).data.acl;
+
+      // Invite creation is handled exclusively by the createInvite Cloud Function
+      // This ensures secure random IDs, proper deduplication, and rate limiting
+      allow create: if false;
+
+      // Allow deleting invites if user is in the list's ACL (for cancelling pending invites)
+      allow delete: if signedIn() &&
+        request.auth.uid in get(/databases/$(database)/documents/lists/$(resource.data.listId)).data.acl;
+
+      // Updates are handled by Cloud Functions only
+      allow update: if false;
     }
 
     match /users/{uid} {
     	allow read, write: if request.auth.uid == uid
     }
 
+    match /userProfiles/{uid} {
+      // Only owner can read/write their own profile
+      // Other users access profile info through lists/{listId}/members subcollection
+      allow read, write: if signedIn() && request.auth.uid == uid;
+    }
+
     match /lists/{listId} {
-    	allow create: if signedIn();
-    	allow read, write: if request.auth.uid in resource.data.acl;
+      // Anyone can create a list (they become owner)
+      allow create: if signedIn() &&
+        request.resource.data.acl is list &&
+        request.resource.data.acl.size() > 0 &&
+        request.auth.uid in request.resource.data.acl;
+
+      // ACL members can read the list
+      allow read: if signedIn() && request.auth.uid in resource.data.acl;
+
+      // ACL members can update, but cannot modify acl or owner fields (handled by Cloud Functions)
+      allow update: if signedIn() &&
+        request.auth.uid in resource.data.acl &&
+        request.resource.data.acl == resource.data.acl &&
+        (!('owner' in resource.data) || request.resource.data.owner == resource.data.owner);
+
+      // Only owner can delete the list
+      allow delete: if signedIn() &&
+        request.auth.uid == (resource.data.owner != null ? resource.data.owner : resource.data.acl[0]);
     }
 
     match /lists/{listId}/items/{item} {
-    	allow read, write: if request.auth.uid in get(/databases/$(database)/documents/lists/$(listId)).data.acl;
+      allow read, write: if signedIn() &&
+        request.auth.uid in get(/databases/$(database)/documents/lists/$(listId)).data.acl;
     }
 
     match /lists/{listId}/groups/{group} {
-    	allow read, write: if request.auth.uid in get(/databases/$(database)/documents/lists/$(listId)).data.acl;
+      allow read, write: if signedIn() &&
+        request.auth.uid in get(/databases/$(database)/documents/lists/$(listId)).data.acl;
+    }
+
+    match /lists/{listId}/members/{memberId} {
+      // ACL members can read member info
+      allow read: if signedIn() &&
+        request.auth.uid in get(/databases/$(database)/documents/lists/$(listId)).data.acl;
+
+      // Members subcollection is managed by Cloud Functions only
+      allow write: if false;
     }
   }
 }

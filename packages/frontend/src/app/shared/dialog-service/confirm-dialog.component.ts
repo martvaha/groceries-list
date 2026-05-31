@@ -40,7 +40,7 @@ export class ConfirmDialogComponent {
   constructor() {
     const data = this.data;
 
-    data.cancelLabel = data.cancelLabel || $localize`Cancel`;
-    data.confirmLabel = data.confirmLabel || $localize`Yes`;
+    data.cancelLabel = data.cancelLabel || $localize`:@@dialog.cancel:Cancel`;
+    data.confirmLabel = data.confirmLabel || $localize`:@@dialog.yes:Yes`;
   }
 }
