@@ -84,6 +84,7 @@ export class ListService {
     const finalList = {
       ...list,
       acl: [user.uid],
+      owner: user.uid,
       favorites: [],
       modified: serverTimestamp() as any,
     } as List;
