@@ -40,7 +40,7 @@ async function compileTemplate<T = unknown>(
         path.join(APP_ROOT, 'views', 'email', template + '.mjml'),
         'utf-8'
       );
-      const { html: htmlTemplate, errors: mjmlErrors } = mjml2html(mjml);
+      const { html: htmlTemplate, errors: mjmlErrors } = await mjml2html(mjml);
       if (mjmlErrors && mjmlErrors.length) {
         Sentry.captureException(mjmlErrors);
       }

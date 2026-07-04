@@ -32,7 +32,7 @@ jobs:
       PROJECT_ID: ${{ github.ref_name == 'main' && 'groceries-list-production' || 'com-groceries-list' }}
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           fetch-depth: 0
 
@@ -147,13 +147,13 @@ jobs:
 
       - name: Setup pnpm
         if: steps.targets.outputs.deploy_targets != ''
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Setup Node.js
         if: steps.targets.outputs.deploy_targets != ''
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 22
+          node-version: 24
           cache: pnpm
 
       - name: Install dependencies
@@ -180,6 +180,43 @@ jobs:
           printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$credentials_file"
           echo "GOOGLE_APPLICATION_CREDENTIALS=$credentials_file" >> "$GITHUB_ENV"
 
+      # Prerequisite APIs (enable once per project, not roles):
+      #   gcloud services enable cloudbilling.googleapis.com --project <id>
+      #   (gen-2 functions require a billing check; the CLI calls the Cloud
+      #    Billing API, which must be enabled even though the project is on Blaze)
+      #
+      # The deploy service account (secrets.FIREBASE_SERVICE_ACCOUNT_GROCERIES_LIST)
+      # must hold these IAM roles on the target project. Grant the same set on
+      # both com-groceries-list (test) and groceries-list-production (prod).
+      #
+      #   Firebase / rules / indexes:
+      #     roles/firebase.hosting.admin        # hosting
+      #     roles/firebaserules.admin           # firestore:rules + storage:rules (compile & release)
+      #     roles/datastore.indexAdmin          # firestore:indexes
+      #     roles/firebasestorage.admin         # storage default bucket
+      #     roles/storage.bucketViewer          # GCS buckets.get/list — the defaultBucket
+      #                                         # endpoint checks these plain-GCS perms too
+      #                                         # (firebase-tools#6593)
+      #     roles/firebaseauth.admin            # auth (sign-in links)
+      #     roles/firebaseextensions.viewer     # CLI lists extension instances on every deploy
+      #     roles/serviceusage.serviceUsageConsumer
+      #
+      #   Functions are 2nd-gen (firebase-functions/v2), so deploying them also needs:
+      #     roles/cloudfunctions.admin
+      #     roles/run.admin                     # gen-2 runs on Cloud Run
+      #     roles/artifactregistry.admin        # build image storage
+      #     roles/cloudbuild.builds.editor      # container build
+      #     roles/eventarc.admin                # Firestore triggers
+      #     roles/cloudscheduler.admin          # scheduledCleanup
+      #     roles/pubsub.admin                  # scheduler backing
+      #     roles/iam.serviceAccountUser        # act as the functions runtime SA
+      #
+      #   One-time service-agent bindings (firebase-tools creates these itself when
+      #   run by an owner, but the CI SA cannot modify project IAM policy):
+      #     service-<projectNumber>@gcp-sa-pubsub.iam.gserviceaccount.com → roles/iam.serviceAccountTokenCreator
+      #     <projectNumber>-compute@developer.gserviceaccount.com         → roles/run.invoker
+      #     <projectNumber>-compute@developer.gserviceaccount.com         → roles/eventarc.eventReceiver
+      #
       # --force lets non-interactive deploys proceed when functions were
       # removed from the codebase (deletes them instead of aborting).
       - name: Deploy Firebase targets
