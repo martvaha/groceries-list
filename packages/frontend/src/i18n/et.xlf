@@ -31,11 +31,11 @@
         <target>Konto juba eksisteerib</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/auth/auth.service.ts</context>
-          <context context-type="linenumber">50</context>
+          <context context-type="linenumber">54</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/auth/auth.service.ts</context>
-          <context context-type="linenumber">136</context>
+          <context context-type="linenumber">222</context>
         </context-group>
       </trans-unit>
       <trans-unit id="auth.accountExistsMessage" datatype="html">
@@ -43,11 +43,19 @@
         <target>Konto emailiga <x id="PH" equiv-text="error.customData?.email"/> juba eksisteerib. Proovi uuesti <x id="PH_1" equiv-text="otherProvider"/> kontoga.</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/auth/auth.service.ts</context>
-          <context context-type="linenumber">51</context>
+          <context context-type="linenumber">55</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/auth/auth.service.ts</context>
-          <context context-type="linenumber">137</context>
+          <context context-type="linenumber">223</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="auth.confirmInviteEmail" datatype="html">
+        <source>Please confirm the email this invitation was sent to</source>
+        <target>Palun kinnita e-posti aadress, millele kutse saadeti</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/auth/auth.service.ts</context>
+          <context context-type="linenumber">173</context>
         </context-group>
       </trans-unit>
       <trans-unit id="nav.home" datatype="html">
@@ -69,7 +77,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-avatar/user-avatar.component.html</context>
-          <context context-type="linenumber">4,5</context>
+          <context context-type="linenumber">4,6</context>
         </context-group>
       </trans-unit>
       <trans-unit id="nav.favorites" datatype="html">
@@ -85,7 +93,7 @@
         <target>Privaatsus</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/home/sidenav-menu/sidenav-menu.component.html</context>
-          <context context-type="linenumber">23,24</context>
+          <context context-type="linenumber">23,25</context>
         </context-group>
       </trans-unit>
       <trans-unit id="common.name" datatype="html">
@@ -93,7 +101,7 @@
         <target>Nimi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/item-edit/item-edit-form/item-edit-form.component.html</context>
-          <context context-type="linenumber">3</context>
+          <context context-type="linenumber">3,4</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/list-edit/list-edit.component.html</context>
@@ -105,7 +113,7 @@
         <target>Detailid</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/item-edit/item-edit-form/item-edit-form.component.html</context>
-          <context context-type="linenumber">8</context>
+          <context context-type="linenumber">8,9</context>
         </context-group>
       </trans-unit>
       <trans-unit id="common.group" datatype="html">
@@ -113,11 +121,11 @@
         <target>Grupp</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/item-edit/item-edit-form/item-edit-form.component.html</context>
-          <context context-type="linenumber">14</context>
+          <context context-type="linenumber">14,15</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/list-edit/list-edit.component.html</context>
-          <context context-type="linenumber">5,6</context>
+          <context context-type="linenumber">5,7</context>
         </context-group>
       </trans-unit>
       <trans-unit id="itemEdit.createGroupTooltip" datatype="html">
@@ -141,7 +149,11 @@
         <target>Tagasi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/item-edit/item-edit-form/item-edit-form.component.html</context>
-          <context context-type="linenumber">43,44</context>
+          <context context-type="linenumber">43,45</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.html</context>
+          <context context-type="linenumber">111,113</context>
         </context-group>
       </trans-unit>
       <trans-unit id="common.save" datatype="html">
@@ -149,7 +161,11 @@
         <target>Salvesta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/item-edit/item-edit-form/item-edit-form.component.html</context>
-          <context context-type="linenumber">47,48</context>
+          <context context-type="linenumber">47,49</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/profile/profile-container/profile-container.component.html</context>
+          <context context-type="linenumber">16,19</context>
         </context-group>
       </trans-unit>
       <trans-unit id="common.add" datatype="html">
@@ -161,7 +177,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/list/list-container/list-container.component.html</context>
-          <context context-type="linenumber">111,112</context>
+          <context context-type="linenumber">153,154</context>
         </context-group>
       </trans-unit>
       <trans-unit id="itemEdit.addGroupTitle" datatype="html">
@@ -228,6 +244,414 @@
           <context context-type="linenumber">49</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="invite.title" datatype="html">
+        <source>List Invitation</source>
+        <target>Nimekirja kutse</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
+          <context context-type="linenumber">12,13</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
+          <context context-type="linenumber">65,66</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="invite.invitedYou" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="{{ preview.inviterName || 'Someone' }}"/> invited you to</source>
+        <target><x id="INTERPOLATION" equiv-text="{{ preview.inviterName || 'Someone' }}"/> kutsus sind nimekirja</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
+          <context context-type="linenumber">15,16</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="invite.subtitle" datatype="html">
+        <source>You've been invited to a shared shopping list</source>
+        <target>Sind on kutsutud jagatud ostunimekirja</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
+          <context context-type="linenumber">19,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="invite.checkInbox" datatype="html">
+        <source>Check your inbox for a secure sign-in link to accept this invitation.</source>
+        <target>Kutse vastuvõtmiseks vaata oma postkasti turvalise sisselogimise lingi järele.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
+          <context context-type="linenumber">27,29</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
+          <context context-type="linenumber">110,112</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="invite.signInPrompt" datatype="html">
+        <source>Sign in to accept this invitation and start sharing the list.</source>
+        <target>Logi sisse, et kutse vastu võtta ja nimekirja jagamist alustada.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
+          <context context-type="linenumber">30,31</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="invite.continueGoogle" datatype="html">
+        <source>Continue with Google</source>
+        <target>Jätka Google'iga</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
+          <context context-type="linenumber">41,44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="invite.emailLink" datatype="html">
+        <source>Email me a sign-in link</source>
+        <target>Saada mulle sisselogimise link</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
+          <context context-type="linenumber">51,53</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
+          <context context-type="linenumber">125,126</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="invite.from" datatype="html">
+        <source>From</source>
+        <target>Saatja</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
+          <context context-type="linenumber">67</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="invite.listLabel" datatype="html">
+        <source>List:</source>
+        <target>Nimekiri:</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
+          <context context-type="linenumber">72</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="invite.accept" datatype="html">
+        <source>Accept Invitation</source>
+        <target>Võta kutse vastu</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
+          <context context-type="linenumber">87,88</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="invite.wrongAccountTitle" datatype="html">
+        <source>Wrong account</source>
+        <target>Vale konto</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
+          <context context-type="linenumber">95,96</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="invite.wrongAccountMessage" datatype="html">
+        <source>This invitation was sent to a different email address</source>
+        <target>See kutse saadeti teisele e-posti aadressile</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
+          <context context-type="linenumber">96,97</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="invite.signedInAs" datatype="html">
+        <source>Currently signed in as:</source>
+        <target>Hetkel sisse logitud kui:</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
+          <context context-type="linenumber">100,101</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="invite.useCorrectAddress" datatype="html">
+        <source> Use the address this invite was sent to. We can email a secure sign-in link to the correct address, or you can sign in with a different account. </source>
+        <target> Kasuta aadressi, millele see kutse saadeti. Saadame turvalise sisselogimise lingi õigele aadressile või saad sisse logida teise kontoga. </target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
+          <context context-type="linenumber">103,106</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="invite.differentAccount" datatype="html">
+        <source>Sign in with a different account</source>
+        <target>Logi sisse teise kontoga</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
+          <context context-type="linenumber">130,132</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="invite.sendLinkFailed" datatype="html">
+        <source>Failed to send the sign-in link. Please try again.</source>
+        <target>Sisselogimise lingi saatmine ebaõnnestus. Palun proovi uuesti.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-invite/list-invite.component.ts</context>
+          <context context-type="linenumber">79</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="invite.acceptFailed" datatype="html">
+        <source>Failed to accept invite. Please try again.</source>
+        <target>Kutse vastuvõtmine ebaõnnestus. Palun proovi uuesti.</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-invite/list-invite.component.ts</context>
+          <context context-type="linenumber">110</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.listNotFoundTitle" datatype="html">
+        <source>List not found</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.html</context>
+          <context context-type="linenumber">11,12</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.listNotFoundMessage" datatype="html">
+        <source>This list doesn't exist or you don't have access to it.</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.html</context>
+          <context context-type="linenumber">12,17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.currentTitle" datatype="html">
+        <source>Current Members (<x id="INTERPOLATION" equiv-text="{{ members.length }}"/>)</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.html</context>
+          <context context-type="linenumber">19,20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.ownerBadge" datatype="html">
+        <source>(Owner)</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.html</context>
+          <context context-type="linenumber">27,29</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.pendingTitle" datatype="html">
+        <source>Pending Invitations (<x id="INTERPOLATION" equiv-text="{{ activeInvites.length }}"/>)</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.html</context>
+          <context context-type="linenumber">52,53</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.expiredTitle" datatype="html">
+        <source>Expired Invitations (<x id="INTERPOLATION" equiv-text="{{ expiredInvites.length }}"/>)</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.html</context>
+          <context context-type="linenumber">81,82</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.expiredBadge" datatype="html">
+        <source>(Expired)</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.html</context>
+          <context context-type="linenumber">88,90</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.inviteMore" datatype="html">
+        <source>Invite More</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.html</context>
+          <context context-type="linenumber">115,118</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.leaveTitle" datatype="html">
+        <source>Leave list?</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.ts</context>
+          <context context-type="linenumber">101</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.leaveMessage" datatype="html">
+        <source>Are you sure you want to leave this list? You will lose access to all items.</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.ts</context>
+          <context context-type="linenumber">102</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.leaveConfirm" datatype="html">
+        <source>Leave</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.ts</context>
+          <context context-type="linenumber">103</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="common.cancel" datatype="html">
+        <source>Cancel</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.ts</context>
+          <context context-type="linenumber">104</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.ts</context>
+          <context context-type="linenumber">111</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.removeTitle" datatype="html">
+        <source>Remove member?</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.ts</context>
+          <context context-type="linenumber">108</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.removeMessage" datatype="html">
+        <source>Are you sure you want to remove <x id="member" equiv-text="memberLabel"/> from this list?</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.ts</context>
+          <context context-type="linenumber">109</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.removeConfirm" datatype="html">
+        <source>Remove</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.ts</context>
+          <context context-type="linenumber">110</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.left" datatype="html">
+        <source>You have left the list</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.ts</context>
+          <context context-type="linenumber">142</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.removed" datatype="html">
+        <source>Member removed</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.ts</context>
+          <context context-type="linenumber">143</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="common.close" datatype="html">
+        <source>Close</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.ts</context>
+          <context context-type="linenumber">144</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.ts</context>
+          <context context-type="linenumber">155</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.ts</context>
+          <context context-type="linenumber">203</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.ts</context>
+          <context context-type="linenumber">210</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-share/list-share.component.ts</context>
+          <context context-type="linenumber">168</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-share/list-share.component.ts</context>
+          <context context-type="linenumber">191</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-share/list-share.component.ts</context>
+          <context context-type="linenumber">203</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/profile/profile-container/profile-container.component.ts</context>
+          <context context-type="linenumber">119</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/profile/profile-container/profile-container.component.ts</context>
+          <context context-type="linenumber">126</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.permissionDenied" datatype="html">
+        <source>You don't have permission to remove this member</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.ts</context>
+          <context context-type="linenumber">164</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.cannotRemoveLast" datatype="html">
+        <source>Cannot remove the last member</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.ts</context>
+          <context context-type="linenumber">167</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.removeFailed" datatype="html">
+        <source>Failed to remove member</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.ts</context>
+          <context context-type="linenumber">169</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.cancelInviteTitle" datatype="html">
+        <source>Cancel invitation?</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.ts</context>
+          <context context-type="linenumber">174</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.cancelInviteMessage" datatype="html">
+        <source>Are you sure you want to cancel the invitation to <x id="email" equiv-text="invite.to"/>?</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.ts</context>
+          <context context-type="linenumber">175</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.cancelInviteConfirm" datatype="html">
+        <source>Cancel Invitation</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.ts</context>
+          <context context-type="linenumber">176</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="common.back" datatype="html">
+        <source>Back</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.ts</context>
+          <context context-type="linenumber">177</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.inviteCancelled" datatype="html">
+        <source>Invitation cancelled</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.ts</context>
+          <context context-type="linenumber">202</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.cancelFailed" datatype="html">
+        <source>Failed to cancel invitation</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.ts</context>
+          <context context-type="linenumber">209</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="members.you" datatype="html">
+        <source>You</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-members/list-members.component.ts</context>
+          <context context-type="linenumber">220</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="share.placeholder" datatype="html">
         <source>Share with...</source>
         <target>Jaga...</target>
@@ -236,16 +660,120 @@
           <context context-type="linenumber">15,16</context>
         </context-group>
       </trans-unit>
-      <trans-unit id="lists.share" datatype="html">
-        <source>Share</source>
-        <target>Jaga</target>
+      <trans-unit id="share.shareButton" datatype="html">
+        <source> Share </source>
+        <target>TODO: add Estonian translation</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/list-share/list-share.component.html</context>
-          <context context-type="linenumber">25,26</context>
+          <context context-type="linenumber">43,46</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="share.tooMany" datatype="html">
+        <source>Maximum <x id="max" equiv-text="MAX_INVITES_PER_BATCH"/> invitations per batch</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-share/list-share.component.ts</context>
+          <context context-type="linenumber">135</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="share.alreadyInvited" datatype="html">
+        <source><x id="count" equiv-text="alreadyInvited.length"/> already invited</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-share/list-share.component.ts</context>
+          <context context-type="linenumber">161</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="share.alreadyMembers" datatype="html">
+        <source><x id="count" equiv-text="alreadyMembers.length"/> already members</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-share/list-share.component.ts</context>
+          <context context-type="linenumber">164</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="share.success" datatype="html">
+        <source>Invitation sent to <x id="count" equiv-text="created.length"/> recipient(s)</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-share/list-share.component.ts</context>
+          <context context-type="linenumber">183</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="share.error" datatype="html">
+        <source>Failed to send invitations</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-share/list-share.component.ts</context>
+          <context context-type="linenumber">202</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="share.permissionDenied" datatype="html">
+        <source>You don't have permission to invite people to this list</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-share/list-share.component.ts</context>
+          <context context-type="linenumber">215</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="share.listNotFound" datatype="html">
+        <source>List not found</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-share/list-share.component.ts</context>
+          <context context-type="linenumber">218</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="share.invalidInput" datatype="html">
+        <source>Invalid input. Please check the email addresses</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-share/list-share.component.ts</context>
+          <context context-type="linenumber">221</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="share.networkError" datatype="html">
+        <source>Network error. Please check your connection and try again</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-share/list-share.component.ts</context>
+          <context context-type="linenumber">224</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="share.unauthenticated" datatype="html">
+        <source>Please sign in to send invitations</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-share/list-share.component.ts</context>
+          <context context-type="linenumber">227</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="share.genericError" datatype="html">
+        <source>Failed to send invitations. Please try again</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list-share/list-share.component.ts</context>
+          <context context-type="linenumber">229</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="list.markJustAddedTitle" datatype="html">
+        <source>Mark as just added</source>
+        <target>Märgi äsja lisatuks</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list/list-container/list-container.component.html</context>
+          <context context-type="linenumber">78,79</context>
         </context-group>
         <context-group purpose="location">
-          <context context-type="sourcefile">src/app/lists-container/lists-container.component.html</context>
-          <context context-type="linenumber">18,19</context>
+          <context context-type="sourcefile">src/app/list/list-container/list-container.component.ts</context>
+          <context context-type="linenumber">333</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="list.addedAgoTooltip" datatype="html">
+        <source>Added <x id="INTERPOLATION" equiv-text="{{ (item.added ?? item.modified) | duration: now() }}"/> ago</source>
+        <target>Lisatud <x id="INTERPOLATION" equiv-text="{{ (item.added ?? item.modified) | duration: now() }}"/> tagasi</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list/list-container/list-container.component.html</context>
+          <context context-type="linenumber">80,81</context>
         </context-group>
       </trans-unit>
       <trans-unit id="list.addToListPlaceholder" datatype="html">
@@ -253,7 +781,15 @@
         <target>Lisa nimekirja ...</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/list/list-container/list-container.component.html</context>
-          <context context-type="linenumber">105,106</context>
+          <context context-type="linenumber">124,125</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="list.clearInput" datatype="html">
+        <source>Clear input</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list/list-container/list-container.component.html</context>
+          <context context-type="linenumber">131</context>
         </context-group>
       </trans-unit>
       <trans-unit id="list.markAllActive" datatype="html">
@@ -261,11 +797,51 @@
         <target>Märgi kõik aktiivseks</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/list/list-container/list-container.component.html</context>
-          <context context-type="linenumber">120,121</context>
+          <context context-type="linenumber">162,164</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/list/list-container/list-container.component.ts</context>
-          <context context-type="linenumber">299</context>
+          <context context-type="linenumber">376</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="list.ageDays" datatype="html">
+        <source><x id="PH" equiv-text="days"/>d</source>
+        <target><x id="PH" equiv-text="days"/>p</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list/list-container/list-container.component.ts</context>
+          <context context-type="linenumber">320</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="list.ageHours" datatype="html">
+        <source><x id="PH" equiv-text="hours"/>h</source>
+        <target><x id="PH" equiv-text="hours"/>t</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list/list-container/list-container.component.ts</context>
+          <context context-type="linenumber">321</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="list.ageMinutes" datatype="html">
+        <source><x id="PH" equiv-text="Math.max(minutes, 1)"/>m</source>
+        <target><x id="PH" equiv-text="Math.max(minutes, 1)"/>min</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list/list-container/list-container.component.ts</context>
+          <context context-type="linenumber">322</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="list.markJustAddedConfirmWithDate" datatype="html">
+        <source>This item was added to the list on <x id="INTERPOLATION" equiv-text="formatDate(added, 'dd.MM HH:mm', this.locale)"/>. Are you sure you want to mark the item as just added?</source>
+        <target>See kirje lisati nimekirja <x id="INTERPOLATION" equiv-text="formatDate(added, 'dd.MM HH:mm', this.locale)"/>. Oled sa kindel, et soovid kirje äsja lisatuks märkida?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list/list-container/list-container.component.ts</context>
+          <context context-type="linenumber">328</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="list.markJustAddedConfirm" datatype="html">
+        <source>Are you sure you want to mark the item as just added?</source>
+        <target>Oled sa kindel, et soovid kirje äsja lisatuks märkida?</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list/list-container/list-container.component.ts</context>
+          <context context-type="linenumber">329</context>
         </context-group>
       </trans-unit>
       <trans-unit id="list.itemDone" datatype="html">
@@ -273,7 +849,7 @@
         <target><x id="PH" equiv-text="item.name"/> märgitud!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/list/list-container/list-container.component.ts</context>
-          <context context-type="linenumber">274</context>
+          <context context-type="linenumber">349</context>
         </context-group>
       </trans-unit>
       <trans-unit id="list.revert" datatype="html">
@@ -281,7 +857,7 @@
         <target>Võta tagasi</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/list/list-container/list-container.component.ts</context>
-          <context context-type="linenumber">274</context>
+          <context context-type="linenumber">349</context>
         </context-group>
       </trans-unit>
       <trans-unit id="list.noInactiveItems" datatype="html">
@@ -289,7 +865,7 @@
         <target>Inaktiivseid kirjeid pole!</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/list/list-container/list-container.component.ts</context>
-          <context context-type="linenumber">294</context>
+          <context context-type="linenumber">371</context>
         </context-group>
       </trans-unit>
       <trans-unit id="common.ok" datatype="html">
@@ -298,7 +874,7 @@
         <note priority="1" from="meaning">confirm</note>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/list/list-container/list-container.component.ts</context>
-          <context context-type="linenumber">294</context>
+          <context context-type="linenumber">371</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/dialog-service/info-dialog.component.ts</context>
@@ -314,7 +890,7 @@
         <target>Oled sa kindel, et soovid kõik kirjed aktiivseks märkida?</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/list/list-container/list-container.component.ts</context>
-          <context context-type="linenumber">299</context>
+          <context context-type="linenumber">376</context>
         </context-group>
       </trans-unit>
       <trans-unit id="lists.edit" datatype="html">
@@ -322,7 +898,23 @@
         <target>Muuda</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/lists-container/lists-container.component.html</context>
-          <context context-type="linenumber">14,15</context>
+          <context context-type="linenumber">16,17</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="lists.share" datatype="html">
+        <source>Share</source>
+        <target>Jaga</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/lists-container/lists-container.component.html</context>
+          <context context-type="linenumber">20,21</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="lists.members" datatype="html">
+        <source>Members</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/lists-container/lists-container.component.html</context>
+          <context context-type="linenumber">24,26</context>
         </context-group>
       </trans-unit>
       <trans-unit id="lists.delete" datatype="html">
@@ -330,7 +922,7 @@
         <target>Kustuta</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/lists-container/lists-container.component.html</context>
-          <context context-type="linenumber">22,23</context>
+          <context context-type="linenumber">28,29</context>
         </context-group>
       </trans-unit>
       <trans-unit id="lists.addTitle" datatype="html">
@@ -365,12 +957,28 @@
           <context context-type="linenumber">66</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="profile.displayName" datatype="html">
+        <source>Display Name</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/profile/profile-container/profile-container.component.html</context>
+          <context context-type="linenumber">3,4</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profile.displayNameHint" datatype="html">
+        <source>Shown to other members in shared lists</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/profile/profile-container/profile-container.component.html</context>
+          <context context-type="linenumber">5,7</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="profile.theme" datatype="html">
         <source>Theme</source>
         <target>Toon</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/profile/profile-container/profile-container.component.html</context>
-          <context context-type="linenumber">1,3</context>
+          <context context-type="linenumber">21,24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.themeSystem" datatype="html">
@@ -378,7 +986,7 @@
         <target> Süsteemi väärtus (<x id="ICU" equiv-text="{ systemTheme , select, light {hele} dark {tume} other {{{systemTheme}}} }"/>) </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/profile/profile-container/profile-container.component.html</context>
-          <context context-type="linenumber">12,15</context>
+          <context context-type="linenumber">32,35</context>
         </context-group>
       </trans-unit>
       <trans-unit id="4804429884366326479" datatype="html">
@@ -386,7 +994,7 @@
         <target>{VAR_SELECT, select, light {hele} dark {tume} other {<x id="INTERPOLATION" equiv-text=""/>}}</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/profile/profile-container/profile-container.component.html</context>
-          <context context-type="linenumber">12,13</context>
+          <context context-type="linenumber">32,33</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.themeLight" datatype="html">
@@ -394,7 +1002,7 @@
         <target> Hele </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/profile/profile-container/profile-container.component.html</context>
-          <context context-type="linenumber">16</context>
+          <context context-type="linenumber">36,37</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.themeDark" datatype="html">
@@ -402,7 +1010,7 @@
         <target> Tume </target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/profile/profile-container/profile-container.component.html</context>
-          <context context-type="linenumber">17</context>
+          <context context-type="linenumber">37,38</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.language" datatype="html">
@@ -410,7 +1018,7 @@
         <target>Keel</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/profile/profile-container/profile-container.component.html</context>
-          <context context-type="linenumber">20,22</context>
+          <context context-type="linenumber">40,42</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.langEnglish" datatype="html">
@@ -418,7 +1026,7 @@
         <target> Inglise</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/profile/profile-container/profile-container.component.html</context>
-          <context context-type="linenumber">24,25</context>
+          <context context-type="linenumber">44,46</context>
         </context-group>
       </trans-unit>
       <trans-unit id="profile.langEstonian" datatype="html">
@@ -426,7 +1034,23 @@
         <target> Eesti</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/profile/profile-container/profile-container.component.html</context>
-          <context context-type="linenumber">27,28</context>
+          <context context-type="linenumber">47,50</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profile.nameSaved" datatype="html">
+        <source>Display name saved</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/profile/profile-container/profile-container.component.ts</context>
+          <context context-type="linenumber">118</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="profile.nameSaveFailed" datatype="html">
+        <source>Failed to save display name</source>
+        <target>TODO: add Estonian translation</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/profile/profile-container/profile-container.component.ts</context>
+          <context context-type="linenumber">125</context>
         </context-group>
       </trans-unit>
       <trans-unit id="dialog.cancel" datatype="html">
@@ -443,6 +1067,54 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/dialog-service/confirm-dialog.component.ts</context>
           <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="duration.day" datatype="html">
+        <source>1 day</source>
+        <target>1 päev</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/duration.pipe.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="duration.days" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="days"/> days</source>
+        <target><x id="INTERPOLATION" equiv-text="days"/> päeva</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/duration.pipe.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="duration.hour" datatype="html">
+        <source>1 hour</source>
+        <target>1 tund</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/duration.pipe.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="duration.hours" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="hours"/> hours</source>
+        <target><x id="INTERPOLATION" equiv-text="hours"/> tundi</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/duration.pipe.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="duration.minute" datatype="html">
+        <source>1 minute</source>
+        <target>1 minut</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/duration.pipe.ts</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="duration.minutes" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="minutes"/> minutes</source>
+        <target><x id="INTERPOLATION" equiv-text="minutes"/> minutit</target>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/duration.pipe.ts</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="update.unsupported" datatype="html">
@@ -514,7 +1186,7 @@
         <target>Logi välja</target>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/user/user-avatar/user-avatar.component.html</context>
-          <context context-type="linenumber">18,19</context>
+          <context context-type="linenumber">18,20</context>
         </context-group>
       </trans-unit>
       <trans-unit id="app.name" datatype="html">
@@ -524,132 +1196,6 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/environments/environment.prod.ts</context>
           <context context-type="linenumber">5</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="invite.title" datatype="html">
-        <source>List Invitation</source>
-        <target>Nimekirja kutse</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="invite.invitedYou" datatype="html">
-        <source><x id="INTERPOLATION" equiv-text="{{ preview.inviterName || &apos;Someone&apos; }}"/> invited you to</source>
-        <target><x id="INTERPOLATION" equiv-text="{{ preview.inviterName || &apos;Someone&apos; }}"/> kutsus sind nimekirja</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="invite.subtitle" datatype="html">
-        <source>You&apos;ve been invited to a shared shopping list</source>
-        <target>Sind on kutsutud jagatud ostunimekirja</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="invite.checkInbox" datatype="html">
-        <source>Check your inbox for a secure sign-in link to accept this invitation.</source>
-        <target>Kutse vastuvõtmiseks vaata oma postkasti turvalise sisselogimise lingi järele.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="invite.signInPrompt" datatype="html">
-        <source>Sign in to accept this invitation and start sharing the list.</source>
-        <target>Logi sisse, et kutse vastu võtta ja nimekirja jagamist alustada.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="invite.continueGoogle" datatype="html">
-        <source>Continue with Google</source>
-        <target>Jätka Google'iga</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="invite.emailLink" datatype="html">
-        <source>Email me a sign-in link</source>
-        <target>Saada mulle sisselogimise link</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="invite.wrongAccountTitle" datatype="html">
-        <source>Wrong account</source>
-        <target>Vale konto</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="invite.wrongAccountMessage" datatype="html">
-        <source>This invitation was sent to a different email address</source>
-        <target>See kutse saadeti teisele e-posti aadressile</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="invite.signedInAs" datatype="html">
-        <source>Currently signed in as:</source>
-        <target>Hetkel sisse logitud kui:</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="invite.useCorrectAddress" datatype="html">
-        <source> Use the address this invite was sent to. We can email a secure sign-in link to the correct address, or you can sign in with a different account. </source>
-        <target> Kasuta aadressi, millele see kutse saadeti. Saadame turvalise sisselogimise lingi õigele aadressile või saad sisse logida teise kontoga. </target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="invite.differentAccount" datatype="html">
-        <source>Sign in with a different account</source>
-        <target>Logi sisse teise kontoga</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="invite.from" datatype="html">
-        <source>From</source>
-        <target>Saatja</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="invite.listLabel" datatype="html">
-        <source>List:</source>
-        <target>Nimekiri:</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="invite.accept" datatype="html">
-        <source>Accept Invitation</source>
-        <target>Võta kutse vastu</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/list-invite/list-invite.component.html</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="auth.confirmInviteEmail" datatype="html">
-        <source>Please confirm the email this invitation was sent to</source>
-        <target>Palun kinnita e-posti aadress, millele kutse saadeti</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/auth/auth.service.ts</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="invite.sendLinkFailed" datatype="html">
-        <source>Failed to send the sign-in link. Please try again.</source>
-        <target>Sisselogimise lingi saatmine ebaõnnestus. Palun proovi uuesti.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/list-invite/list-invite.component.ts</context>
-        </context-group>
-      </trans-unit>
-      <trans-unit id="invite.acceptFailed" datatype="html">
-        <source>Failed to accept invite. Please try again.</source>
-        <target>Kutse vastuvõtmine ebaõnnestus. Palun proovi uuesti.</target>
-        <context-group purpose="location">
-          <context context-type="sourcefile">src/app/list-invite/list-invite.component.ts</context>
         </context-group>
       </trans-unit>
     </body>

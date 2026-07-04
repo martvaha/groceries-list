@@ -4,6 +4,7 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import {
   ChangeDetectionStrategy,
   Component,
+  LOCALE_ID,
   OnDestroy,
   OnInit,
   effect,
@@ -13,7 +14,7 @@ import {
 } from '@angular/core';
 import { SearchItemHighlightDirective } from './search-item-highlight.directive';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { AsyncPipe, NgClass } from '@angular/common';
+import { AsyncPipe, formatDate, NgClass } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -25,6 +26,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatListModule } from '@angular/material/list';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { ActivatedRoute, ParamMap } from '@angular/router';
@@ -32,6 +34,7 @@ import { Store } from '@ngrx/store';
 import { combineLatest, from, Observable, of, Subject } from 'rxjs';
 import { debounceTime, delay, distinctUntilChanged, map, shareReplay, startWith, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
 import { DialogService } from '../../shared/dialog-service/dialog.service';
+import { DurationPipe } from '../../shared/duration.pipe';
 import { GroupWithItems, Item } from '../../shared/models';
 import { SearchService } from '../../shared/search.service';
 import { highlight, takeValue } from '../../shared/utils';
@@ -71,10 +74,12 @@ export interface FuseAdvancedResult<T> {
     MatListModule,
     MatDividerModule,
     MatCheckboxModule,
+    MatTooltipModule,
     MatProgressSpinnerModule,
     MatAutocompleteModule,
     LongPressDirective,
     SearchItemHighlightDirective,
+    DurationPipe,
   ],
   selector: 'app-list-container',
   templateUrl: './list-container.component.html',
@@ -89,6 +94,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
   private search = inject(SearchService);
   private dialog = inject(DialogService);
   private media = inject(MediaMatcher);
+  private locale = inject(LOCALE_ID);
   private mobileQuery = this.media.matchMedia('(max-width: 600px)');
   private mobileQueryListener = () => this.isMobile.set(this.mobileQuery.matches);
   isMobile = signal(this.mobileQuery.matches);
@@ -105,6 +111,10 @@ export class ListContainerComponent implements OnInit, OnDestroy {
   inactiveItems$!: Observable<Item[]>;
   dragDelay = 300;
   draggingGroupId!: string | null;
+  /** Ticks every minute so the recently-added chips stay fresh. */
+  protected readonly now = signal(Date.now());
+  private nowTimer?: ReturnType<typeof setInterval>;
+  private static readonly maxAgeDays = 9;
   readonly searchItems = viewChildren(SearchItemHighlightDirective);
   keyboardEventsManager!: ListKeyManager<SearchItemHighlightDirective>;
   private filteredItemsCache: Item[] = [];
@@ -141,6 +151,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.mobileQuery.addEventListener('change', this.mobileQueryListener);
+    this.nowTimer = setInterval(() => this.now.set(Date.now()), 60_000);
 
     this.loading$ = this.store.select(selectListStateLoading);
     this.items$ = this.store.select(selectAllItems);
@@ -293,16 +304,56 @@ export class ListContainerComponent implements OnInit, OnDestroy {
     this.addItem(event.option.value as Item);
   }
 
+  /**
+   * Compact age of the item since it was (re)added to the list, e.g. "5m", "3h", "4d".
+   * Returns null when the item has been on the list for more than 9 days.
+   */
+  itemAge(item: Item): string | null {
+    const added = item.added ?? item.modified;
+    if (!added) return null;
+    // Clamp: server timestamps can be ahead of the last minute tick / local clock
+    const elapsed = Math.max(0, this.now() - added.getTime());
+    const minutes = Math.floor(elapsed / 60_000);
+    const hours = Math.floor(minutes / 60);
+    const days = Math.floor(hours / 24);
+    if (days > ListContainerComponent.maxAgeDays) return null;
+    if (days >= 1) return $localize`:@@list.ageDays:${days}d`;
+    if (hours >= 1) return $localize`:@@list.ageHours:${hours}h`;
+    return $localize`:@@list.ageMinutes:${Math.max(minutes, 1)}m`;
+  }
+
+  markJustAdded(item: Item) {
+    const added = item.added ?? item.modified;
+    const message = added
+      ? $localize`:@@list.markJustAddedConfirmWithDate:This item was added to the list on ${formatDate(added, 'dd.MM HH:mm', this.locale)}:INTERPOLATION:. Are you sure you want to mark the item as just added?`
+      : $localize`:@@list.markJustAddedConfirm:Are you sure you want to mark the item as just added?`;
+
+    const dialogRef = this.dialog.confirm({
+      data: {
+        title: $localize`:@@list.markJustAddedTitle:Mark as just added`,
+        message,
+      },
+    });
+
+    dialogRef.afterClosed().subscribe((response) => {
+      if (!response) return;
+      const listId = takeValue(this.listId);
+      this.listService.markItemJustAdded(listId, item);
+    });
+  }
+
   markDone(item: Item) {
     // Add delay so animation has time to finish
     this.listId.pipe(delay(300)).subscribe((listId) => {
       this.listService.markItemDone(listId, item);
       const snackBarRef = this.snackBar.open($localize`:@@list.itemDone:${item.name} done!`, $localize`:@@list.revert:Revert`, {
         duration: 5000,
+        verticalPosition: 'top',
       });
       snackBarRef.afterDismissed().subscribe((data) => {
         if (data.dismissedByAction) {
-          this.listService.markItemTodo(listId, item);
+          // Reverting an accidental "done" keeps the original added time
+          this.listService.markItemTodo(listId, item, true);
         }
       });
     });
@@ -364,6 +415,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.mobileQuery.removeEventListener('change', this.mobileQueryListener);
+    clearInterval(this.nowTimer);
     this.destroy$?.next();
     this.destroy$?.complete();
     delete this.destroy$;

@@ -23,6 +23,7 @@ export interface Item {
   displayName?: string;
   description: string | null;
   modified: Date;
+  added?: Date;
   deleted?: boolean;
 }
 

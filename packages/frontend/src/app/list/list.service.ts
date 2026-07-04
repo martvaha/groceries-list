@@ -17,6 +17,7 @@ export class ListService {
         name: name.trim(),
         active: true,
         modified: serverTimestamp(),
+        added: serverTimestamp(),
       });
     });
   }
@@ -26,11 +27,22 @@ export class ListService {
     return this.markItem(listId, item, false);
   }
 
-  markItemTodo(listId: string, item: Item) {
-    return this.markItem(listId, item, true);
+  markItemTodo(listId: string, item: Item, preserveAdded = false) {
+    return this.markItem(listId, item, true, preserveAdded);
   }
 
-  private markItem(listId: string, item: Item, active: boolean) {
+  markItemJustAdded(listId: string, item: Item) {
+    const path = 'lists/' + listId + '/items/' + item.id;
+    return runInInjectionContext(this.injector, () => {
+      const itemDoc = doc(this.firestore, path);
+      return updateDoc(itemDoc, {
+        added: serverTimestamp(),
+        modified: serverTimestamp(),
+      });
+    });
+  }
+
+  private markItem(listId: string, item: Item, active: boolean, preserveAdded = false) {
     const path = 'lists/' + listId + '/items/' + item.id;
     return runInInjectionContext(this.injector, () => {
       const itemDoc = doc(this.firestore, path);
@@ -39,6 +51,9 @@ export class ListService {
         modified: serverTimestamp(),
         description: item?.description ?? null,
       };
+      if (active) {
+        updateDto.added = preserveAdded && item.added ? item.added : serverTimestamp();
+      }
       console.log(updateDto);
       return updateDoc(itemDoc, updateDto);
     });

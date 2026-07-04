@@ -140,6 +140,22 @@
   width: 0;
 }
 
+// Theme uses the M2 API (no --mat-sys tokens), so derive the chip colors from
+// the inherited text color to stay correct in both light and dark themes
+.age-chip {
+  flex-shrink: 0;
+  align-self: center;
+  margin-left: 0.5rem;
+  border: none;
+  cursor: pointer;
+  padding: 0.125rem 0.5rem;
+  border-radius: 1rem;
+  color: inherit;
+  background-color: color-mix(in srgb, currentColor 10%, transparent);
+  font-size: 0.75rem;
+  line-height: 1.25rem;
+}
+
 .extra-actions-button {
   margin-left: auto;
 }

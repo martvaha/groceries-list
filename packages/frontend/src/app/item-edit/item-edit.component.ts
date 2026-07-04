@@ -75,7 +75,10 @@ export class ItemEditComponent implements OnInit {
     console.log(item);
     const listId = takeValue(this.store.select(selectActiveListId));
     if (!listId) return;
-    this.store.dispatch(updateItem(item, listId, true));
+    const previous = takeValue(this.item);
+    // Reactivating an item counts as adding it back to the list
+    const updated = previous && !previous.active && item.active ? { ...item, added: new Date() } : item;
+    this.store.dispatch(updateItem(updated, listId, true));
   }
 
   onReturn() {

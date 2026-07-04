@@ -38,6 +38,7 @@
     "@ngrx/store": "^21.0.1",
     "@ngrx/store-devtools": "^21.0.1",
     "@sentry/browser": "^8.55.0",
+    "date-fns": "^4.4.0",
     "firebase": "12.7.0",
     "fuse.js": "^7.1.0",
     "jsondiffpatch": "^0.6.2",

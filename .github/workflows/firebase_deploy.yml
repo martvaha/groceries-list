@@ -1,0 +1,191 @@
+name: Deploy Firebase
+
+on:
+  push:
+    branches:
+      - test
+      - main
+  workflow_dispatch:
+    inputs:
+      force_all:
+        description: Deploy all targets regardless of changed files
+        type: boolean
+        default: false
+
+# Queue deploys per branch instead of running them concurrently, but never
+# cancel a deploy that is already in flight.
+concurrency:
+  group: firebase-deploy-${{ github.ref }}
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  deploy:
+    name: Deploy changed Firebase targets
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    environment: ${{ github.ref_name == 'main' && 'production' || 'test' }}
+    env:
+      PROJECT_ID: ${{ github.ref_name == 'main' && 'groceries-list-production' || 'com-groceries-list' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Determine deploy targets
+        id: targets
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+          FORCE_ALL: ${{ github.event_name == 'workflow_dispatch' && inputs.force_all == true }}
+        run: |
+          set -euo pipefail
+
+          # Diff against the last successful run of this workflow on this
+          # branch, not github.event.before: this way changes from failed or
+          # force-pushed runs are retried on the next push instead of being
+          # silently skipped.
+          base=""
+          if [[ "$FORCE_ALL" == "true" ]]; then
+            echo "force_all requested; deploying all targets."
+          else
+            base="$(gh api \
+              "repos/$GITHUB_REPOSITORY/actions/workflows/firebase_deploy.yml/runs?branch=$GITHUB_REF_NAME&status=success&per_page=1" \
+              --jq '.workflow_runs[0].head_sha // empty' || true)"
+            if [[ -n "$base" ]] && ! git cat-file -e "$base^{commit}" 2>/dev/null; then
+              echo "Last successful deploy commit $base is unreachable (force-push?); deploying all targets."
+              base=""
+            fi
+          fi
+
+          hosting=false
+          functions=false
+          firestore_rules=false
+          firestore_indexes=false
+          storage=false
+          remoteconfig=false
+
+          if [[ -z "$base" ]]; then
+            echo "No usable base commit; treating all targets as changed."
+            hosting=true
+            functions=true
+            firestore_rules=true
+            firestore_indexes=true
+            storage=true
+            remoteconfig=true
+          elif [[ "$base" == "$GITHUB_SHA" ]]; then
+            echo "HEAD already deployed successfully; nothing to do."
+          else
+            echo "Comparing $base...$GITHUB_SHA"
+            changed_files="$(git diff --name-only "$base" "$GITHUB_SHA")"
+            echo "Changed files:"
+            printf '%s\n' "${changed_files:-(none)}"
+
+            while IFS= read -r file; do
+              [[ -z "$file" ]] && continue
+              case "$file" in
+                firebase.json|.firebaserc|.github/workflows/firebase_deploy.yml)
+                  hosting=true
+                  functions=true
+                  firestore_rules=true
+                  firestore_indexes=true
+                  storage=true
+                  remoteconfig=true
+                  ;;
+                package.json|pnpm-workspace.yaml|pnpm-lock.yaml)
+                  hosting=true
+                  functions=true
+                  ;;
+                packages/frontend/*)
+                  hosting=true
+                  ;;
+                packages/functions/*)
+                  functions=true
+                  ;;
+                firestore.rules)
+                  firestore_rules=true
+                  ;;
+                firestore.indexes.json)
+                  firestore_indexes=true
+                  ;;
+                storage.rules)
+                  storage=true
+                  ;;
+                remoteconfig.template.json)
+                  remoteconfig=true
+                  ;;
+              esac
+            done <<< "$changed_files"
+          fi
+
+          targets=()
+          [[ "$hosting" == "true" ]] && targets+=("hosting")
+          [[ "$functions" == "true" ]] && targets+=("functions")
+          [[ "$firestore_rules" == "true" ]] && targets+=("firestore:rules")
+          [[ "$firestore_indexes" == "true" ]] && targets+=("firestore:indexes")
+          [[ "$storage" == "true" ]] && targets+=("storage")
+          if [[ "$remoteconfig" == "true" ]]; then
+            if [[ -s remoteconfig.template.json ]]; then
+              targets+=("remoteconfig")
+            else
+              echo "Skipping Remote Config deploy because remoteconfig.template.json is empty."
+            fi
+          fi
+
+          deploy_targets="$(IFS=,; echo "${targets[*]}")"
+          {
+            echo "deploy_targets=$deploy_targets"
+            echo "hosting=$hosting"
+          } >> "$GITHUB_OUTPUT"
+
+          echo "Project: $PROJECT_ID"
+          echo "Firebase deploy targets: ${deploy_targets:-(none)}"
+
+      - name: Setup pnpm
+        if: steps.targets.outputs.deploy_targets != ''
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js
+        if: steps.targets.outputs.deploy_targets != ''
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        if: steps.targets.outputs.deploy_targets != ''
+        run: pnpm install --frozen-lockfile
+
+      - name: Build app
+        if: steps.targets.outputs.hosting == 'true'
+        run: |
+          if [[ "${{ github.ref_name }}" == "main" ]]; then
+            pnpm --filter @groceries-list/frontend build:production
+          else
+            pnpm --filter @groceries-list/frontend build:test
+          fi
+
+      - name: Prepare Firebase credentials
+        if: steps.targets.outputs.deploy_targets != ''
+        shell: bash
+        env:
+          FIREBASE_SERVICE_ACCOUNT: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_GROCERIES_LIST }}
+        run: |
+          set -euo pipefail
+          credentials_file="$RUNNER_TEMP/firebase-service-account.json"
+          printf '%s' "$FIREBASE_SERVICE_ACCOUNT" > "$credentials_file"
+          echo "GOOGLE_APPLICATION_CREDENTIALS=$credentials_file" >> "$GITHUB_ENV"
+
+      # --force lets non-interactive deploys proceed when functions were
+      # removed from the codebase (deletes them instead of aborting).
+      - name: Deploy Firebase targets
+        if: steps.targets.outputs.deploy_targets != ''
+        run: pnpm exec firebase deploy --project "$PROJECT_ID" --only "${{ steps.targets.outputs.deploy_targets }}" --non-interactive --force
+
+      - name: Skip deploy
+        if: steps.targets.outputs.deploy_targets == ''
+        run: echo "No deploy-relevant changes since the last successful deploy."

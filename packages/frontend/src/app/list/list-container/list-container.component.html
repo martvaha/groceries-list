@@ -70,6 +70,19 @@
                       (longPressEnd)="dragStart(null)"
                     >
                       <mat-checkbox (click)="markDone(item)">{{ item.name }}</mat-checkbox>
+                      @if (itemAge(item); as age) {
+                        <button
+                          type="button"
+                          class="age-chip"
+                          (click)="markJustAdded(item)"
+                          aria-label="Mark as just added"
+                          i18n-aria-label="@@list.markJustAddedTitle"
+                          matTooltip="Added {{ (item.added ?? item.modified) | duration: now() }} ago"
+                          i18n-matTooltip="@@list.addedAgoTooltip"
+                        >
+                          {{ age }}
+                        </button>
+                      }
                       <span class="description mat-hint">{{ item.description }}</span>
                       <button
                         mat-icon-button

@@ -120,6 +120,13 @@ export class ItemService {
     const modified = (data.modified as any)?.toDate() || new Date(0);
     const groupId = data.groupId || 'others';
     const item = { ...data, id, modified, groupId } as Item;
+    const added = (data.added as any)?.toDate?.();
+    if (added) {
+      item.added = added;
+    } else {
+      // Drop pending/missing server timestamps so the key never reaches updateDoc as undefined/null
+      delete (item as any).added;
+    }
     return item;
   }
 }

@@ -159,7 +159,7 @@
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/list/list-container/list-container.component.html</context>
-          <context context-type="linenumber">140,141</context>
+          <context context-type="linenumber">153,154</context>
         </context-group>
       </trans-unit>
       <trans-unit id="itemEdit.addGroupTitle" datatype="html">
@@ -672,57 +672,110 @@
           <context context-type="linenumber">229</context>
         </context-group>
       </trans-unit>
+      <trans-unit id="list.markJustAddedTitle" datatype="html">
+        <source>Mark as just added</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list/list-container/list-container.component.html</context>
+          <context context-type="linenumber">78,79</context>
+        </context-group>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list/list-container/list-container.component.ts</context>
+          <context context-type="linenumber">333</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="list.addedAgoTooltip" datatype="html">
+        <source>Added <x id="INTERPOLATION" equiv-text="{{ (item.added ?? item.modified) | duration: now() }}"/> ago</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list/list-container/list-container.component.html</context>
+          <context context-type="linenumber">80,81</context>
+        </context-group>
+      </trans-unit>
       <trans-unit id="list.addToListPlaceholder" datatype="html">
         <source>Add to list ...</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/list/list-container/list-container.component.html</context>
-          <context context-type="linenumber">111,112</context>
+          <context context-type="linenumber">124,125</context>
         </context-group>
       </trans-unit>
       <trans-unit id="list.clearInput" datatype="html">
         <source>Clear input</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/list/list-container/list-container.component.html</context>
-          <context context-type="linenumber">118</context>
+          <context context-type="linenumber">131</context>
         </context-group>
       </trans-unit>
       <trans-unit id="list.markAllActive" datatype="html">
         <source>Mark all active</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/list/list-container/list-container.component.html</context>
-          <context context-type="linenumber">149,151</context>
+          <context context-type="linenumber">162,164</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/list/list-container/list-container.component.ts</context>
-          <context context-type="linenumber">325</context>
+          <context context-type="linenumber">376</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="list.ageDays" datatype="html">
+        <source><x id="PH" equiv-text="days"/>d</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list/list-container/list-container.component.ts</context>
+          <context context-type="linenumber">320</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="list.ageHours" datatype="html">
+        <source><x id="PH" equiv-text="hours"/>h</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list/list-container/list-container.component.ts</context>
+          <context context-type="linenumber">321</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="list.ageMinutes" datatype="html">
+        <source><x id="PH" equiv-text="Math.max(minutes, 1)"/>m</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list/list-container/list-container.component.ts</context>
+          <context context-type="linenumber">322</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="list.markJustAddedConfirmWithDate" datatype="html">
+        <source>This item was added to the list on <x id="INTERPOLATION" equiv-text="formatDate(added, &apos;dd.MM HH:mm&apos;, this.locale)"/>. Are you sure you want to mark the item as just added?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list/list-container/list-container.component.ts</context>
+          <context context-type="linenumber">328</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="list.markJustAddedConfirm" datatype="html">
+        <source>Are you sure you want to mark the item as just added?</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/list/list-container/list-container.component.ts</context>
+          <context context-type="linenumber">329</context>
         </context-group>
       </trans-unit>
       <trans-unit id="list.itemDone" datatype="html">
         <source><x id="PH" equiv-text="item.name"/> done!</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/list/list-container/list-container.component.ts</context>
-          <context context-type="linenumber">300</context>
+          <context context-type="linenumber">349</context>
         </context-group>
       </trans-unit>
       <trans-unit id="list.revert" datatype="html">
         <source>Revert</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/list/list-container/list-container.component.ts</context>
-          <context context-type="linenumber">300</context>
+          <context context-type="linenumber">349</context>
         </context-group>
       </trans-unit>
       <trans-unit id="list.noInactiveItems" datatype="html">
         <source>No inactive items left!</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/list/list-container/list-container.component.ts</context>
-          <context context-type="linenumber">320</context>
+          <context context-type="linenumber">371</context>
         </context-group>
       </trans-unit>
       <trans-unit id="common.ok" datatype="html">
         <source>OK</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/list/list-container/list-container.component.ts</context>
-          <context context-type="linenumber">320</context>
+          <context context-type="linenumber">371</context>
         </context-group>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/dialog-service/info-dialog.component.ts</context>
@@ -738,7 +791,7 @@
         <source>Are you sure you want to reactivate all items?</source>
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/list/list-container/list-container.component.ts</context>
-          <context context-type="linenumber">325</context>
+          <context context-type="linenumber">376</context>
         </context-group>
       </trans-unit>
       <trans-unit id="lists.edit" datatype="html">
@@ -893,6 +946,48 @@
         <context-group purpose="location">
           <context context-type="sourcefile">src/app/shared/dialog-service/confirm-dialog.component.ts</context>
           <context context-type="linenumber">44</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="duration.day" datatype="html">
+        <source>1 day</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/duration.pipe.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="duration.days" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="days"/> days</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/duration.pipe.ts</context>
+          <context context-type="linenumber">15</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="duration.hour" datatype="html">
+        <source>1 hour</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/duration.pipe.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="duration.hours" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="hours"/> hours</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/duration.pipe.ts</context>
+          <context context-type="linenumber">20</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="duration.minute" datatype="html">
+        <source>1 minute</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/duration.pipe.ts</context>
+          <context context-type="linenumber">24</context>
+        </context-group>
+      </trans-unit>
+      <trans-unit id="duration.minutes" datatype="html">
+        <source><x id="INTERPOLATION" equiv-text="minutes"/> minutes</source>
+        <context-group purpose="location">
+          <context context-type="sourcefile">src/app/shared/duration.pipe.ts</context>
+          <context context-type="linenumber">24</context>
         </context-group>
       </trans-unit>
       <trans-unit id="update.unsupported" datatype="html">

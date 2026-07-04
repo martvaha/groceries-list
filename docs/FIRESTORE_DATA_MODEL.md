@@ -63,6 +63,7 @@ Stores individual items within a shopping list.
 | `active` | `boolean` | `true` = todo, `false` = done |
 | `groupId` | `string` | Reference to parent group |
 | `modified` | `Timestamp` | Last modification time |
+| `added` | `Timestamp?` | When the item was last (re)added to the list (set on creation and on activation). Used for the "recently added" chip in the list view. |
 | `deleted` | `boolean?` | Soft delete flag for sync (see [Soft Delete Pattern](#soft-delete-pattern)) |
 
 **Access:** Inherited from parent list's `acl`.
@@ -255,6 +256,7 @@ interface Item {
   active: boolean;
   groupId: string;
   modified: Date;
+  added?: Date;
   deleted?: boolean;
 }
 
