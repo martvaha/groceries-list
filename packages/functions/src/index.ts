@@ -13,7 +13,7 @@ admin.initializeApp();
 // Set global options for all functions
 // Enforce App Check for all callable functions to prevent abuse
 setGlobalOptions({
-  region: 'europe-west1',
+  region: 'europe-north1',
   enforceAppCheck: false, // TODO: change to true
 });
 
@@ -700,6 +700,8 @@ export const scheduledCleanup = onSchedule(
     schedule: '0 0 * * *',
     timeoutSeconds: 540, // 9 minutes max for cleanup
     memory: '512MiB',
+    // Cloud Scheduler does not support europe-north1; keep this function in europe-west1
+    region: 'europe-west1',
   },
   async () => {
     const db = admin.firestore();

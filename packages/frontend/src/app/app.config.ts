@@ -55,7 +55,7 @@ export const appConfig: ApplicationConfig = {
       : []),
     provideFirestore(() => getFirestore()),
     provideAuth(() => getAuth()),
-    provideFunctions(() => getFunctions(undefined, 'europe-west1')),
+    provideFunctions(() => getFunctions(undefined, 'europe-north1')),
     provideAnalytics(() => getAnalytics()),
     provideStore(reducers, {
       metaReducers,
