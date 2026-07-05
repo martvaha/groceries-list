@@ -15,5 +15,5 @@ export const environment = {
     appId: '1:1093945067476:web:7b84eafb5883bee8',
   },
   sentry: { dsn: 'https://e0ad91b3a5b944eba7624b3fc20a56d5@sentry.io/1508217' },
-  recaptchaSiteKey: '6Le-mkUsAAAAACzJkEz3LLDRCeYw9ngfahOJ-JSr',
+  recaptchaSiteKey: '6Le-qkUtAAAAAIjNv1A0pcHBsiOIomgShnz-VGe8',
 };
