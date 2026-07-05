@@ -12,6 +12,11 @@ import {
   updateItemSuccess,
   updateItemFail,
   removeItemsFromState,
+  markItemDone,
+  markItemTodo,
+  markItemJustAdded,
+  markItemsTodo,
+  markItemsFail,
 } from './item.actions';
 import { selectActiveListId } from '../list/list.reducer';
 import { State } from '../app.reducer';
@@ -39,26 +44,90 @@ function get(state: ItemListState, listId: string | null) {
   return (listId && state[listId]) || initialItemState;
 }
 
+/**
+ * Advance the listener high-water mark using server `modified` timestamps only.
+ * Never regresses, and keeps the same reference when nothing advances so the
+ * `selectItemLastUpdated` stream doesn't emit (avoids Firestore listener churn).
+ */
+function maxModified(prev: Date | null, items: Item[]): Date | null {
+  let max = prev;
+  for (const { modified } of items) {
+    if (modified && (!max || modified > max)) max = modified;
+  }
+  return max;
+}
+
 const listReducer = createReducer(
   initialState,
   on(upsertItemSuccess, deleteItemFail, (state, { item, listId }) => {
+    const prev = get(state, listId);
     return {
       ...state,
       [listId]: {
-        ...adapter.upsertOne(item, get(state, listId)),
+        ...adapter.upsertOne(item, prev),
         loading: false,
-        lastUpdated: new Date(),
+        lastUpdated: maxModified(prev.lastUpdated, [item]),
       },
     };
   }),
   on(upsertItemListSuccess, (state, { items, listId }) => {
+    const prev = get(state, listId);
     return {
       ...state,
       [listId]: {
-        ...adapter.upsertMany(items, get(state, listId)),
+        ...adapter.upsertMany(items, prev),
         loading: false,
-        lastUpdated: new Date(),
+        lastUpdated: maxModified(prev.lastUpdated, items),
       },
+    };
+  }),
+  // Optimistic mark updates: apply the change locally right away so the UI
+  // doesn't depend on the Firestore listener echo (which can silently stall on
+  // mobile PWAs). None of these touch lastUpdated — the high-water mark must
+  // stay server-driven so the echo is still fetched and reconciled.
+  on(markItemDone, (state, { item, listId }) => {
+    return {
+      ...state,
+      [listId]: adapter.updateOne({ id: item.id, changes: { active: false } }, get(state, listId)),
+    };
+  }),
+  on(markItemTodo, (state, { item, listId, preserveAdded }) => {
+    return {
+      ...state,
+      [listId]: adapter.updateOne(
+        {
+          id: item.id,
+          changes: {
+            active: true,
+            description: item.description ?? null,
+            added: preserveAdded && item.added ? item.added : new Date(),
+          },
+        },
+        get(state, listId)
+      ),
+    };
+  }),
+  on(markItemJustAdded, (state, { item, listId }) => {
+    return {
+      ...state,
+      [listId]: adapter.updateOne({ id: item.id, changes: { added: new Date() } }, get(state, listId)),
+    };
+  }),
+  on(markItemsTodo, (state, { items, listId }) => {
+    return {
+      ...state,
+      [listId]: adapter.updateMany(
+        items.map((item) => ({ id: item.id, changes: { active: true, added: new Date() } })),
+        get(state, listId)
+      ),
+    };
+  }),
+  // Rollback: restore the pre-update snapshots. setMany (full replace, not a
+  // merge) so an optimistic `added` is cleared when the snapshot had none.
+  on(markItemsFail, (state, { items, listId }) => {
+    return {
+      ...state,
+      [listId]: adapter.setMany(items, get(state, listId)),
     };
   }),
   on(setGroupId, (state, { item, listId, groupId }) => {
@@ -83,8 +152,10 @@ const listReducer = createReducer(
     return { ...state, [listId]: updatedList };
   }),
   on(removeItemsFromState, (state, { listId, itemIds }) => {
+    // Deletions arrive through the same upsert path that advances lastUpdated,
+    // so keep the existing high-water mark here (client clock would skew it).
     const updatedList = adapter.removeMany(itemIds, get(state, listId));
-    return { ...state, [listId]: { ...updatedList, lastUpdated: new Date() } };
+    return { ...state, [listId]: updatedList };
   })
 );
 

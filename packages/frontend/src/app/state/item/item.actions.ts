@@ -19,6 +19,20 @@ export const removeItemsFromState = createAction(
 );
 // export const upsertGroup = createAction('[Item] get not changed');
 
+// Optimistic mark actions: the reducer applies the change immediately,
+// an effect performs the Firestore write, markItemsFail rolls back on failure.
+export const markItemDone = createAction('[Item] mark done', props<{ item: Item; listId: string }>());
+export const markItemTodo = createAction(
+  '[Item] mark todo',
+  (item: Item, listId: string, preserveAdded = false) => ({ item, listId, preserveAdded })
+);
+export const markItemJustAdded = createAction('[Item] mark just added', props<{ item: Item; listId: string }>());
+export const markItemsTodo = createAction('[Item] mark all todo', props<{ items: Item[]; listId: string }>());
+export const markItemsFail = createAction(
+  '[Item] mark fail',
+  props<{ items: Item[]; listId: string; error: Error }>()
+);
+
 export const setGroupId = createAction('[Item] set group id', props<{ item: Item; listId: string; groupId: string }>());
 export const updateItem = createAction('[Item] update', (item: Item, listId: string, returnToList?: boolean) => ({
   item,

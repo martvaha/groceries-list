@@ -39,7 +39,7 @@ import { GroupWithItems, Item } from '../../shared/models';
 import { SearchService } from '../../shared/search.service';
 import { highlight, takeValue } from '../../shared/utils';
 import { selectOrderedGroupedItems, State } from '../../state/app.reducer';
-import { setGroupId } from '../../state/item/item.actions';
+import { markItemDone, markItemJustAdded, markItemsTodo, markItemTodo, setGroupId } from '../../state/item/item.actions';
 import { selectAllInactiveItems, selectAllItems } from '../../state/item/item.reducer';
 import { upsertGroupsOrder } from '../../state/list/list.actions';
 import { selectActiveListId, selectListStateLoading } from '../../state/list/list.reducer';
@@ -226,7 +226,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
         const normalizedInput = trimmedValue.toLocaleLowerCase();
         const existingValue = items.find((item) => item.name.trim().toLocaleLowerCase() === normalizedInput);
         if (existingValue && !existingValue.active) {
-          this.listService.markItemTodo(listId, { ...existingValue, description: null });
+          this.store.dispatch(markItemTodo({ ...existingValue, description: null }, listId));
           return;
         }
 
@@ -291,7 +291,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
     this.listId.pipe(take(1)).subscribe((listId) => {
       // mark description as undefined
       // TODO: make separate button to edit description before adding item as todo
-      this.listService.markItemTodo(listId, { ...item, description: null });
+      this.store.dispatch(markItemTodo({ ...item, description: null }, listId));
     });
     this.inputControl.reset('', { emitEvent: true });
   }
@@ -338,14 +338,14 @@ export class ListContainerComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((response) => {
       if (!response) return;
       const listId = takeValue(this.listId);
-      this.listService.markItemJustAdded(listId, item);
+      this.store.dispatch(markItemJustAdded({ item, listId }));
     });
   }
 
   markDone(item: Item) {
     // Add delay so animation has time to finish
-    this.listId.pipe(delay(300)).subscribe((listId) => {
-      this.listService.markItemDone(listId, item);
+    this.listId.pipe(take(1), delay(300)).subscribe((listId) => {
+      this.store.dispatch(markItemDone({ item, listId }));
       const snackBarRef = this.snackBar.open($localize`:@@list.itemDone:${item.name} done!`, $localize`:@@list.revert:Revert`, {
         duration: 5000,
         verticalPosition: 'top',
@@ -353,7 +353,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
       snackBarRef.afterDismissed().subscribe((data) => {
         if (data.dismissedByAction) {
           // Reverting an accidental "done" keeps the original added time
-          this.listService.markItemTodo(listId, item, true);
+          this.store.dispatch(markItemTodo(item, listId, true));
         }
       });
     });
@@ -379,7 +379,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe((response) => {
       if (!response) return;
       const listId = takeValue(this.listId);
-      Promise.all(inactiveItems.map((item) => this.listService.markItemTodo(listId, item)));
+      this.store.dispatch(markItemsTodo({ items: inactiveItems, listId }));
     });
   }
 
