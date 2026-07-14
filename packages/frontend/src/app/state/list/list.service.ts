@@ -15,7 +15,7 @@ import {
   arrayRemove,
 } from '@angular/fire/firestore';
 import { Action, Store } from '@ngrx/store';
-import { combineLatest, of } from 'rxjs';
+import { combineLatest, Observable, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, map, startWith, switchMap } from 'rxjs/operators';
 import { List } from '../../shared/models';
 import { captureException } from '../../shared/sentry';
@@ -50,13 +50,10 @@ export class ListService {
       filter(([user]) => !!user),
       switchMap(([user, lastUpdated]) => {
         return runInInjectionContext(this.injector, () => {
-          const listCollection = collection(this.firestore, 'lists');
-          const listQuery =
-            (lastUpdated?.getTime() ?? 0) > 0
-              ? query(listCollection, where('acl', 'array-contains', user!.uid), where('modified', '>', lastUpdated))
-              : query(listCollection, where('acl', 'array-contains', user!.uid));
-
-          return collectionChanges(listQuery).pipe(
+          return this.observeListChanges(user!.uid, lastUpdated).pipe(
+            // Incremental queries can remain silent when nothing changed. Emit a
+            // no-op result immediately so the list loading state is always cleared.
+            startWith([] as DocumentChange<any>[]),
             map((changes) => {
               if (!changes?.length) return [loadListsNothingChanged()];
               const upserted: List[] = [];
@@ -85,6 +82,16 @@ export class ListService {
         });
       }),
     );
+  }
+
+  private observeListChanges(userId: string, lastUpdated: Date): Observable<DocumentChange<any>[]> {
+    const listCollection = collection(this.firestore, 'lists');
+    const listQuery =
+      lastUpdated.getTime() > 0
+        ? query(listCollection, where('acl', 'array-contains', userId), where('modified', '>', lastUpdated))
+        : query(listCollection, where('acl', 'array-contains', userId));
+
+    return collectionChanges(listQuery);
   }
 
   addList(list: List) {
