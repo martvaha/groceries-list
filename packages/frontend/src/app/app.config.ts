@@ -1,31 +1,31 @@
-import { ApplicationConfig, provideZonelessChangeDetection } from '@angular/core';
-import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideHttpClient, withFetch } from '@angular/common/http';
+import { ApplicationConfig, provideZonelessChangeDetection } from '@angular/core';
+import { getAnalytics, provideAnalytics, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
+import { getApp, initializeApp, provideFirebaseApp } from '@angular/fire/app';
+import { initializeAppCheck, provideAppCheck, ReCaptchaV3Provider } from '@angular/fire/app-check';
+import { getAuth, provideAuth } from '@angular/fire/auth';
+import { getFirestore, provideFirestore } from '@angular/fire/firestore';
+import { getFunctions, provideFunctions } from '@angular/fire/functions';
+import { provideRouter, withComponentInputBinding } from '@angular/router';
 import { provideServiceWorker } from '@angular/service-worker';
-import { provideFirebaseApp, initializeApp, getApp } from '@angular/fire/app';
-import { provideAppCheck, initializeAppCheck, ReCaptchaV3Provider } from '@angular/fire/app-check';
-import { provideAuth, getAuth } from '@angular/fire/auth';
-import { provideFirestore, getFirestore } from '@angular/fire/firestore';
-import { provideFunctions, getFunctions } from '@angular/fire/functions';
-import { provideAnalytics, getAnalytics, ScreenTrackingService, UserTrackingService } from '@angular/fire/analytics';
-import { provideStore } from '@ngrx/store';
 import { provideEffects } from '@ngrx/effects';
-import { provideStoreDevtools } from '@ngrx/store-devtools';
 import { provideRouterStore, RouterState } from '@ngrx/router-store';
+import { provideStore } from '@ngrx/store';
+import { provideStoreDevtools } from '@ngrx/store-devtools';
 
+import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
 import { environment } from '../environments/environment';
 import { routes } from './app.routes';
-import { reducers, metaReducers } from './state/app.reducer';
-import { appEffects } from './state/app.effects';
-import { configEffects } from './state/config/config.effects';
-import { listEffects } from './state/list/list.effects';
-import { userEffects } from './state/user/user.effects';
-import { groupEffects } from './state/group/group.effects';
-import { itemEffects } from './state/item/item.effects';
 import { AuthGuard } from './auth/auth.guard';
 import { sentryInstrumentation } from './shared/sentry';
-import { provideClientHydration, withEventReplay } from '@angular/platform-browser';
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
+import { appEffects } from './state/app.effects';
+import { metaReducers, reducers } from './state/app.reducer';
+import { configEffects } from './state/config/config.effects';
+import { groupEffects } from './state/group/group.effects';
+import { itemEffects } from './state/item/item.effects';
+import { listEffects } from './state/list/list.effects';
+import { userEffects } from './state/user/user.effects';
 
 export const appConfig: ApplicationConfig = {
   providers: [

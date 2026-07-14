@@ -18,9 +18,9 @@
     "test": "pnpm --filter @groceries-list/frontend test"
   },
   "devDependencies": {
-    "fast-xml-parser": "^5.3.3",
-    "firebase-tools": "^15.2.1",
-    "prettier": "^3.7.4",
+    "fast-xml-parser": "^5.10.0",
+    "firebase-tools": "^15.23.0",
+    "prettier": "^3.9.5",
     "typescript": "~5.9.3"
   },
   "engines": {
@@ -30,6 +30,17 @@
   "pnpm": {
     "overrides": {
       "typescript": "~5.9.3"
-    }
+    },
+    "ignoredBuiltDependencies": [
+      "lmdb",
+      "msgpackr-extract",
+      "re2"
+    ],
+    "onlyBuiltDependencies": [
+      "@firebase/util",
+      "@parcel/watcher",
+      "esbuild",
+      "protobufjs"
+    ]
   }
 }
