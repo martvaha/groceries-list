@@ -21,6 +21,7 @@ import {
 import { selectActiveListId } from '../list/list.reducer';
 import { State } from '../app.reducer';
 import { lastUpdated, sortByName } from '../utils';
+import { coerceDate } from '../../shared/utils';
 
 export interface ItemState extends EntityState<Item> {
   loading: boolean;
@@ -50,9 +51,10 @@ function get(state: ItemListState, listId: string | null) {
  * `selectItemLastUpdated` stream doesn't emit (avoids Firestore listener churn).
  */
 function maxModified(prev: Date | null, items: Item[]): Date | null {
-  let max = prev;
+  let max = coerceDate(prev);
   for (const { modified } of items) {
-    if (modified && (!max || modified > max)) max = modified;
+    const date = coerceDate(modified);
+    if (date && (!max || date > max)) max = date;
   }
   return max;
 }
@@ -103,7 +105,7 @@ const listReducer = createReducer(
             added: preserveAdded && item.added ? item.added : new Date(),
           },
         },
-        get(state, listId)
+        get(state, listId),
       ),
     };
   }),
@@ -118,7 +120,7 @@ const listReducer = createReducer(
       ...state,
       [listId]: adapter.updateMany(
         items.map((item) => ({ id: item.id, changes: { active: true, added: new Date() } })),
-        get(state, listId)
+        get(state, listId),
       ),
     };
   }),
@@ -156,7 +158,7 @@ const listReducer = createReducer(
     // so keep the existing high-water mark here (client clock would skew it).
     const updatedList = adapter.removeMany(itemIds, get(state, listId));
     return { ...state, [listId]: updatedList };
-  })
+  }),
 );
 
 export function reducer(state: ItemListState | undefined, action: Action) {
@@ -169,7 +171,7 @@ const { selectEntities, selectAll } = adapter.getSelectors();
 export const selectItemState = createFeatureSelector<State, ItemListState>('item');
 
 export const selectActiveListItemState = createSelector(selectItemState, selectActiveListId, (state, listId) =>
-  get(state, listId)
+  get(state, listId),
 );
 
 export const selectAllItems = createSelector(selectActiveListItemState, selectAll);
@@ -186,7 +188,7 @@ export const selectActiveItemsByGroup = createSelector(selectAllActiveItems, (it
       ...prev,
       [cur.groupId]: prev[cur.groupId] ? [...prev[cur.groupId], cur] : [cur],
     }),
-    {} as { [groupId: string]: Item[] }
+    {} as { [groupId: string]: Item[] },
   );
   console.log('selectActiveItemsByGroup output', data);
   return data;

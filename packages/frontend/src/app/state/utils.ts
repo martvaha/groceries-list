@@ -1,7 +1,8 @@
 import { ITEMS_FULL_RELOAD_TIMEOUT } from '../shared/const';
+import { coerceDate } from '../shared/utils';
 
 interface UpdateableObject {
-  lastUpdated?: Date | null;
+  lastUpdated?: unknown;
 }
 
 /** Constant to avoid creating new Date objects on every selector call */
@@ -12,14 +13,15 @@ const NEVER_UPDATED = new Date(0);
  * Only items modified after lastUpdated will be queried.
  */
 export function lastUpdated({ lastUpdated }: UpdateableObject) {
-  if (!lastUpdated) return NEVER_UPDATED;
+  const date = coerceDate(lastUpdated);
+  if (!date) return NEVER_UPDATED;
 
   // If last updated date is older than 30 days return neverModifiedDate to reload all items
-  if (lastUpdated.getTime() <= Date.now() - ITEMS_FULL_RELOAD_TIMEOUT) {
+  if (date.getTime() <= Date.now() - ITEMS_FULL_RELOAD_TIMEOUT) {
     return NEVER_UPDATED;
   }
 
-  return lastUpdated;
+  return date;
 }
 
 export interface ObjectWithName {

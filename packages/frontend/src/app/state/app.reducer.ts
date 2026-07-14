@@ -14,6 +14,11 @@ import { sentryReducer } from '../shared/sentry';
 import { Storage } from './utils';
 import { GroupWithItems, Item } from '../shared/models';
 import { ConfigState, reducer as configReducer } from './config/config.reducer';
+import {
+  normalizePersistedGroupState,
+  normalizePersistedItemState,
+  normalizePersistedListState,
+} from './persisted-state';
 
 export interface State {
   config: ConfigState;
@@ -45,7 +50,17 @@ export const reducers: ActionReducerMap<State> = {
 
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
   return localStorageSync({
-    keys: [{ list: ['entities', 'ids', 'activeId', 'lastUpdated'] }, 'group', 'item', 'config'],
+    keys: [
+      {
+        list: {
+          filter: ['entities', 'ids', 'activeId', 'lastUpdated'],
+          deserialize: normalizePersistedListState,
+        },
+      },
+      { group: { deserialize: normalizePersistedGroupState } },
+      { item: { deserialize: normalizePersistedItemState } },
+      'config',
+    ],
     rehydrate: true,
     removeOnUndefined: true,
     storage: new Storage(),
@@ -70,7 +85,7 @@ export const selectGroupedItems = createSelector(selectAllGroups, selectActiveIt
   });
   const unknownGroup = Object.keys(itemsByGroupLocal).reduce<Item[]>(
     (prev, cur) => [...prev, ...itemsByGroupLocal[cur]],
-    []
+    [],
   );
   if (othersGroupIndex !== undefined) {
     groupsWithItems[othersGroupIndex].items.push(...unknownGroup);
@@ -94,11 +109,11 @@ export const selectOrderedGroupedItems = createSelector(
     if (!groupsOrder) return groupedItems;
     const groupedItemsMap: Dictionary<GroupWithItems> = groupedItems.reduce(
       (prev, cur) => ({ ...prev, [cur.id]: cur }),
-      {}
+      {},
     );
     const orderedUnion = [...new Set([...groupsOrder, ...Object.keys(groupedItemsMap)])];
     return orderedUnion
       .filter((groupId) => groupedItemsMap[groupId])
       .map((groupId) => groupedItemsMap[groupId] as GroupWithItems);
-  }
+  },
 );

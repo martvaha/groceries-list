@@ -32,14 +32,31 @@ import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/ma
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { combineLatest, from, Observable, of, Subject } from 'rxjs';
-import { debounceTime, delay, distinctUntilChanged, map, shareReplay, startWith, switchMap, take, tap, withLatestFrom } from 'rxjs/operators';
+import {
+  debounceTime,
+  delay,
+  distinctUntilChanged,
+  map,
+  shareReplay,
+  startWith,
+  switchMap,
+  take,
+  tap,
+  withLatestFrom,
+} from 'rxjs/operators';
 import { DialogService } from '../../shared/dialog-service/dialog.service';
 import { DurationPipe } from '../../shared/duration.pipe';
 import { GroupWithItems, Item } from '../../shared/models';
 import { SearchService } from '../../shared/search.service';
-import { highlight, takeValue } from '../../shared/utils';
+import { coerceDate, highlight, takeValue } from '../../shared/utils';
 import { selectOrderedGroupedItems, State } from '../../state/app.reducer';
-import { markItemDone, markItemJustAdded, markItemsTodo, markItemTodo, setGroupId } from '../../state/item/item.actions';
+import {
+  markItemDone,
+  markItemJustAdded,
+  markItemsTodo,
+  markItemTodo,
+  setGroupId,
+} from '../../state/item/item.actions';
 import { selectAllInactiveItems, selectAllItems } from '../../state/item/item.reducer';
 import { upsertGroupsOrder } from '../../state/list/list.actions';
 import { selectActiveListId, selectListStateLoading } from '../../state/list/list.reducer';
@@ -174,7 +191,10 @@ export class ListContainerComponent implements OnInit, OnDestroy {
 
     // Use shareReplay to cache items and avoid re-executing setCollection unnecessarily
     const allItems$ = this.items$.pipe(
-      distinctUntilChanged((prev, curr) => prev.length === curr.length && prev.every((p, i) => p.id === curr[i]?.id && p.active === curr[i]?.active)),
+      distinctUntilChanged(
+        (prev, curr) =>
+          prev.length === curr.length && prev.every((p, i) => p.id === curr[i]?.id && p.active === curr[i]?.active),
+      ),
       tap((items) => {
         this.search.setCollection(items, this.searchOptions);
       }),
@@ -254,20 +274,14 @@ export class ListContainerComponent implements OnInit, OnDestroy {
 
     if (event.key === 'ArrowDown') {
       event.preventDefault();
-      if (
-        this.keyboardEventsManager.activeItemIndex === null ||
-        this.keyboardEventsManager.activeItemIndex === -1
-      ) {
+      if (this.keyboardEventsManager.activeItemIndex === null || this.keyboardEventsManager.activeItemIndex === -1) {
         this.keyboardEventsManager.setFirstItemActive();
       } else {
         this.keyboardEventsManager.onKeydown(event);
       }
     } else if (event.key === 'ArrowUp') {
       event.preventDefault();
-      if (
-        this.keyboardEventsManager.activeItemIndex === null ||
-        this.keyboardEventsManager.activeItemIndex === -1
-      ) {
+      if (this.keyboardEventsManager.activeItemIndex === null || this.keyboardEventsManager.activeItemIndex === -1) {
         this.keyboardEventsManager.setLastItemActive();
       } else {
         this.keyboardEventsManager.onKeydown(event);
@@ -309,7 +323,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
    * Returns null when the item has been on the list for more than 9 days.
    */
   itemAge(item: Item): string | null {
-    const added = item.added ?? item.modified;
+    const added = coerceDate(item.added ?? item.modified);
     if (!added) return null;
     // Clamp: server timestamps can be ahead of the last minute tick / local clock
     const elapsed = Math.max(0, this.now() - added.getTime());
@@ -323,7 +337,7 @@ export class ListContainerComponent implements OnInit, OnDestroy {
   }
 
   markJustAdded(item: Item) {
-    const added = item.added ?? item.modified;
+    const added = coerceDate(item.added ?? item.modified);
     const message = added
       ? $localize`:@@list.markJustAddedConfirmWithDate:This item was added to the list on ${formatDate(added, 'dd.MM HH:mm', this.locale)}:INTERPOLATION:. Are you sure you want to mark the item as just added?`
       : $localize`:@@list.markJustAddedConfirm:Are you sure you want to mark the item as just added?`;
@@ -346,10 +360,14 @@ export class ListContainerComponent implements OnInit, OnDestroy {
     // Add delay so animation has time to finish
     this.listId.pipe(take(1), delay(300)).subscribe((listId) => {
       this.store.dispatch(markItemDone({ item, listId }));
-      const snackBarRef = this.snackBar.open($localize`:@@list.itemDone:${item.name} done!`, $localize`:@@list.revert:Revert`, {
-        duration: 5000,
-        verticalPosition: 'top',
-      });
+      const snackBarRef = this.snackBar.open(
+        $localize`:@@list.itemDone:${item.name} done!`,
+        $localize`:@@list.revert:Revert`,
+        {
+          duration: 5000,
+          verticalPosition: 'top',
+        },
+      );
       snackBarRef.afterDismissed().subscribe((data) => {
         if (data.dismissedByAction) {
           // Reverting an accidental "done" keeps the original added time
@@ -368,12 +386,18 @@ export class ListContainerComponent implements OnInit, OnDestroy {
    */
   markAllActive(inactiveItems: Item[]) {
     if (!inactiveItems.length) {
-      this.snackBar.open($localize`:@@list.noInactiveItems:No inactive items left!`, $localize`:confirm|@@common.ok:OK`);
+      this.snackBar.open(
+        $localize`:@@list.noInactiveItems:No inactive items left!`,
+        $localize`:confirm|@@common.ok:OK`,
+      );
       return;
     }
 
     const dialogRef = this.dialog.confirm({
-      data: { title: $localize`:@@list.markAllActive:Mark all active`, message: $localize`:@@list.reactivateConfirm:Are you sure you want to reactivate all items?` },
+      data: {
+        title: $localize`:@@list.markAllActive:Mark all active`,
+        message: $localize`:@@list.reactivateConfirm:Are you sure you want to reactivate all items?`,
+      },
     });
 
     dialogRef.afterClosed().subscribe((response) => {

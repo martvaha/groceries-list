@@ -1,5 +1,16 @@
 import { Injectable, inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
-import { Firestore, collection, query, where, collectionChanges, doc, setDoc, serverTimestamp, DocumentChange, updateDoc } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  query,
+  where,
+  collectionChanges,
+  doc,
+  setDoc,
+  serverTimestamp,
+  DocumentChange,
+  updateDoc,
+} from '@angular/fire/firestore';
 import { Store } from '@ngrx/store';
 import { combineLatest, EMPTY, of } from 'rxjs';
 import { switchMap, map, mergeMap, catchError } from 'rxjs/operators';
@@ -9,6 +20,7 @@ import { State } from '../app.reducer';
 import { selectActiveListId } from '../list/list.reducer';
 import { getGroupsNothingChanged, removeGroupsFromState, upsertGroupsSuccess } from './group.actions';
 import { selectGroupLastUpdated } from './group.reducer';
+import { coerceDate } from '../../shared/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -25,9 +37,10 @@ export class GroupService2 {
         if (!listId) return EMPTY;
         return runInInjectionContext(this.injector, () => {
           const groupCollection = collection(this.firestore, `lists/${listId}/groups`);
-          const groupQuery = (maxModified?.getTime() ?? 0) > 0 
-            ? query(groupCollection, where('modified', '>', maxModified))
-            : query(groupCollection);
+          const groupQuery =
+            (maxModified?.getTime() ?? 0) > 0
+              ? query(groupCollection, where('modified', '>', maxModified))
+              : query(groupCollection);
 
           return collectionChanges(groupQuery).pipe(
             mergeMap((changes) => {
@@ -57,12 +70,12 @@ export class GroupService2 {
                 case 'added':
                 case 'modified': {
                   const groups = payload.map((data) => this.extractGroup(data));
-                  const deletedGroups = groups.filter(g => g.deleted);
-                  const activeGroups = groups.filter(g => !g.deleted);
+                  const deletedGroups = groups.filter((g) => g.deleted);
+                  const activeGroups = groups.filter((g) => !g.deleted);
 
                   // Dispatch removal for soft-deleted groups (cleanup handled by backend scheduled job)
                   if (deletedGroups.length) {
-                    this.store.dispatch(removeGroupsFromState({ listId, groupIds: deletedGroups.map(g => g.id) }));
+                    this.store.dispatch(removeGroupsFromState({ listId, groupIds: deletedGroups.map((g) => g.id) }));
                   }
 
                   if (activeGroups.length) {
@@ -81,10 +94,10 @@ export class GroupService2 {
             catchError((error) => {
               console.error('getGroups error', error);
               return of(getGroupsNothingChanged());
-            })
+            }),
           );
         });
-      })
+      }),
     );
   }
 
@@ -114,7 +127,7 @@ export class GroupService2 {
   private extractGroup(change: DocumentChange<any>) {
     const data = change.doc.data();
     const id = change.doc.id;
-    const modified = (data.modified && (data.modified as any).toDate()) || new Date(0);
+    const modified = coerceDate(data.modified) ?? new Date(0);
     const group = { ...data, id, modified } as Group;
     return group;
   }

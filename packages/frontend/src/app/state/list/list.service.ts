@@ -1,5 +1,19 @@
 import { Injectable, inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
-import { Firestore, collection, query, where, collectionChanges, addDoc, doc, updateDoc, deleteDoc, serverTimestamp, DocumentChange, arrayUnion, arrayRemove } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  query,
+  where,
+  collectionChanges,
+  addDoc,
+  doc,
+  updateDoc,
+  deleteDoc,
+  serverTimestamp,
+  DocumentChange,
+  arrayUnion,
+  arrayRemove,
+} from '@angular/fire/firestore';
 import { Action, Store } from '@ngrx/store';
 import { combineLatest, of } from 'rxjs';
 import { catchError, debounceTime, distinctUntilChanged, filter, map, startWith, switchMap } from 'rxjs/operators';
@@ -10,6 +24,7 @@ import { State } from '../app.reducer';
 import { selectUser } from '../user/user.reducer';
 import { loadListsNothingChanged, removeListSuccess, upsertListSuccess } from './list.actions';
 import { selectListLastUpdated } from './list.reducer';
+import { coerceDate } from '../../shared/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -29,25 +44,19 @@ export class ListService {
         .pipe(
           debounceTime(1000),
           startWith(takeValue(this.store.select(selectListLastUpdated))),
-          distinctUntilChanged()
+          distinctUntilChanged(),
         ),
     ]).pipe(
       filter(([user]) => !!user),
       switchMap(([user, lastUpdated]) => {
         return runInInjectionContext(this.injector, () => {
           const listCollection = collection(this.firestore, 'lists');
-          const listQuery = (lastUpdated?.getTime() ?? 0) > 0
-            ? query(
-                listCollection,
-                where('acl', 'array-contains', user!.uid),
-                where('modified', '>', lastUpdated)
-              )
-            : query(listCollection, where('acl', 'array-contains', user!.uid));
+          const listQuery =
+            (lastUpdated?.getTime() ?? 0) > 0
+              ? query(listCollection, where('acl', 'array-contains', user!.uid), where('modified', '>', lastUpdated))
+              : query(listCollection, where('acl', 'array-contains', user!.uid));
 
           return collectionChanges(listQuery).pipe(
-            // startWith ensures we emit immediately when query returns no documents
-            // (collectionChanges may not emit for empty results with time-based filters)
-            startWith([] as DocumentChange<any>[]),
             map((changes) => {
               if (!changes?.length) return [loadListsNothingChanged()];
               const upserted: List[] = [];
@@ -71,10 +80,10 @@ export class ListService {
               console.error('getLists error', error);
               captureException(error);
               return of([loadListsNothingChanged()]);
-            })
+            }),
           );
         });
-      })
+      }),
     );
   }
 
@@ -128,7 +137,7 @@ export class ListService {
   private extractList(change: DocumentChange<any>) {
     const data = change.doc.data();
     const id = change.doc.id;
-    const modified = (data?.modified as any)?.toDate() || new Date(0);
+    const modified = coerceDate(data?.modified) ?? new Date(0);
     const shared = (data.acl?.length || 0) > 1;
     const favorites = data.favorites || [];
     const list = { ...data, id, modified, shared, favorites } as List;

@@ -1,14 +1,31 @@
 import { Injectable, inject, EnvironmentInjector, runInInjectionContext } from '@angular/core';
-import { Firestore, collection, query, where, collectionChanges, doc, updateDoc, serverTimestamp, DocumentChange } from '@angular/fire/firestore';
+import {
+  Firestore,
+  collection,
+  query,
+  where,
+  collectionChanges,
+  doc,
+  updateDoc,
+  serverTimestamp,
+  DocumentChange,
+} from '@angular/fire/firestore';
 import { map, tap, mergeMap, switchMap, catchError } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
 import { State } from '../app.reducer';
 import { combineLatest, EMPTY, of } from 'rxjs';
 import { selectActiveListId } from '../list/list.reducer';
-import { deleteItemSuccess, getItemsFail, getItemsNothingChanged, removeItemsFromState, upsertItemListSuccess } from './item.actions';
+import {
+  deleteItemSuccess,
+  getItemsFail,
+  getItemsNothingChanged,
+  removeItemsFromState,
+  upsertItemListSuccess,
+} from './item.actions';
 import { Item } from '../../shared/models';
 import { selectItemLastUpdated } from './item.reducer';
 import { captureException } from '../../shared/sentry';
+import { coerceDate } from '../../shared/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -26,9 +43,10 @@ export class ItemService {
         if (!listId) return EMPTY;
         return runInInjectionContext(this.injector, () => {
           const itemCollection = collection(this.firestore, `lists/${listId}/items`);
-          const itemQuery = (maxModified?.getTime() ?? 0) > 0 
-            ? query(itemCollection, where('modified', '>', maxModified))
-            : query(itemCollection);
+          const itemQuery =
+            (maxModified?.getTime() ?? 0) > 0
+              ? query(itemCollection, where('modified', '>', maxModified))
+              : query(itemCollection);
 
           return collectionChanges(itemQuery).pipe(
             mergeMap((changes) => {
@@ -58,12 +76,12 @@ export class ItemService {
                 case 'added':
                 case 'modified': {
                   const items = payload.map((data) => this.extractItem(data));
-                  const deletedItems = items.filter(i => i.deleted);
-                  const activeItems = items.filter(i => !i.deleted);
+                  const deletedItems = items.filter((i) => i.deleted);
+                  const activeItems = items.filter((i) => !i.deleted);
 
                   // Dispatch removal for soft-deleted items (cleanup handled by backend scheduled job)
                   if (deletedItems.length) {
-                    this.store.dispatch(removeItemsFromState({ listId, itemIds: deletedItems.map(i => i.id) }));
+                    this.store.dispatch(removeItemsFromState({ listId, itemIds: deletedItems.map((i) => i.id) }));
                   }
 
                   if (activeItems.length) {
@@ -82,10 +100,10 @@ export class ItemService {
             catchError((error: any) => {
               captureException(error);
               return of(getItemsFail({ error }));
-            })
+            }),
           );
         });
-      })
+      }),
     );
   }
 
@@ -97,8 +115,7 @@ export class ItemService {
       return updateDoc(itemDoc, {
         ...others,
         modified: serverTimestamp(),
-      })
-      .catch((reason) => captureException(reason));
+      }).catch((reason) => captureException(reason));
     });
   }
 
@@ -117,10 +134,10 @@ export class ItemService {
   private extractItem(change: DocumentChange<any>) {
     const data = change.doc.data();
     const id = change.doc.id;
-    const modified = (data.modified as any)?.toDate() || new Date(0);
+    const modified = coerceDate(data.modified) ?? new Date(0);
     const groupId = data.groupId || 'others';
     const item = { ...data, id, modified, groupId } as Item;
-    const added = (data.added as any)?.toDate?.();
+    const added = coerceDate(data.added);
     if (added) {
       item.added = added;
     } else {
