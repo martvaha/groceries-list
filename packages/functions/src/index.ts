@@ -14,7 +14,7 @@ admin.initializeApp();
 // Enforce App Check for all callable functions to prevent abuse
 setGlobalOptions({
   region: 'europe-north1',
-  enforceAppCheck: false, // TODO: change to true
+  enforceAppCheck: true,
 });
 
 // Constants for validation
