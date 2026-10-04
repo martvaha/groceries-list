@@ -9,7 +9,6 @@
         "files": [
           "/favicon.ico",
           "/index.html",
-          "/manifest.webmanifest",
           "/*.css",
           "/*.js"
         ]
@@ -22,6 +21,8 @@
       "resources": {
         "files": [
           "/assets/**",
+          "!/assets/icon-*.png",
+          "!/assets/favicon.svg",
           "/*.(eot|svg|cur|jpg|png|webp|gif|otf|ttf|woff|woff2|ani)"
         ]
       }
