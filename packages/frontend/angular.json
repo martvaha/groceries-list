@@ -76,6 +76,20 @@
                   "with": "src/environments/environment.test.ts"
                 }
               ],
+              "assets": [
+                "src/favicon.ico",
+                {
+                  "glob": "**/*",
+                  "input": "src/assets",
+                  "output": "assets",
+                  "ignore": ["icon-*.png", "favicon.svg"]
+                },
+                {
+                  "glob": "**/*",
+                  "input": "src/test-overrides",
+                  "output": "/"
+                }
+              ],
               "optimization": true,
               "outputHashing": "all",
               "sourceMap": false,
